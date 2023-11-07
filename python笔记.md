@@ -1,28 +1,294 @@
-# python中表当前项目文件路径 代码
+# 基础
+
+## 注释
+
+**单行注释**
+
+```python
+# 我是一个注释
+print('Hello world')
+```
+
+**多行注释**
+
+```python
+"""
+在三引号中的注释被称之为多行注释
+可以写很多行的功能说明
+"""
+```
+
+## 变量
+
+命名规则
+
++ 大驼峰：ClassName
++ 小驼峰：myNameValue 
++ 蛇形：name_value (python代码里个人推荐)
+
+```python
+name = 'wuhaopeng' 
+wechat = 'weicreates' 
+print(name)  # wuhaopeng
+print(wechat)  # weicreates
+```
+
+## **数据类型**
+
+| 类型   | 关键字  |
+| ------ | ------- |
+| 字符串 | string  |
+| 整数   | int     |
+| 浮点数 | float   |
+| 复数   | complex |
+| 列表   | list    |
+| 元组   | tuple   |
+| 字典   | dict    |
+| 集合   | set     |
+
+```python
+String = 'Hello world'
+Int = 1
+Float = 1.2
+Complex = 1+2j
+```
+
+## **运算符**
+
+**算数运算符**
+
+![image-20231107224946346](python笔记.assets/image-20231107224946346.png)
+
+**赋值运算符**
+
+![image-20231107225012918](python笔记.assets/image-20231107225012918.png)
+
+**比较运算符**
+
+![](python笔记.assets/image-20231107225040431.png)
+
+**逻辑运算符**
+
+![image-20231107225234629](python笔记.assets/image-20231107225234629.png)
+
+**成员运算符**
+
+**in**
+
++ 某值或元素是否在指定字符串、序列中
+
+```python
+String = '123456'
+print('123' in String)  # True
+```
+
+**not in**
+
++ 某值或元素是否不在指定字符串、序列中
+
+```python
+String = '123456'
+print('321' not in String)  # True
+```
+
+**身份运算符**
+
+ **is**
+
++ 判断两个标识符是不是引用自一个对象
++ 相当于 id(x) == id(y)
+
+```python
+a = 1
+b = 1
+print(a is b)  # True
+```
+
+**is not**
+
++ 判断两个标识符是不是引用自不同对象
+
+```python
+a = 1
+b = 2
+print(a is not b)  # True
+```
+
+##  if、elif、else 条件判断
+
+```python
+name = '阿'
+wechat = 'weieates'
+if name == '阿':
+    if wechat == 'weieates':
+        print('wechat True')  # wechat True
+    else:
+        print('wechat False')
+    print('name True')  # name True
+else:
+    print('name False')
+```
+
+## **for循环、while循环**
+
+### for循环
+
+#### **range 范围限制**
+
++ range(开始值, 结束值, 步长)
++ step可不写，默认值为1
+
+```python
+for y in range(1, 10):
+    for x in range(1, y + 1):
+        z = x * y
+        print(str(x) + '*' + str(y) + '=' + str(z), end=' ')
+    print()
+```
+
+#### 遍历字符串
+
+```python
+String = 'Hello world'
+for i in String:
+	print(i)  # H e l l o  w o r l d
+```
+
+#### 遍历列表
+
+```python
+List = [1, 2, 3, 4]
+for i in List:
+	print(i)  # 1 2 3 4
+```
+
+####  遍历字典
+
+```python
+Dict = {1: 1, 2: 2, 3: 3}
+for i in Dict:
+	print(Dict[i])  # 1 2 3
+```
+
+#### **遍历字典的键值**
+
+```python
+Dict = {1: 'first', 2: 'second', 3: 'third'}
+for k, v in Dict.items():
+	print(k, v)
+# 1 first
+# 2 second
+# 3 third
+```
+
+### **while 循环**
+
+####  **无限循环**
+
+```python
+while True:
+	print('Hello world')
+```
+
+#### **while 判断语句**
+
+```python
+n = 0
+while n < 10:
+	n = n + 1
+	print(n)  # 1 2 3 4 5 6 7 8 9 10
+```
+
+### **break 语句**
+
+退出循环
+
+```python
+for i in range(5):
+	print(i)
+	if i == 3:
+		break
+# 0 1 2 3
+```
+
+### **continue 语句**
+
+跳过本次循环
+
+```python
+n = 0
+while n < 15:
+    n = n + 1
+    if n % 2 == 0:
+        continue
+    print(n)  # 1 3 5 7 9 11 13 15
+```
+
+### **pass 语句**
+
+不执行任何操作
+
+```python
+for i in range(5):
+    if i == 4:
+        print(i)
+    else:
+        pass
+# 4
+```
+
+### **else 语句**
+
+循环判断条件为False后执行(没啥用)
+
+break 影响else语句的执行，continue 不影响else语句的执行
+
+```python
+n = 0
+while n < 10:
+	n += 1
+	print(n)
+else:
+	print('n>=10')
+
+# 1 2 3 4 5 6 7 8 9 10 n>=10
+
+for i in range(5):
+	number = int(input('输入数字0：'))
+	if number == 0:
+		print('输入了0')
+		break
+else:
+	print('错误5次！')
+```
+
+
+
+# 当前项目文件路径
 
 ```python
 import os
 
 current_directory = os.getcwd()
 print("Current project file path:", current_directory)
-
 ```
 
-# Python中将字符串转换为数字并将数字转换为字符串
+# 字符串操作
+
+## 字符串和数字相互转换
 
 ```python
 # 字符串转换为数字
 num_str = "1234"
-num = int(num_str)
+num = int(num_str)  #!!!
 print("Converted number:", num)
 print("Type of converted number:", type(num))
 
 # 数字转换为字符串
 num = 5678
-num_str = str(num)
+num_str = str(num)  #!!!
 print("Converted string:", num_str)
 print("Type of converted string:", type(num_str))
-
 ```
 
 ```
@@ -32,7 +298,98 @@ Converted string: 5678
 Type of converted string: <class 'str'>
 ```
 
+注意:  
 
+```python
+num = 000000
+num_str = str(num)
+print(num_str)
+print("Type of converted string:", type(num_str))
+```
+
+```python
+0
+Type of converted string: <class 'str'>
+```
+
+
+
+
+
+
+
+# 输入输出
+
+## **格式化输出**:crossed_swords:
+
+![](python笔记.assets/image-20231107224532869.png)
+
+**格式字符的使用**
+
+```python
+String = 'world'
+print('字符串：hello %s' % String)  # 字符串：hello world
+print('字符串前三位：hello %.3s' % String)  # 字符串前三位：hello wor
+print('字符串三到五位：hello %3.5s' % String)  # 字符串三到五位：hello world
+
+Int = 1
+print('整数：%d' % Int)  # 整数：1
+
+Float = 0.0123
+print('浮点数：%f' % Float)  # 浮点数：0.012300
+print('浮点数前两位小数：%.2f' % Float)  # 浮点数前两位小数：0.01
+print('浮点数前二到四位小数：%2.4f' % Float)  # 浮点数前二到四位小数：0.0123
+
+print(f'{String},{Int},{Float}')  # world,1,0.0123
+print('{0},{1},{2}'.format(String, Int, Float))  # world,1,0.0123
+```
+
+<font color=red>注意:  推荐使用f'{}'</font>
+
+## **print 函数**
+
+```python
+print("格式化字符串 %s %s" % (变量1, 变量2...))
+print("格式化字符串 %s %s " % (变量1, 变量2...),  end="")   #不换行输出
+print("{}\r\n".format("电影名, 详情页, 豆瓣评分, 封面图片"))
+print(f'格式化字符串{变量1} {变量2}!')  #推荐!!!!
+```
+
+print("格式化字符串 %s %s" % (变量1, 变量2...))需要用到以下格式化字符
+
+| 格式化字符 | 含义                                                         |
+| ---------- | ------------------------------------------------------------ |
+| %s         | 字符串                                                       |
+| %d         | 有符号十进制整数，`%06d` 表示输出的整数显示位数，不足的地方使用 `0` 补全 |
+| %f         | 浮点数，`%.2f` 表示小数点后只显示两位                        |
+| %%         | 输出 `%`                                                     |
+
+ 补充:
+
+**pprint 模块**
+
+pprint(object)  数据结构较为复杂的可以使用pprint优化输出
+
+```python
+from pprint import pprint
+pprint("""Hello
+world""") 
+# 'hello \nworld'
+```
+
+## Input 函数
+
+默认返回字符串类型, 可在外部转换为其它数据类型
+
+```python 
+name = input('请输入姓名：')            #
+age = int(input('请输入年龄：'))        #
+money = float(input('请输入财富：'))    #
+
+print('你的姓名是：%s' % name)
+print('你的年龄是：%d' % age)
+print('你的财富是：%f' % money)
+```
 
 # python 字符串拼接
 
@@ -280,14 +637,22 @@ for line in lines:
 
 ## 写数据到文件
 
+<font color=red>核心使用 newStr = f"{Parma1},{Parma2},{Parma3},…,{ParmaN}"  自定义写入格式</font>
+
 写数据有几种不同的模式，最常用的是w’, ‘a’, 分别表示擦除原有数据再写入和将数据写到原数据之后：
 
 ```python
 filename = 'write_data.txt'
-with open(filename,'w') as f: # 如果filename不存在会自动创建， 'w'表示写数据，写之前会清空文件中的原有数据！
+with open(filename,'w', newline='' ,encoding='utf-8') as f: # 如果filename不存在会自动创建， 'w'表示写数据，写之前会清空文件中的原有数据！
     f.write("I am Meringue.\n")
-    f.write("I am now studying in NJTECH.\n")
+    NJTECH='NJTECH'
+    f.write(f"I am now studying in {NJTECH}.\n")
 ```
+
+注意:
+
++ `newline=''`: 通过将`newline`参数设置为空字符串，您可以确保不进行特定的行尾字符转换，以兼容不同操作系统。例如在Windows上通常使用"\r\n"（回车换行），而在Linux和macOS上使用"\n"（换行符）。
++ `encoding='utf-8'`: 这是用于指定文件的编码方式。
 
 创建一个write_data.txt的文本文件，里面的数据如下：
 
@@ -305,13 +670,9 @@ with open(filename,'a') as f: # 'a'表示append,即在原来文件内容后继�
 
 
 
-# python 生成随机数模块random 常用方法总结
+# 生成随机数模块random 
 
 [python 生成随机数模块random 常用方法总结 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/34395664)
-
-
-
-
 
 ```
 from openpyxl import Workbook
@@ -447,4 +808,18 @@ wb.save("result1.xlsx")
 ```
 for i in range(8):
 ```
+
+
+
+
+
+
+
+函数之间空两格
+
+
+
+
+
+
 
