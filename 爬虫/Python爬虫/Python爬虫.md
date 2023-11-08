@@ -1,4 +1,4 @@
-爬虫概述
+# 爬虫概述
 
 ## 爬虫的概念
 
@@ -37,7 +37,7 @@
 
 ## 爬虫的分类
 
-![爬虫的分类](Python爬虫.assets/format,png.png) 
+![爬虫的分类](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255156.png) 
 
 1. 根据被爬取网站的数量不同，可以分为：
    + 通用爬虫，如 搜索引擎
@@ -53,11 +53,7 @@
 
 4. 爬虫的流程
 
-   ![image-20231106145017990](Python爬虫.assets/image-20231106145017990.png)
-
-
-
-[【精选】已解决requests.exceptions.ConnectionError: (‘Connection aborted .’, ConnectionResetError(10054，“远程主机强迫关_袁袁袁袁满的博客-CSDN博客](https://blog.csdn.net/yuan2019035055/article/details/128307722)
+   ![image-20231106145017990](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255158.png)
 
 # 网络请求库
 
@@ -695,14 +691,14 @@ def baidu_fanyi(keyword=None):
 
 - **sign、cookie是动态的，**会变****
 
-<img src="Python爬虫.assets/1629184713006-d27c61eb-3630-4fd7-8f45-8708d609e7dd.png" alt="image.png" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255159.png" alt="image.png" style="zoom:50%;" />
 
 **解决方案：**
 
 - 修改url为手机版的地址：http://fanyi.baidu.com/basetrans 或者 https://fanyi.baidu.com/sug
   User-Agent也用手机版的
 
-![img](Python爬虫.assets/1629186927695-f77871fb-2ec3-4d98-bea2-55c4841b9c38.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255160.png)
 
 ```python
 # 解决cookie和sign动态变化问题
@@ -737,7 +733,7 @@ https://movie.douban.com/chart
 
 定位数据包（不是都能定位到）：原因：如果动态加载的数据是经过加密的密文数据
 
-![img](Python爬虫.assets/1629152043054-136b384f-8b2c-42e2-8c5c-13360cc6e7a8.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255161.png)
 
 从该数据包可以获取：
 
@@ -755,7 +751,7 @@ https://blog.csdn.net/qq_29757283/article/details/98252728
 - 键值对使用单引号而非双引号。
 - 参数为（或含有）普通的字符串格式（plain or html）。
 
-![img](Python爬虫.assets/1629156253287-61b980b7-1a78-43ed-82f2-db12c10f757d.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255162.png)
 
 [**pandas创建空dataframe**](https://blog.csdn.net/chixujohnny/article/details/54133866)
 
@@ -831,9 +827,9 @@ def kfc_info():
 
 爬取[药监局](http://scxk.nmpa.gov.cn:81/xk/)中的企业详情数据
 
-![img](Python爬虫.assets/1629182476319-5c35a766-02fe-44dd-aa6b-0c50d57a090a.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255163.png)
 
-![img](Python爬虫.assets/1629182520593-8e64eafc-ff33-428d-b275-c85c38c6b1ac.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255164.png)
 
 - 不用数据解析
 - 数据都是动态出来的（Ajax请求）
@@ -921,7 +917,7 @@ def get_canpanysinfo(pageNum=None):
 
 一般来讲对我们而言，需要抓取的是某个网站或者某个应用的内容，提取有用的价值。内容一般分为两部分，非结构化的数据 和 结构化的数据。
 
-<img src="Python爬虫.assets/image-20231106164428648.png" style="zoom: 67%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255165.png" style="zoom: 67%;" />
 
 <font color=red>不同类型的数据，我们需要采用不同的方式来处理。</font>
 
@@ -929,7 +925,7 @@ def get_canpanysinfo(pageNum=None):
 
 先有结构、再有数据（http://wangyi.butterfly.mopaasapp.com/news/api?type=war&page=1&limit=10）
 
-<img src="Python爬虫.assets/image-20231106164753548.png" alt="image-20231106164753548" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255166.png" alt="image-20231106164753548" style="zoom:67%;" />
 
 **JSON 文件**
 
@@ -951,7 +947,7 @@ def get_canpanysinfo(pageNum=None):
 
 先有数据，再有结构，（[http://www.baidu.com](http://www.baidu.com)/)
 
-<img src="Python爬虫.assets/image-20231106164701972.png" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255167.png" style="zoom:67%;" />
 
 **文本、电话号码、邮箱地址**
 
@@ -1445,7 +1441,7 @@ print(res)
 
 识别英文数字验证码
 
-![code.png](Python爬虫.assets/1657991915211-53f3caba-5095-4619-a9b8-0aa14ce19eb7.png)
+![code.png](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255168.png)
 
 ```
 with open('code.png', mode='rb') as file:
@@ -1456,7 +1452,7 @@ print('识别英文数字验证码：' + res)
 
 识别汉字验证码
 
-![image-20231107220522245](Python爬虫.assets/image-20231107220522245.png)
+![image-20231107220522245](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255169.png)
 
 ```
 with open("code2.png", mode='rb') as file:
@@ -1467,7 +1463,7 @@ print('识别汉字验证码：' + res)
 
 识别算术验证码
 
-![](Python爬虫.assets/image-20231107220517238.png)
+![](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255170.png)
 
 ```
 import re
@@ -1497,7 +1493,7 @@ print('识别验证码：' + res)
 
 滑块与背景识别
 
-![](Python爬虫.assets/image-20231107220508245.png)
+![](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255171.png)
 
 ```
 with open('block.png', mode='rb') as file:
@@ -1514,7 +1510,7 @@ print({'x1': res[0], 'y1': res[1], 'x2': res[2], 'y2': res[3]})
 
 绘制矩形
 
-![](Python爬虫.assets/image-20231107220505061.png)
+![](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255172.png)
 
 ●rectangle：绘制矩形
 
@@ -1537,7 +1533,7 @@ cv2.imwrite('bg_box.png', img)
 
 simple_target参数
 
-![image-20231107220457595](Python爬虫.assets/image-20231107220457595.png)
+![image-20231107220457595](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255173.png)
 
 ●如果小滑块无过多背景部分，则可以添加 simple_target 参数
 
@@ -1559,7 +1555,7 @@ cv2.imwrite('bg2_box.png', img)
 
 坑位与背景识别
 
-![image-20231107220440861](Python爬虫.assets/image-20231107220440861.png)
+![image-20231107220440861](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255174.png)
 
 ```
 with open('block3.png', mode='rb') as file:
@@ -1580,7 +1576,7 @@ cv2.imwrite('bg3_box.png', img)
 
 1 切换目标检测模式
 
-<img src="Python爬虫.assets/image-20231107220534907.png" alt="image-20231107220534907" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255175.png" alt="image-20231107220534907" style="zoom:67%;" />
 
 ●默认为识别文字模式，为 det=True 则开启目标检测模式
 
@@ -1689,7 +1685,7 @@ Scrapy 常应用在包括数据挖掘，信息处理或存储历史数据等一�
 
 ## scrapy工作原理
 
-![img](Python爬虫.assets/1597109361323-67348f38-e8e7-40f0-b8e2-6b547b5ea928.png)1引擎向spiders要url
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255176.png)1引擎向spiders要url
 2spiders将url发送给引擎
 3引擎将url发送给scheduler(调度器)
 4scheduler生成requests对象并放入指定的队列中
@@ -1741,13 +1737,13 @@ spiderTest/
 
 #### pycharm打开项目
 
-![image-20231106212922251](Python爬虫.assets/image-20231106212922251.png)
+![image-20231106212922251](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255177.png)
 
-![image-20231106213057787](Python爬虫.assets/image-20231106213057787.png)
+![image-20231106213057787](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255178.png)
 
 效果
 
-![image-20231106213131278](Python爬虫.assets/image-20231106213131278.png)
+![image-20231106213131278](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255179.png)
 
 #### 安装虚拟环境的Scrapy
 
@@ -1760,7 +1756,7 @@ pip install scrapy
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple scrapy
 ```
 
-![](Python爬虫.assets/image-20231106213759757.png)
+![](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255180.png)
 
 ### **创建蜘蛛文件**
 
@@ -1796,9 +1792,9 @@ spiderTest/
             douban.py     #爬虫文件
 ```
 
-![image-20231106214122318](Python爬虫.assets/image-20231106214122318.png)
+![image-20231106214122318](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255181.png)
 
-![image-20231106214106747](Python爬虫.assets/image-20231106214106747.png)
+![image-20231106214106747](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255182.png)
 
 ###  **运行爬虫**
 
@@ -2308,7 +2304,7 @@ class test(scrapy.Spider): #需要继承scrapy.Spider类
 
 如果项目中包括多个配置，比如有如下目录结构：
 
-<img src="Python爬虫.assets/1608881133310-deb28b57-cf93-4e33-bae7-261ee911fdd6.png" alt="image.png" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255183.png" alt="image.png" style="zoom:67%;" />
 
 可以在scrapy.cfg 中配置：
 
@@ -2680,17 +2676,17 @@ LOG_FILE = 'demo.log'
 
 地址：https://movie.douban.com/top250
 
-<img src="Python爬虫.assets/1597109982151-6055d8d8-c711-421a-9403-ff630f17705d.png" alt="img" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255184.png" alt="img" style="zoom:50%;" />
 
 ##### 分析页面结构
 
 主体结构分析
 
-![](Python爬虫.assets/image-20231107195447421.png)
+![](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255185.png)
 
 “下一页”按钮分析
 
-<img src="Python爬虫.assets/image-20231107195535820.png" alt="image-20231107195535820" style="zoom: 60%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255186.png" alt="image-20231107195535820" style="zoom: 60%;" />
 
 嵌套很明显了，很简单的页面结构，接下来就开始编写爬虫。
 
@@ -2704,7 +2700,7 @@ scrapy genspider top250 movie.douban.com/top250
 
 创建好的项目结构如下
 
-<img src="Python爬虫.assets/1597110005336-2cd3ff47-fc42-409d-942e-f33d21dde444.png" alt="img" style="zoom: 80%;" />
+<img src="https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255187.png" alt="img" style="zoom: 80%;" />
 
 打开Top250Spider.py可以看到蜘蛛文件如下：
 
@@ -2909,11 +2905,11 @@ scrapy crawl top250
 
 csv格式
 
-![image-20231107204322827](Python爬虫.assets/image-20231107204322827.png)
+![image-20231107204322827](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255188.png)
 
 txt格式
 
-![image-20231107210724832](Python爬虫.assets/image-20231107210724832.png)
+![image-20231107210724832](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255190.png)
 
 #### **保存为MySQL文件**
 
@@ -3001,7 +2997,7 @@ class DoubanMysqlPipeline(object):
 
 ok，执行爬虫程序，可以看到豆瓣电影top250的信息都已经存储到数据库了
 
-![img](Python爬虫.assets/1597110651515-bca23daf-a495-41de-adc4-2d8a50f92d04.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255191.png)
 
 #### **保存为MongoDB文件**
 
@@ -3033,7 +3029,7 @@ class DoubanMongodbPipeline(object):
 
 k，执行爬虫程序，可以看到豆瓣电影top250的信息都已经存储到数据库了
 
-![img](Python爬虫.assets/1597110795412-e373ebe6-bbea-4efd-9592-13ae393570a5.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255192.png)
 
 
 
@@ -3224,7 +3220,7 @@ if __name__ == "__main__":
 
 首先我们用谷歌打开这个网址，它是这个样子：
 
-![img](Python爬虫.assets/1542436662411-64d2dea8-e274-4666-9fb6-05464c5cce5c.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255193.png)
 
 我们的目标是把图片下载下来，那我们怎么找到它们？ 一般图片都是在其他网址z下载过了的
 
@@ -3232,21 +3228,21 @@ if __name__ == "__main__":
 
 **按F12，谷歌会弹出开发者界面，在这里我们可以找到图片的位置  右边的界面就是开发者界面
 
-![img](Python爬虫.assets/1542437086559-975daa8f-7ce9-4d6d-bea7-26a174125ec7.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255194.png)
 
 **鼠标先点击下图的方框来
 
-![img](Python爬虫.assets/1542437290848-b3b67557-3760-4f1e-ac1c-ae20478450eb.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255195.png)
 
 然后鼠标点击你想下载的图片来定位图片
 
-![img](Python爬虫.assets/1542438001599-3926f321-6955-4194-8ba7-c3bdc3937815.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255196.png)
 
 定位到了之后，在右边蓝色的区域，我们发现有<div class...>这类东西，其实这是标签，有了它浏览器就知道怎么帮图片啊，文字啊，视频啊，链接等其他东西布局.写推文用的模板其实可以理解为不同方式的布局吧.有尖括号括起来的里面存放着"名字"，尖括号里面或者可能外面存放着信息.通过名字就可以找到想要的信息.
 
 在这里可以找到url(网址)，括号开始到结束
 
-![img](Python爬虫.assets/1542438505651-367da69b-10bc-472b-be72-09f589ae510d.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255197.png)
 
 
 
@@ -3256,7 +3252,7 @@ if __name__ == "__main__":
 https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/0.png?responseContentType=image%2Fpng&responseCacheControl=max-age%3D3888000&responseExpires=Tue%2C%2001%20Jan%202019%2014%3A43%3A32%20%2B0800&authorization=bce-auth-v1%2Ffa1126e91489401fa7cc85045ce7179e%2F2018-11-17T06%3A43%3A32Z%2F3600%2Fhost%2F93c7d46568530e17fe73e33d09c83f9f89ba973978173197eef1e3ae65617730&x-bce-range=0-164464&token=1a05d8fc7c319f190be39020fd5e1c744040f9c18a3e93dbacca0ca5fc95524f&expire=2018-11-17T07:43:32Z](https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/0.png?responseContentType=image%2Fpng&responseCacheControl=max-age%3D3888000&responseExpires=Tue%2C 01 Jan 2019 14%3A43%3A32 %2B0800&authorization=bce-auth-v1%2Ffa1126e91489401fa7cc85045ce7179e%2F2018-11-17T06%3A43%3A32Z%2F3600%2Fhost%2F93c7d46568530e17fe73e33d09c83f9f89ba973978173197eef1e3ae65617730&x-bce-range=0-164464&token=1a05d8fc7c319f190be39020fd5e1c744040f9c18a3e93dbacca0ca5fc95524f&expire=2018-11-17T07:43:32Z)
 ```
 
-![img](Python爬虫.assets/1542438613652-4cacdc17-c5c4-49e3-bf68-b3985fb4c9c2.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255198.png)
 
 我们想要的信息是<div class=...>后面的名字reader-pic-item，还有信息:url
 
@@ -3266,11 +3262,11 @@ https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/
 
 点击倒三角符号往上找
 
-![img](Python爬虫.assets/1542439317469-6564d375-d591-47bf-b3f8-154b1b752ecf.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255199.png)
 
  可以发现图片信息都放在这一块里面
 
-![img](Python爬虫.assets/1542439515095-94dc34a9-0653-4b10-939c-de3b1be955a2.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255200.png)
 
 所以我们再记录包含这一块的<div class=....>（叫做节点) 的id   reader-container xreaderd   (有id就选id，因为它是唯一的)
 
@@ -3280,11 +3276,11 @@ https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/
 
 我们发现整个网页就显示了三张图片，所以要点一下按钮
 
-![img](Python爬虫.assets/1542440561338-8bb69114-4a69-47c7-9009-5f814ecba9a4.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255201.png)
 
 为了让爬虫帮我们点，我们要找到存放它的节点，步骤同上，结果
 
-![img](Python爬虫.assets/1542440738490-3b25a8e3-7e5a-4257-8135-7cf331305657.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255202.png)
 
 很可惜没找到id，所以就勉强用class名字了  banner-more-btn
 
@@ -3296,10 +3292,10 @@ https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/
 
 结果：
 
-![img](Python爬虫.assets/1542441672703-136e3bc7-c3ad-4f51-bc67-b3f35526fbe0.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255203.png)
 
 ## 3.把图片合成pdf
 
 全部选择：
 
-![img](Python爬虫.assets/1542441784085-3ef54d6a-74b9-4a3f-833f-cb53d7facd92.png)
+![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255204.png)

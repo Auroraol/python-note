@@ -94,5 +94,5 @@ class DoubanMysqlPipeline(object):
                 (item['title'], item['detail_page_url'], item['star'], item['pic_url']))
             # 提交sql语句
             self.connect.commit()
-
+        
         return item

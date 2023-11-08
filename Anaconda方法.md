@@ -107,3 +107,8 @@ conda config --set show_channel_urls yes
 ![image-20231107132620002](Anaconda方法.assets/image-20231107132620002.png)
 
 就可以在这里就行编码啦，如果想换一个python版本，可选择其他版本自行创建，不想用的虚拟环境可以删除
+
+# pip安装及使用详解
+
+
+
