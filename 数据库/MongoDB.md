@@ -1,0 +1,3 @@
+![image-20231109204437547](MongoDB.assets/image-20231109204437547.png)
+
+![image-20231109204552091](MongoDB.assets/image-20231109204552091.png)

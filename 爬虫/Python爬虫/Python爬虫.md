@@ -1174,6 +1174,8 @@ import jsonpath
 
 ## BeautifulSoup 解析数据
 
++ 简称bs4
+
 + Beautiful Soup 是一个HTML/XML的解析器，主要的功能是解析和提取 HTML/XML 数据。
 + Beautiful Soup 是基于HTML DOM的，会载入整个文档，解析整个DOM树，因此时间和内存开销都会大很多，所以性能要低于lxml。
 + BeautifulSoup 用来解析 HTML 比较简单，API非常人性化，支持CSS选择器、Python标准库中的HTML解析器，也支持 lxml 的 XML解析器。

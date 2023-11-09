@@ -37,25 +37,25 @@ print(wechat)  # weicreates
 
 ## **运算符**
 
-**算数运算符**
+### **算数运算符**
 
 ![image-20231107224946346](python笔记.assets/image-20231107224946346.png)
 
-**赋值运算符**
+### **赋值运算符**
 
 ![image-20231107225012918](python笔记.assets/image-20231107225012918.png)
 
-**比较运算符**
+### **比较运算符**
 
 ![](python笔记.assets/image-20231107225040431.png)
 
-**逻辑运算符**
+### **逻辑运算符**
 
 ![image-20231107225234629](python笔记.assets/image-20231107225234629.png)
 
-**成员运算符**
+### **成员运算符**
 
-**in**
+#### **in**
 
 + 某值或元素是否在指定字符串、序列中
 
@@ -64,7 +64,7 @@ String = '123456'
 print('123' in String)  # True
 ```
 
-**not in**
+#### **not in**
 
 + 某值或元素是否不在指定字符串、序列中
 
@@ -73,9 +73,9 @@ String = '123456'
 print('321' not in String)  # True
 ```
 
-**身份运算符**
+### **身份运算符**
 
- **is**
+#### is
 
 + 判断两个标识符是不是引用自一个对象
 + 相当于 id(x) == id(y)
@@ -86,7 +86,7 @@ b = 1
 print(a is b)  # True
 ```
 
-**is not**
+#### **is not**
 
 + 判断两个标识符是不是引用自不同对象
 
@@ -94,6 +94,73 @@ print(a is b)  # True
 a = 1
 b = 2
 print(a is not b)  # True
+```
+
+### **三元运算符:crossed_swords:**
+
+#### 基本语法
+
+```python
+[结果为真的值] if [条件] else [结果为假的值]
+```
+
+嵌套三元运算符的语法为
+
+```python
+[结果1] if [条件1] else ([结果2] if [条件2] else [结果3])。
+```
+
+在C语言中，三元运算符的语法为
+
+```python
+[条件] ? [结果为真的值] : [结果为假的值]。
+```
+
+####  **条件赋值**
+
+三元运算符可以用于条件赋值，即根据条件的真假来决定变量的值。下面是一个使用三元运算符进行条件赋值的示例：
+
+```python
+# 传统的if-else语句
+if x > 0:
+    y = "正数"
+else:
+    y = "零或负数"
+
+# 使用三元运算符
+y = "正数" if x > 0 else "零或负数"
+```
+
+#### 列表推导式
+
+列表推导式其实就是用的三元运算符
+
+```python
+# 传统的if-else语句
+result = []
+for x in range(10):
+    if x % 2 == 0:
+        result.append(x)
+
+# 使用三元运算符
+result = [x for x in range(10) if x % 2 == 0]
+```
+
+#### **字典中的条件赋值**
+
+三元运算符可以用于字典中的条件赋值，即根据条件的真假来决定字典键值对的值。下面是一个使用三元运算符进行条件赋值的示例：
+
+```python
+# 传统的if-else语句
+result = {}
+x = 10
+if x > 0:
+    result["status"] = "正数"
+else:
+    result["status"] = "零或负数"
+
+# 使用三元运算符
+result = {"status": "正数" if x > 0 else "零或负数"}
 ```
 
 ##  if、elif、else 条件判断
@@ -1826,7 +1893,9 @@ for i in g:
 
 ## **装饰器**:crossed_swords:
 
-装饰器本质上是个Pythop函数， 它可以让其他函数在不需 要做任何代码变动的前提下增加额外功能， 装饰器的返回值也是一个函数对象。它经常用于有切面需求的场景，比如:插入日志、性能测试、事务处理、缓存、权限校验等场景。装饰器是解决这类问题的绝佳设计，有了装饰器，我们就可以抽离出大量与函数功能本身无关的雷同代码并继续重用。
+装饰器本质上是个Pythop函数， 它可以让其他函数在不需 要做任何代码变动的前提下增加额外功能， 装饰器的返回值也是一个函数对象。
+
+它经常用于有切面需求的场景，比如:插入日志、性能测试、事务处理、缓存、权限校验等场景。装饰器是解决这类问题的绝佳设计，有了装饰器，我们就可以抽离出大量与函数功能本身无关的雷同代码并继续重用。
 
 **装饰器的使用**
 
@@ -3086,6 +3155,117 @@ person.at_home(cat)  # 刘洁家里有只橘猫 橘猫在喵喵叫...
 person.at_home(dog)  # 刘洁家里有只哈士奇 哈士奇在汪汪叫...
 ```
 
+## 自定义类迭代器:crossed_swords:
+
+一个类，只要有_iter_方法，那么这个类创建出来的对象就是可以迭代对象
+
+在使用next()函数的时候，调用的就是迭代器对象的__next__方法
+
+```python
+from collections.abc import Iterable,Iterator
+
+class Mylist:
+    def __init__(self):
+        self.items = []
+
+    def add(self, item):
+        self.items.append(item)
+
+    # 声明该类为可迭代对象
+    def __iter__(self):
+        return AIterator(self)  # 对象关联，传入实例对象，返回实例对象的迭代器
+
+
+class AIterator:
+    def __init__(self, obj):
+        self.index = 0  # 计数器
+        self.obj = obj  # 实例对象
+
+    def __iter__(self):
+        return self
+
+    # 声明该类为迭代器
+    def __next__(self):
+        if self.index < len(self.obj.items):  # 如果 计数器 小于 列表 的总数
+            result = self.obj.items[self.index]  # 取 列表[计数器] 的值
+            self.index += 1  # 计数器递增
+            return result
+        raise StopIteration  # 取完则抛出StopIteration异常停止
+
+
+my_list = Mylist()
+print('my_list 是否为可迭代对象:', isinstance(my_list, Iterable))
+print('my_list 是否为迭代器:', isinstance(my_list, Iterator))
+# my_list 是否为可迭代对象: True
+# my_list 是否为迭代器: False
+my_list.add(1)
+my_list.add(2)
+my_list.add(3)
+
+iter_obj = iter(my_list)  # 调用 my_list 实例对象的 __iter__
+print(iter_obj)  # <__main__.AIterator object at 0x000002379EFBFCD0>
+print(next(iter_obj))  # 1
+print(next(iter_obj))  # 2
+
+for item in my_list:
+    print(item)  # 1 2 3
+```
+
+##  自定义类装饰器:crossed_swords:
+
+### **装饰器的使用**
+
+如果需要通过类形式实现装饰器，通过类把函数保存起来。然后在重载 __call__方法是即可返回一个函数
+
+```python
+class Logging:
+    def __init__(self, func):
+        self.func = func
+
+    # 参数    
+    def __call__(self, *args, **kwargs):
+        print('开始计算...')
+        return self.func(*args, **kwargs)
+
+
+@Logging     # 相当于add=Logging(add) 返回作用域含有func的__call__函数
+def add(a, b):
+    return a + b
+
+
+print(add(1, 2))
+
+# 开始计算...
+# 3
+```
+
+### 带有参数的类装饰器
+
+如果需要通过类形式实现带参数的装饰器，在构造函数里接收的就不是一个函数，而是传入的参数。通过类把这些参数保存起来。然后在重载 __call__方法是就需要接收一个函数并返回一个函数
+
+```python
+class Logging:
+    def __init__(self, info):
+        self.info = info
+
+    def __call__(self, func):
+        def wrapper(*args, **kwargs):
+            print(f'{self.info}：开始计算...')
+            return func(*args, **kwargs)
+        return wrapper
+
+
+@Logging(info='加法计算')  # 相当于add=Logging(info='加法计算'), 然后 add = Logging.__call__(add)
+def add(a, b):
+    return a + b
+
+
+print(add(1, 2))
+
+# 加法计算：开始计算...
+# 3
+```
+
 ## 补充说明
 
 ### isinstance
@@ -3120,138 +3300,6 @@ class Test2(Test):
 
 print(issubclass(Test2, Test))  # True
 ```
-
- 自定义类可迭代对象 
-
-●一个类，只要有_iter_方法，那么这个类创建出来的对象就是可以迭代对象
-
-●其实，当我们调用 iter()函数提取一个可迭代对象的 迭代器时，实际上会自动调用这个对象的_iter_方法，并且这个方法返回迭代器
-
-```
-from collections.abc import Iterable,Iterator
-
-
-class MyList:
-    def __init__(self):
-        self.items = []
-
-    def add(self, value):
-        self.items.append(value)
-
-        # 声明该类为可迭代对象
-    def __iter__(self):
-        pass
-
-
-my_list = MyList()
-print('my_list 是否为可迭代对象:', isinstance(my_list, Iterable))
-print('my_list 是否为迭代器:', isinstance(my_list, Iterator))
-# my_list 是否为可迭代对象: True
-# my_list 是否为迭代器: False
-```
-
-自定义类迭代器
-
-实际上，在使用next()函数的时候，调用的就是迭代器对象的__next__方法
-
-```
-class Mylist:
-    def __init__(self):
-        self.items = []
-
-    def add(self, item):
-        self.items.append(item)
-
-    def __iter__(self):
-        return AIterator(self)  # 对象关联，传入实例对象，返回实例对象的迭代器
-
-
-class AIterator:
-    def __init__(self, obj):
-        self.index = 0  # 计数器
-        self.obj = obj  # 实例对象
-
-    def __iter__(self):
-        return self
-
-        # 声明该类为迭代器
-    def __next__(self):
-        if self.index < len(self.obj.items):  # 如果 计数器 小于 列表 的总数
-            result = self.obj.items[self.index]  # 取 列表[计数器] 的值
-            self.index += 1  # 计数器递增
-            return result
-        raise StopIteration  # 取完则抛出StopIteration异常停止
-
-
-my_list = Mylist()
-my_list.add(1)
-my_list.add(2)
-my_list.add(3)
-
-iter_obj = iter(my_list)  # 调用 my_list 实例对象的 __iter__
-print(iter_obj)  # <__main__.AIterator object at 0x000002379EFBFCD0>
-print(next(iter_obj))  # 1
-
-for item in my_list:
-    print(item)  # 1 2 3
-```
-
-
-
- 自定义类装饰器
-
-如果需要通过类形式实现装饰器，通过类把函数保存起来。然后在重载 __call__方法是即可返回一个函数
-
-```
-class Logging:
-    def __init__(self, func):
-        self.func = func
-
-    def __call__(self, *args, **kwargs):
-        print('开始计算...')
-        return self.func(*args, **kwargs)
-
-
-@Logging
-def add(a, b):
-    return a + b
-
-
-print(add(1, 2))
-
-# 开始计算...
-# 3
-```
-
-带有参数的类装饰器
-●如果需要通过类形式实现带参数的装饰器，那么会比前面的例子稍微复杂一点那么在构造函数里接收的就不是一个函数，而是传入的参数。通过类把这些参数保存起来。然后在重载 __call__方法是就需要接收一个函数并返回一个函数
-
-```
-class Logging:
-    def __init__(self, info):
-        self.info = info
-
-    def __call__(self, func):
-        def wrapper(*args, **kwargs):
-            print(f'{self.info}：开始计算...')
-            return func(*args, **kwargs)
-        return wrapper
-
-
-@Logging(info='加法计算')
-def add(a, b):
-    return a + b
-
-
-print(add(1, 2))
-
-# 加法计算：开始计算...
-# 3
-```
-
-
-
-
 
 # **单例模式**
 
@@ -3316,11 +3364,9 @@ print(b.age)  # 19
 
 反射就是通过字符串的形式去对象（模块）中操作（查找/获取/删除/添加）成员，一种基于字符串的事件驱动
 
- 面向对象中的反射 
+面向对象中的反射
 
-●反射就是通过字符串的形式去对象（模块）中操作（查找/获取/删除/添加）成员，一种基于字符串的事件驱动
-
- 1 hasattr 
+## hasattr
 
 ●判断类对象或实例对象中是否有相应的属性
 
@@ -3338,7 +3384,8 @@ print(hasattr(test, 'a'))  # True
 print(hasattr(test, 'func'))  # True
 ```
 
- getattr
+##  getattr
+
 ●获取类对象或实例对象的属性，有则返回，没有时有传入第三参数就返回第三参数
 
 ```python
@@ -3356,7 +3403,8 @@ func = getattr(test, 'func')
 func()  # 1
 ```
 
-setattr
+## setattr
+
 ●设置类对象或实例对象的属性
 
 ```python
@@ -3374,7 +3422,8 @@ setattr(test, 'add', lambda self, x: print(self.b + x))
 test.add(test, 5)  # 7
 ```
 
-delattr
+## delattr
+
 ●删除类对象或实例对象的属性
 
 ```python
@@ -3392,168 +3441,6 @@ test = Test()
 delattr(test, 'a')
 print(test.__dict__)  # {}
 ```
-
-
-
-
-
-
-
-
-
-# 生成随机数模块random 
-
-[python 生成随机数模块random 常用方法总结 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/34395664)
-
-```
-from openpyxl import Workbook
-
-wb = Workbook()
-ws = wb.active
-
-# 输出测线距中心点处的距离
-ws['A1'] = "测线距中心点处的距离/m"
-for i, item in enumerate(data, start=2):
-    ws.cell(row=i, column=1, value=item['distance_from_center'])
-
-# 输出海水深度
-ws['B1'] = "海水深度/m"
-for i, item in enumerate(data, start=2):
-    ws.cell(row=i, column=2, value=item['depth'])
-
-# 输出覆盖宽度
-ws['C1'] = "覆盖宽度/m"
-for i, item in enumerate(data, start=2):
-    ws.cell(row=i, column=3, value=item['coverage_width'])
-
-# 输出与前一条测线的重叠率
-ws['D1'] = "与前一条测线的重叠率/%"
-for i, item in enumerate(data, start=2):
-    ws.cell(row=i, column=4, value=item['overlap_percentage'])
-
-wb.save("result1.xlsx")
-
-```
-
-
-
-
-
-```
-from openpyxl import load_workbook
-
-# 打开现有的工作簿
-wb = load_workbook("result1.xlsx")
-
-# 选择要写入的工作表
-ws = wb.active
-
-# 写入 'depth' 值
-for i, item in enumerate(data, start=2):
-    ws.cell(row=2, column=i, value=item['depth'])
-
-# 写入 'coverage_width' 值
-for i, item in enumerate(data, start=2):
-    ws.cell(row=3, column=i, value=item['coverage_width'])
-
-# 写入 'overlap_percentage' 值
-for i, item in enumerate(data, start=2):
-    if item['overlap_percentage'] == 0:
-        # ws.cell(row=4, column=i, value='——')
-        pass
-    else:
-        ws.cell(row=4, column=i, value=item['overlap_percentage'])
-
-# 保存更改
-wb.save("result1.xlsx")
-
-```
-
-![image-20230908142945578](python笔记.assets/image-20230908142945578.png)
-
-
-
-
-
-```
-import math
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from openpyxl import load_workbook
-
-# 定义参数
-D_center = 70  # 海域中心点处的海水深度
-theta = math.radians(120)  # 换能器开角转换为弧度
-alpha = math.radians(1.5)  # 坡度转换为弧度
-distances = np.array([-800, -600, -400, -200, 0, 200, 400, 600, 800])  # 测线距中心点处的距离
-
-# 计算每个距离的海水深度、覆盖宽度
-sea_depth = D_center - distances * np.tan(alpha)
-coverage_width = 2 * sea_depth * np.tan(theta / 2)
-# 计算重叠率
-overlap_rate = np.zeros(len(distances))
-overlap_rate[1:] = 100 * (coverage_width[:-1] - distances[1:] + distances[:-1]) / coverage_width[:-1]
-
-# 存储结果
-data = pd.DataFrame({
-    'distance': distances,
-    'sea_depth': sea_depth,
-    'coverage_width': coverage_width,
-    'overlap_rate': overlap_rate
-})
-
-# 打印结果
-print(data)
-
-# 保存到Excel文件
-wb = load_workbook("result1.xlsx") # 打开现有的工作簿
-# 选择要写入的工作表
-ws = wb.active
-# 写入 'depth' 值
-for i, item in enumerate(data['depth'], start=2):
-    # ws.cell(row=2, column=i, value=item['depth'])
-    ws.cell(row=2, column=i, value=item)
-# 写入 'coverage_width' 值
-for i, item in enumerate(data['coverage_width'], start=2):
-    # ws.cell(row=3, column=i, value=item['coverage_width'])
-    ws.cell(row=3, column=i, value=item)
-# 写入 'overlap_percentage' 值
-for i, item in enumerate(data['overlap'], start=2):
-    if item == 0:
-        # ws.cell(row=4, column=i, value='——')
-        pass
-    else:
-        ws.cell(row=4, column=i, value=item)
-# 保存更改
-wb.save("result1.xlsx")
-
-```
-
-
-
-
-
-遍历
-
-```
-for i in range(8):
-```
-
-
-
-
-
-# 当前项目文件路径
-
-```python
-import os
-
-current_directory = os.getcwd()
-print("Current project file path:", current_directory)
-```
-
-
 
 # 异常
 
@@ -3673,26 +3560,13 @@ test()  # 自定义异常...
 
 # 文件读取
 
+## 当前项目文件路径
+
 ```python
-from os import path as osp
+import os
 
-save_folder = "xxx/目录名"
-# 创建目录
-if not osp.exists(save_folder):
-    os.mkdir(save_folder)
-
-
-save_folder = save_folder if save_folder is not None else 'download'  #保存目录
-#创建子文档,参数:父级目录,子目录名称
-save_folder = osp.join(save_folder, chapter_title)
-if not osp.exists(save_folder):
-    os.mkdir(save_folder)
-   
-//写
-with open(save_path, 'wb') as fp:
-     fp.write(content)
-except Exception as et:
-   	logging.error(et, exc_info=True)
+current_directory = os.getcwd()
+print("Current projectfile path:", current_directory)
 ```
 
 ## 读取数据
@@ -3705,10 +3579,16 @@ pi_digits.txt的文本文件，里面的数据如下：
 2643383279
 ```
 
+**读取方式**
+
++ r：以文本格式打开文件，用于只读
++ rb：以二进制格式打开文件，用于只读
++ r+：以文本格式打开文件，用于读写
+
 ### 读取整个文件
 
 ```python
-with open('pi_digits.txt') as f: # 默认模式为‘r’，只读模式
+with open('pi_digits.txt', 'r', encoding='utf-8') as f: # 默认模式为‘r’，只读模式
     contents = f.read() # 读取文件全部内容
     print(contents) # 输出时在最后会多出一行（read()函数到达文件末会返回一个空字符，显示出空字符就是一个空行）
     print('------------')
@@ -3727,6 +3607,8 @@ with open('pi_digits.txt') as f: # 默认模式为‘r’，只读模式
 ```
 
 ### 逐行读取
+
+#### 使用rstrip()
 
 ```python 
 with open('pi_digits.txt') as f:
@@ -3752,7 +3634,7 @@ with open('pi_digits.txt') as f: # 需要重新打开文本进行读取
 2643383279
 ```
 
-**使用readline()函数**
+#### **使用readline()函数**
 
 ```python
 with open('pi_digits.txt') as f:
@@ -3762,8 +3644,8 @@ with open('pi_digits.txt') as f:
         # 判断是否读到内容
         if not text:
             break
-            # 每读取一行的末尾已经有了一个 `\n`
-            print(text, end="")
+        # 每读取一行的末尾已经有了一个 `\n`
+        print(text, end="")
 ```
 
 ```
@@ -3772,7 +3654,7 @@ with open('pi_digits.txt') as f:
 2643383279
 ```
 
-**使用readlines()函数**
+#### **使用readlines()函数**
 
 ```python
 with open('pi_digits.txt') as f:
@@ -3805,7 +3687,13 @@ for line in lines:
 
 <font color=red>核心使用 newStr = f"{Parma1},{Parma2},{Parma3},…,{ParmaN}"  自定义写入格式</font>
 
-写数据有几种不同的模式，最常用的是w’, ‘a’, 分别表示擦除原有数据再写入和将数据写到原数据之后：
+ 写入方式
+
++ w：以文本格式打开文件，用于只写
++ wb：以二进制格式打开文件，用于只写
++ w+：对文件进行读写双重操作
+
+**基础**
 
 ```python
 filename = 'write_data.txt'
@@ -3827,16 +3715,101 @@ I am Meringue.
 I am now studying in NJTECH.
 ```
 
-追加
+**追加**
+
++ ```python
+  with open(filename,'a') as f: # 'a'表示append,即在原来文件内容后继续写数据（不清楚原有数据）
+      f.write("I major in Machine learning and Computer vision.\n")
+  ```
+
+**writelines()方法**
+
++ 通过序列写入每行数据
+
++ ```python
+  List = ['w', 'o', 'r', 'l', 'd']
+  file = open('文本.txt', 'w')
+  file.write('Hello ')
+  file.writelines(List)
+  file.close()
+  ```
+
+## 综合代码
 
 ```python
-with open(filename,'a') as f: # 'a'表示append,即在原来文件内容后继续写数据（不清楚原有数据）
-    f.write("I major in Machine learning and Computer vision.\n")
+from os import path as osp
+
+save_folder = "xxx/目录名"
+
+# 创建目录
+if not osp.exists(save_folder):
+    os.mkdir(save_folder)
+
+
+save_folder = save_folder if save_folder is not None else 'download'  #保存目录
+#创建子文档,参数:父级目录,子目录名称
+save_folder = osp.join(save_folder, chapter_title)
+if not osp.exists(save_folder):
+    os.mkdir(save_folder)
+   
+#写
+with open(save_path, 'wb') as fp:
+     fp.write(content)
+except Exception as et:
+   	logging.error(et, exc_info=True)
 ```
 
+## 补充
 
+###  **操作多个文件**
 
+```python
+with open('文本.txt', 'r', encoding='utf-8') as f, \
+        open('文本2.txt', 'w', encoding='utf-8') as f2:
+    content = f.read()
+    f2.write(content)
+```
 
+### **读取大文件**
+
++ 通过readline方法分段读取文件内容
+
+```python
+with open('excel.xlsx', 'rb') as f:
+    content = bytes()
+    while True:
+        reader = f.readline()
+        content += reader
+        if not reader:
+            break
+    print(content)
+```
+
+### 文件指针
+
+#### seek()方法
+
++ 移动文件读取指针到指定位置
++ file.seek(offset，whence)
++ offset参数为开始的偏移量，whence参数表示要从哪个位置开始偏移
++ 0代表从文件开头开始算起，1代表从当前位置开始算起，2代表从文件末尾算起
+
+```python
+with open('文本.txt', 'a+', encoding='utf-8') as file:
+    file.seek(0)
+    content = file.read()
+    print(content)
+    file.write('\n')
+```
+
+#### tell()方法
+
++ 返回文件指针当前位置
+
+```python
+with open('文本.txt', 'a', encoding='utf-8') as f:
+    print(f.tell())
+```
 
 # **模块、包、模块的安装**
 
@@ -3846,126 +3819,208 @@ with open(filename,'a') as f: # 'a'表示append,即在原来文件内容后继�
 + 每一个单独的py文件，本质上都是一个模块
 + 当模块添加了下划线开头_的变量时，只能在模块内部访问该变量
 
-### 1 import
+### 1）import
 
-●使用import语句导入模块
+```python
+import 模块名1
+import 模块名2 
+```
 
+导入之后可以使用 模块提供的全部工具—— 全局变量**、**函数**、**类
 
+### **2）import as**
 
-### 2 import as
+如果模块的名字太长，可以使用 `as` 指定模块的名称，以方便在代码中的使用
 
-如果模块名称过长，可以在import语句导入模块后用as语句命名模块
+```python
+import 模块名1 as 模块别名
+```
 
+注意：模块别名 应该符合 **大驼峰命名法**
 
+### 3）from  import
 
-### 3 from import
++ 通过from...import...  导入模块中的变量名/函数名/类名
++ 通过from...import  * 导入包中的所有模块
 
-●通过from...import...导入模块中的变量名/函数名/类名
+```python
+# 从 模块 导入 某一个工具
+from 模块名1 import 工具名
+from time import sleep
+from urllib import request
 
-●通过from...import...导入包中的模块
+sleep(1)
+print('sleep 1s')
+```
 
+导入之后可以使用 模块提供的指定工具—— 全局变量**、**函数**、**类
 
+## 包
 
- 4 __name__== '__main__' 
++ 包是由一系列模块组成的集合
++ **包必须含有一个init.py文件，它用于标识当前文件夹是一个包**
++ 包的作用是实现程序的重
 
-●被当做主函数来执行，则执行if语句后面的代码，否则不执行
+![image-20231109220201743](python%E7%AC%94%E8%AE%B02.0.assets/image-20231109220201743.png)
 
+导入方法为`包名.模块名`
+调用方法为:`包名.模块名.函数名`
 
+**例子**
 
+```pyhon 
+PkgA            # 顶层包
+    __init__.py  # 初始化 PkgA
+    PkgB                # 子包 PkgB
+        __init__.py     # 初始化 PkgB
+        module1.py
+        module2.py
+    PkgC                # 子包 PkgC
+     __init__.py        # 初始化 PkgC
+        module1.py
+        module2.py
+```
 
+ PkgB 以下的 module1.py 文件内容例如以下：
 
- 2 包 
+```python
+ def say():
+  print(’hello')
+```
 
- 1 包的定义 
+```python
+方式一：导入函数所在模块
+>>import PkgA.PkgB.module1
+>>PkgA.PkgB.module1.say()
+hello
 
-●包是由一系列模块组成的集合
+方式二:从包PkgA.PkgB 中导入函数所在模块
+>>from PkgA.PkgB import module1
+>> module1.say
+hello
 
-●包必须含有一个__init__.py文件，它用于标识当前文件夹是一个包
+方式三：从模块中导入函数(推荐)
+>> from PkgA.PkgB.module1 import say  #导入say函数
+>> say()
+hello
+```
 
-●包的作用是实现程序的重用
+# random模块
 
- 2 导入包中的模块 
-
-
-
- 3 __init__文件 
-
-●只有当目录中包含__init__.py文件时，这个目录才会被Python当作是一个包目录，进而搜索添加里面的文件。这样做可以让编程者自己控制哪些目录可以被Python导入成包
-
-
-
- 3 模块的安装 
-
- 1 安装第三方模块 
-
-●生成 requirements.txt 文件：https://www.cnblogs.com/poloyy/p/13953232.html
-
-
-
- 2 查看已安装的模块 
-
-
-
-1
-
-pip list
-
- 3 查看待更新的模块 
-
-
-
-1
-
-pip list-o
-
- 4 更新模块 
-
-
-
-1
-
-pip install --U pip
-
- 5 查看pip版本 
-
-
-
-1
-
-pip --version
-
- 6 显示已安装模块所在的目录 
-
-
-
-1
-
-pip show -f package
-
-  
-
- 4 国内通道 
-
- 1 通道链接 
-
-| 豆瓣             | http://pypi.douban.com/simple            |
-| ---------------- | ---------------------------------------- |
-| 华中理工大学     | http://pypi.hustunique.com/simple        |
-| 山东理工大学     | http://pypi.sdutlinux.org/simple         |
-| 中国科学技术大学 | http://pypi.mirrors.ustc.edu.cn/simple   |
-| 清华大学         | https://pypi.tuna.tsinghua.edu.cn/simple |
-
- 2 使用通道 
-
-
-
-1
-
-pip install requests -i http://pypi.douban.com/simple
-
-
-
-
-
-
-
+[python 生成随机数模块random 常用方法总结 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/34395664)
+
+```
+from openpyxl import Workbook
+
+wb = Workbook()
+ws = wb.active
+
+# 输出测线距中心点处的距离
+ws['A1'] = "测线距中心点处的距离/m"
+for i, item in enumerate(data, start=2):
+    ws.cell(row=i, column=1, value=item['distance_from_center'])
+
+# 输出海水深度
+ws['B1'] = "海水深度/m"
+for i, item in enumerate(data, start=2):
+    ws.cell(row=i, column=2, value=item['depth'])
+
+# 输出覆盖宽度
+ws['C1'] = "覆盖宽度/m"
+for i, item in enumerate(data, start=2):
+    ws.cell(row=i, column=3, value=item['coverage_width'])
+
+# 输出与前一条测线的重叠率
+ws['D1'] = "与前一条测线的重叠率/%"
+for i, item in enumerate(data, start=2):
+    ws.cell(row=i, column=4, value=item['overlap_percentage'])
+
+wb.save("result1.xlsx")
+
+```
+
+```
+from openpyxl import load_workbook
+
+# 打开现有的工作簿
+wb = load_workbook("result1.xlsx")
+
+# 选择要写入的工作表
+ws = wb.active
+
+# 写入 'depth' 值
+for i, item in enumerate(data, start=2):
+    ws.cell(row=2, column=i, value=item['depth'])
+
+# 写入 'coverage_width' 值
+for i, item in enumerate(data, start=2):
+    ws.cell(row=3, column=i, value=item['coverage_width'])
+
+# 写入 'overlap_percentage' 值
+for i, item in enumerate(data, start=2):
+    if item['overlap_percentage'] == 0:
+        # ws.cell(row=4, column=i, value='——')
+        pass
+    else:
+        ws.cell(row=4, column=i, value=item['overlap_percentage'])
+
+# 保存更改
+wb.save("result1.xlsx")
+
+```
+
+![image-20230908142945578](python笔记.assets/image-20230908142945578.png)
+
+```
+import math
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from openpyxl import load_workbook
+
+# 定义参数
+D_center = 70  # 海域中心点处的海水深度
+theta = math.radians(120)  # 换能器开角转换为弧度
+alpha = math.radians(1.5)  # 坡度转换为弧度
+distances = np.array([-800, -600, -400, -200, 0, 200, 400, 600, 800])  # 测线距中心点处的距离
+
+# 计算每个距离的海水深度、覆盖宽度
+sea_depth = D_center - distances * np.tan(alpha)
+coverage_width = 2 * sea_depth * np.tan(theta / 2)
+# 计算重叠率
+overlap_rate = np.zeros(len(distances))
+overlap_rate[1:] = 100 * (coverage_width[:-1] - distances[1:] + distances[:-1]) / coverage_width[:-1]
+
+# 存储结果
+data = pd.DataFrame({
+    'distance': distances,
+    'sea_depth': sea_depth,
+    'coverage_width': coverage_width,
+    'overlap_rate': overlap_rate
+})
+
+# 打印结果
+print(data)
+
+# 保存到Excel文件
+wb = load_workbook("result1.xlsx") # 打开现有的工作簿
+# 选择要写入的工作表
+ws = wb.active
+# 写入 'depth' 值
+for i, item in enumerate(data['depth'], start=2):
+    # ws.cell(row=2, column=i, value=item['depth'])
+    ws.cell(row=2, column=i, value=item)
+# 写入 'coverage_width' 值
+for i, item in enumerate(data['coverage_width'], start=2):
+    # ws.cell(row=3, column=i, value=item['coverage_width'])
+    ws.cell(row=3, column=i, value=item)
+# 写入 'overlap_percentage' 值
+for i, item in enumerate(data['overlap'], start=2):
+    if item == 0:
+        # ws.cell(row=4, column=i, value='——')
+        pass
+    else:
+        ws.cell(row=4, column=i, value=item)
+# 保存更改
+wb.save("result1.xlsx")
+```

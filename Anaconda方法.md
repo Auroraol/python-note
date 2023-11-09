@@ -1,14 +1,6 @@
 [python3.10里没看到pip_mob649e815c3b9e的技术博客_51CTO博客](https://blog.51cto.com/u_16175466/7392579)
 
-
-
-
-
 [开发工具 之四 Python 中的 pip 安装 及 使用详解-CSDN博客](https://blog.csdn.net/ZCShouCSDN/article/details/85002647)
-
-
-
-
 
 # Anaconda介绍
 
@@ -22,15 +14,13 @@
 
 安装: [Anaconda3的安装配置及使用教程](https://blog.csdn.net/m0_59598029/article/details/132238463)
 
+## 安装
 
+### 第一步：下载
 
+清华大学镜像网站下载最新版Anaconda：[点我下载](https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/?C=M&O=D)
 
-
-### 第一步：清华大学镜像网站下载最新版Anaconda：[点我下载](https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/?C=M&O=D)
-
-##### https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/?C=M&O=D
-
-### 点击按日期排序，下载最新版
+#### 点击按日期排序，下载最新版
 
 ![image-20231106232334799](Anaconda方法.assets/image-20231106232334799.png)
 
@@ -38,13 +28,9 @@
 
 <img src="Anaconda方法.assets/image-20231106232356237.png" alt="image-20231106232356237" style="zoom:67%;" />
 
-其他默认
+其他选择默认
 
-
-
-
-
-### 第二步，配置清华镜像源作为下载源(当然也可以换成阿里的、豆瓣的等)
+### 第二步，配置下载源
 
  **点击：Anaconda Prompt**
 
@@ -56,49 +42,33 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/m
 conda config --set show_channel_urls yes
 ```
 
-注意:  可以科学上网就不要设置
+**注意:  可以科学上网就不要设置**
 
 ### 第三步：配置环境变量
 
 ![image-20231106232628635](Anaconda方法.assets/image-20231106232628635.png)
 
+### 第四步： 验证
 
-
-
-
-### 验证是否成功：
-
-##### `conda --version`,如出现版本号，就是成功了~
+ `conda --version`,如出现版本号，就是成功了~
 
 ![img](Anaconda方法.assets/(7{SBZ94HIHQSQNR{N6()Q3.png)
 
+## 使用
 
+### 启动Anaconda，创建一个虚拟环境：
 
-
-
-## 启动Anaconda，创建一个虚拟环境：
-
-<img src="Anaconda方法.assets/image-20231106232816085.png" alt="image-20231106232816085" style="zoom:67%;" />
+<img src="Anaconda方法.assets/image-20231106232816085.png" alt="image-20231106232816085" style="zoom: 50%;" />
 
 ### 虚拟环境名称&语言选择&版本选择
 
-<img src="Anaconda方法.assets/image-20231106232835072.png" alt="image-20231106232835072" style="zoom:67%;" />
+![image-20231109214522196](Anaconda%E6%96%B9%E6%B3%95.assets/image-20231109214522196.png)
 
-<img src="Anaconda方法.assets/image-20231106232850820.png" alt="image-20231106232850820" style="zoom:80%;" />
-
-
-
- 创建成功(py3.11.3)
-
-<img src="Anaconda方法.assets/image-20231106232918455.png" alt="image-20231106232918455" style="zoom:67%;" />
-
-**刚刚创建的虚拟环境路径**
-
-保存到anconda目录下的envs中
+**创建的虚拟环境路径** 都是保存到anconda目录下的envs中
 
 <img src="Anaconda方法.assets/image-20231106232936518.png" alt="image-20231106232936518" style="zoom: 67%;" />
 
-### pycharm接入刚刚的虚拟环境
+## pycharm接入虚拟环境
 
 ![image-20231107132425040](Anaconda方法.assets/image-20231107132425040.png)
 
@@ -106,7 +76,7 @@ conda config --set show_channel_urls yes
 
 ![image-20231107132620002](Anaconda方法.assets/image-20231107132620002.png)
 
-就可以在这里就行编码啦，如果想换一个python版本，可选择其他版本自行创建，不想用的虚拟环境可以删除
+到此就可以在这里就行编码啦，如果想换一个python版本，可选择其他版本自行创建，不想用的虚拟环境可以删除
 
 # pip安装及使用详解
 
@@ -170,6 +140,53 @@ General Options:
                               Don't periodically check PyPI to determine whether a new version of pip is available for
                               download. Implied with --no-index.
   --no-color                  Suppress colored output
+```
 
+
+查看已安装的模块
+
+```
+pip list
+```
+
+查看待更新的模块
+
+```
+pip list-o
+```
+
+更新模块
+
+```
+pip install --U pip
+```
+
+查看pip版本
+
+```
+pip --version
+```
+
+显示已安装模块所在的目录
+
+```
+pip show -f package
+```
+
+## **通道链接**
+
+ 
+
+| 豆瓣             | http://pypi.douban.com/simple            |
+| ---------------- | ---------------------------------------- |
+| 华中理工大学     | http://pypi.hustunique.com/simple        |
+| 山东理工大学     | http://pypi.sdutlinux.org/simple         |
+| 中国科学技术大学 | http://pypi.mirrors.ustc.edu.cn/simple   |
+| 清华大学         | https://pypi.tuna.tsinghua.edu.cn/simple |
+
+使用通道
+
+```
+pip install requests -i http://pypi.douban.com/simple
 ```
 
