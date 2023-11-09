@@ -110,5 +110,66 @@ conda config --set show_channel_urls yes
 
 # pip安装及使用详解
 
+## 概要
 
+pip 是 [Python](https://so.csdn.net/so/search?q=Python&spm=1001.2101.3001.7020) 的包安装程序。是 Python 标准库（The Python Standard Library）中的一个包，只是这个包比较特殊，用它可以来管理 Python 标准库（The Python Standard Library）中其他的包。
+
+pip 支持从 [PyPI](https://pypi.org/)，版本控制，本地项目以及直接从分发文件进行安装。pip 是一个命令行程序。 安装 pip 后，会向系统添加一个 pip 命令，该命令可以从命令提示符运行。
+
+## 安装
+
+从 Python 2 版本 >=2.7.9 或 Python 3 版本 >=3.4 开始，官网的安装包中已经自带了 pip，在安装时用户可以直接选择安装。或者如果使用由 `virtualenv` 或者 `pyvenv` 创建的 Virtual Environment，那么 pip 也是被默认安装的。
+
+如果没有在安装的时候，选择上安装pip，那么也可以从本地安装。例如，直接使用 `get-pip.py` 进行安装。首先从官网下载 `get-pip.py`，然后直接运行 `python get-pip.py` 即可。
+
+更详细的安装，可以直接去官网参看[安装说明](https://pip.pypa.io/en/stable/installing/)
+
+## 使用
+
+安装后，在命令行中键入：`pip`+ 回车，就会出现如下使用说明：
+
+```
+Usage:
+  pip <command> [options]
+
+Commands:
+  install                     Install packages.
+  download                    Download packages.
+  uninstall                   Uninstall packages.
+  freeze                      查看已经安装的包及版本信息
+  list                        列出当前虚拟环境已经安装的包.
+  show                        显示pip包所在目录及信息
+  check                       Verify installed packages have compatible dependencies.
+  config                      Manage local and global configuration.
+  search                      搜索包
+  wheel                       Build wheels from your requirements.
+  hash                        Compute hashes of package archives.
+  completion                  A helper command used for command completion.
+  help                        Show help for commands.
+
+General Options:
+  -h, --help                  Show help.
+  --isolated                  Run pip in an isolated mode, ignoring environment variables and user configuration.
+  -v, --verbose               Give more output. Option is additive, and can be used up to 3 times.
+  -V, --version               Show version and exit.
+  -q, --quiet                 Give less output. Option is additive, and can be used up to 3 times (corresponding to
+                              WARNING, ERROR, and CRITICAL logging levels).
+  --log <path>                Path to a verbose appending log.
+  --proxy <proxy>             Specify a proxy in the form [user:passwd@]proxy.server:port.
+  --retries <retries>         Maximum number of retries each connection should attempt (default 5 times).
+  --timeout <sec>             Set the socket timeout (default 15 seconds).
+  --exists-action <action>    Default action when a path already exists: (s)witch, (i)gnore, (w)ipe, (b)ackup,
+                              (a)bort).
+  --trusted-host <hostname>   Mark this host as trusted, even though it does not have valid or any HTTPS.
+  --cert <path>               Path to alternate CA bundle.
+  --client-cert <path>        Path to SSL client certificate, a single file containing the private key and the
+                              certificate in PEM format.
+  --cache-dir <dir>           Store the cache data in <dir>.
+  --no-cache-dir              Disable the cache.
+  --disable-pip-version-check
+                              Don't periodically check PyPI to determine whether a new version of pip is available for
+                              download. Implied with --no-index.
+  --no-color                  Suppress colored output
+
+```
 
