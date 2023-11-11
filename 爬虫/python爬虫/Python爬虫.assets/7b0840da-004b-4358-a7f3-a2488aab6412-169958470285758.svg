@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>default</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="24" height="24"></rect>
+    </defs>
+    <g id="default" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <g id="蒙版"></g>
+            <g id="编组-2" mask="url(#mask-2)">
+                <g transform="translate(3.562500, 1.500000)">
+                    <path d="M10.875,0 L16.875,6 L16.875,18.75 C16.875,19.9926407 15.8676407,21 14.625,21 L2.25,21 C1.00735931,21 -7.35998826e-16,19.9926407 0,18.75 L0,2.25 C-1.52179594e-16,1.00735931 1.00735931,2.28269391e-16 2.25,0 L10.875,0 Z M8.48648856,8.625 C6.77126516,8.625 5.730995,9.72576483 5.3246024,10.9648306 C4.41894182,11.1956168 3.75,11.9956758 3.75,12.9485666 C3.75,14.0819836 4.69581822,15 5.86250349,15 L11.1062465,15 C12.2729318,15 13.21875,14.0819836 13.21875,12.9485666 C13.21875,11.9977273 12.5519217,11.1976683 11.6483747,10.9658563 C11.2419821,9.72679055 10.201712,8.625 8.48648856,8.625 Z" id="形状结合" fill="#4E86E6"></path>
+                    <path d="M10.875,0 L10.875,4.5 C10.875,5.32842712 11.5465729,6 12.375,6 L16.875,6 L16.875,6 L10.875,0 Z" id="路径-3" fill="#A9C6F3"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

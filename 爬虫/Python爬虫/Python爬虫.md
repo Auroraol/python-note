@@ -158,7 +158,7 @@ print(response.text)
 url = 'https://fanyi.baidu.com/sug'
 data = {'kw': 'spider'}
 headers = {'User-Agent': UserAgent().random}
-response = requests.post(url=url, headers=headers, data=data).json()
+response = requests.post(url=url,  data=data, headers=headers).json()
 result=response.get('data')
 print(result)
 ```
@@ -997,22 +997,6 @@ html = etree.HTML(response) #解析模板总页面
 + <font color=red>xpath解析定位后返回的是列表数据 </font>
 + <font color=red>content = html.xpath('xpath语法')</font>
 
-
-
- **/ 从根节点定位**
-
- **// 从任意节点定位**
-
- **选取当前节点**
-
-
-
-**..选取父节点**
-
-
-
-
-
 #### **[@] 属性定位**
 
 通用写法：tag[@attrname= "attrvalue"]
@@ -1166,12 +1150,6 @@ import jsonpath
 
 [JsonPath 解析数据 (yuque.com)](https://www.yuque.com/weicreate/111/jsonpath#eWkxQ)
 
-
-
-
-
-
-
 ## BeautifulSoup 解析数据
 
 + 简称bs4
@@ -1179,8 +1157,6 @@ import jsonpath
 + Beautiful Soup 是一个HTML/XML的解析器，主要的功能是解析和提取 HTML/XML 数据。
 + Beautiful Soup 是基于HTML DOM的，会载入整个文档，解析整个DOM树，因此时间和内存开销都会大很多，所以性能要低于lxml。
 + BeautifulSoup 用来解析 HTML 比较简单，API非常人性化，支持CSS选择器、Python标准库中的HTML解析器，也支持 lxml 的 XML解析器。
-
-[BeautifulSoup 解析数据 (yuque.com)](https://www.yuque.com/weicreate/111/beautifulsoup)
 
 [BeautifulSoup 官网](https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html)
 
@@ -1354,6 +1330,600 @@ def main():
 
 if __name__ == '__main__':
     main()
+```
+
+# 数据保存
+
+对于文本类型的response，`Content-Type`通常是`text/html`。
+
+对于json类型的response，`Content-Type`通常是`application/json`。
+
++ 图片 用content -----> 对应 "wb",不用写编码格式
++ 文本 用text  --------> 对应 "w", 用编码格式 encoding="utf-8"
++ json 用json() --------> 对应相应的数据类型(text还是content) . 不用with .. as..
+
+储存路径写法:     "基本路径/ 部分名字 " +  可变名字 比如: 
+
+```python
+with open(r'C:\pythonProject\爬虫复习\模板\模板之家 ' + name, "wb") as fp:
+	fp.write(a)
+	print("完成",name)
+```
+
+## **csv表格存储数据**
+
+### csv的介绍
+
++ CSV，全称为 Comma-Separated Values，中文可以叫作逗号分隔值或字符分隔值，其文件以纯文本形式存储表格数据
+
++ 该文件是一个字符序列，可以由任意数目的记录组成，记录间以某种换行符分隔。每条记录由字段组成，字段间的分隔符是其他字符或字符串，最常见的是逗号或制表符
+
++ 不过所有记录都有完全相同的字段序列，相当于一个结构化表的纯文本形式。它比 Excel 文件更加简洁，XLS 文本是电子表格，它包含了文本、数值、公式和格式等内容，而 CSV 中不包含这些内容，就是特定字符分隔的纯文本，结构简单清晰。所以，有时候用 CSV 来保存数据是比较方便的
+
+### csv的使用
+
+| 函数       | 说明                                |
+| ---------- | ----------------------------------- |
+| reader     | 用于读取CSV文件中的数据，返回迭代器 |
+| DictReader | 以键值对形式读取CSV文件中的数据     |
+| writer     | 用于写入CSV文件中的数据             |
+| DictWriter | 以键值对形式写入CSV文件中的数据     |
+
+**csv数据准备**
+
+```
+user_name,gender,money,birthday,address
+邵敏,男,11989.79,2004-05-04 11:17:42,海南省 三亚市 -
+孟艳,男,5939.52,1993-09-30 05:01:42,宁夏回族自治区 吴忠市 盐池县
+孟秀英,女,5035.06,1971-12-09 02:15:25,四川省 阿坝藏族羌族自治州 其它区
+胡娜,男,9201.28,2007-03-28 10:42:27,青海省 海西蒙古族藏族自治州 天峻县
+孔艳,女,10042.75,2019-11-08 18:48:26,甘肃省 甘南藏族自治州 卓尼县
+锺军,女,11410.27,1987-01-20 02:30:12,青海省 西宁市 湟中县
+孟丽,女,4352.68,2022-12-21 07:31:06,吉林省 吉林市 丰满区
+万秀兰,女,13328.74,1997-11-18 10:05:50,浙江省 绍兴市 绍兴县
+陈勇,女,9128.15,2010-12-09 08:59:52,上海 上海市 金山区
+熊娜,女,11702.69,1995-09-18 17:33:06,广东省 茂名市 电白县
+刘杰,男,10277.58,2021-07-02 11:27:41,四川省 泸州市 古蔺县
+毛秀英,男,3781.16,2015-10-07 13:23:21,浙江省 温州市 文成县
+李强,男,7010.92,1992-06-10 13:34:43,河北省 秦皇岛市 山海关区
+常秀兰,男,15778.79,2006-11-20 00:10:35,内蒙古自治区 兴安盟 扎赉特旗
+何芳,女,19429.38,2018-05-01 00:25:15,宁夏回族自治区 固原市 彭阳县
+胡霞,男,18284.23,2000-10-23 14:08:15,宁夏回族自治区 银川市 兴庆区
+龚娜,男,6578.04,2020-12-18 05:32:12,北京 北京市 丰台区
+廖秀兰,女,19719.13,2007-08-17 14:26:06,山东省 临沂市 郯城县
+陈静,女,1523.39,1984-11-28 15:47:00,黑龙江省 牡丹江市 阳明区
+康磊,女,3141.22,1979-01-27 20:53:00,四川省 巴中市 通江县
+```
+
+####   reader
+
++ 用于读取CSV文件中的数据，返回迭代器
+
+```python
+import csv
+
+with open('data.csv', mode='r', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    for item in reader:
+    	print(item)
+```
+
+![image-20231110081056000](Python%E7%88%AC%E8%99%AB.assets/image-20231110081056000.png)
+
+#### DictReader
+
++ 以键值对形式读取CSV文件中的数据
+
+```python
+with open('data.csv', mode='r', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+    headers = reader.fieldnames
+    print(headers)
+    for item in reader:
+        print(item)
+```
+
+![image-20231110080914759](Python%E7%88%AC%E8%99%AB.assets/image-20231110080914759.png)
+
+#### writer
+
++ 用于写入CSV文件中的数据
++ 默认情况下保存的CSV数据会间隔一行，设置 newline='' 取消空行
++ 使用 writer.writerow 方法 以列表形式写入一行数据
++ 使用 writer.writerows 方法 以二维列表形式写入多行数据
+
+```python
+with open('user_data.csv', mode='w', newline='', encoding='utf-8') as f:
+    writer = csv.writer(f)
+    writer.writerow(['id', 'name', 'gender', 'age'])
+    writer.writerow(['001', '阿洁', '男', 20])
+    writer.writerow(['002', '阿柒', '男', 21])
+    writer.writerow(['003', '阿通', '女', 19])
+    writer.writerow(['004', '阿典', '男', 30])
+    
+    writer.writerows([['005', '阿晴', '女', 25], ['006', '阿雅', '女', 28]])
+```
+
+#### DictWriter
+
++ 以键值对形式写入CSV文件中的数据
+
++ 使用 DictWriter.writerow(fn,fieldnames) 方法 以键值对形式写入一行数据
+
++ 使用 DictWriter.writerows(fn,fieldnames) 方法 以列表嵌套键值对形式写入多行数据
+
++ 使用 writer.writeheader 方法 以键值对形式写入表头
+
+```python
+with open('user_data2.csv', mode='w', newline='', encoding='utf-8') as f:
+    headers = {'id', 'name', 'gender', 'age'}
+    writer = csv.DictWriter(f, headers)
+    writer.writeheader() #表头 
+    writer.writerow({'id': '001', 'name': '阿洁', 'gender': '男', 'age': 20})
+    writer.writerow({'id': '002', 'name': '阿柒', 'gender': '男', 'age': 21})
+    writer.writerow({'id': '003', 'name': '阿通', 'gender': '女', 'age': 19})
+    writer.writerow({'id': '004', 'name': '阿典', 'gender': '男', 'age': 30})
+    
+    data = [{'id': '005', 'name': '阿晴', 'gender': '女', 'age': 25},
+            {'id': '006', 'name': '阿雅', 'gender': '女', 'age': 28}]
+    writer.writerows(data)
+```
+
+###  **csv案例**
+
+ 获取4399游戏中"最新好玩小游戏列表"
+
+**目标地址：**[4399小游戏](https://www.4399.com/)
+
+```python
+import requests
+import csv
+from bs4 import BeautifulSoup
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54",
+}
+url = "https://www.4399.com"
+response = requests.get(url, headers=headers)
+response.encoding = 'gbk'
+
+print(response.text)
+
+soup = BeautifulSoup(response.text, 'lxml')
+data = soup.select('.tm_fun.h_3 ul a')
+items = []
+for item in data:
+    href = item.get('href')
+    item_info = {
+        'title': item.get_text(),
+        'img': 'https:' + item.select_one('img').get('lz_src'),
+        'href': url + href if href.startswith('/') else href
+    }
+    items.append(item_info)
+    print(item_info)
+
+with open('games.csv', mode='a', newline='', encoding='utf-8') as f:
+    fieldnames = {'title', 'img', 'href'}
+    writer = csv.DictWriter(f, fieldnames)
+    writer.writeheader()
+    writer.writerows(items)
+```
+
+获取B站视频标题、作者、播放量、喜欢、壁纸
+目标网址：https://www.bilibili.com/
+
+```python
+import requests
+import csv
+from bs4 import BeautifulSoup
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54",
+}
+url = "https://www.4399.com"
+response = requests.get(url, headers=headers)
+response.encoding = 'gbk'
+
+print(response.text)
+
+soup = BeautifulSoup(response.text, 'lxml')
+data = soup.select('.tm_fun.h_3 ul a')
+items = []
+for item in data:
+    href = item.get('href')
+    item_info = {
+        'title': item.get_text(),
+        'img': 'https:' + item.select_one('img').get('lz_src'),
+        'href': url + href if href.startswith('/') else href
+    }
+    items.append(item_info)
+    print(item_info)
+
+with open('games.csv', mode='a', newline='', encoding='utf-8') as f:
+    fieldnames = {'title', 'img', 'href'}
+    writer = csv.DictWriter(f, fieldnames)
+    writer.writeheader()
+    writer.writerows(items)
+```
+
+## **MySQL存储数据**
+
+### **MySQL的介绍**
+
+多个表组成一个数据库，也就是关系型数据库
+
+关系型数据库有多种，如 SQLite、MySQL、Oracle、SQL Server、DB2 等
+
+### **MySQL的使用**
+
+```python
+import pymysql
+import requests
+
+
+class Spider:
+    def __init__(self):
+        # 连接数据库
+        self.db = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='root',
+            password='123123',
+            db='spider'
+        )
+        # 获取游标对象
+        self.cursor = self.db.cursor()
+        # 定义网页信息
+        self.url = 'https://baidu.com'
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+
+    def create_table(self):
+        # 创建数据表
+        sql = """CREATE TABLE name(
+            id INT PRIMARY KEY AUTO_INCREMENT NOT NULL ,
+            name VARCHAR(255) NOT NULL,
+            age DECIMAL(5,2) DEFAULT 0,
+            gender ENUM('man','woman'),
+            class INT NOT NULL 
+        )"""
+        # 异常处理
+        try:
+            self.cursor.execute(sql)
+            print('CREATE SUCCESS')
+        except Exception as e:
+            print('CREATE FAILED,CASE:', e)
+
+    def get_data(self):
+        # 获取网页数据
+        response = requests.get(url=self.url, headers=self.headers)
+        return response.text
+
+    def parse_data(self, response):
+        # 解析响应数据
+        # ...
+        name = '获取的姓名'
+        age = '获取的年龄'
+        gender = '获取的性别'
+        _class = '获取的班级'
+        self.save_data(name, age, gender, _class)
+
+    def save_data(self, name, age, gender, _class):
+        # 数据库插入数据
+        sql = 'INSERT INTO name(id,name,age,gender,class) values(%s,%s,%s,%s,%s)'
+        try:
+            self.cursor.execute(sql, args=(0, name, age, gender, _class))
+            self.db.commit()  # 提交
+            print('INSERT SUCCESS')
+        except Exception as e:
+            self.db.rollback()  # 回滚
+            print('CREATE FAILED,CASE:', e)
+
+    def run(self):
+        self.create_table()
+        response = self.get_data()
+        self.parse_data(response)
+        self.cursor.close()
+        self.db.close()
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    spider.run()
+```
+
+### MySQL案例
+
+获取百度招聘Python岗位信息
+
+目标地址：[百度招聘](https://talent.baidu.com/external/baidu/index.html)
+
++ 获取名称、工作条件、工作内容、工作地点
+
+```python
+import requests
+            'Cookie': 'BIDUPSID=6DAE2BE6DE41A36518E0802F1B820BAA; PSTM=1672477071; BAIDUID=6DAE2BE6DE41A365056D0C9618163E37:FG=1; BDORZ=FFFB88E999055A3F8A630C64834BD6D0; BAIDUID_BFESS=6DAE2BE6DE41A365056D0C9618163E37:FG=1; Hm_lvt_50e85ccdd6c1e538eb1290bc92327926=1672559377,1672559564; RT="z=1&dm=baidu.com&si=7w2nasej03r&ss=lcd2o1kb&sl=5&tt=342&bcn=https%3A%2F%2Ffclog.baidu.com%2Flog%2Fweirwood%3Ftype%3Dperf"; Hm_lpvt_50e85ccdd6c1e538eb1290bc92327926=1672559581',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+
+    def create_table(self):
+        """创建数据表"""
+        sql = """CREATE TABLE IF NOT EXISTS baidu(
+                id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                serviceCondition TEXT NOT NULL,
+                workContent TEXT NOT NULL,
+                workPlace VARCHAR(255) NOT NULL                          
+        )"""
+        try:
+            self.cursor.execute(sql)
+            print('CREATE TABLE SUCCESS')
+        except Exception as e:
+            print('CREATE TABLE FAILED,CASE:', e)
+
+    def get_data(self, keyword, page):
+        """获取网页数据"""
+        data = {
+            'recruitType': 'SOCIAL',
+            'pageSize': '10',
+            'keyWord': keyword,
+            'curPage': page,
+            'projectType': '',
+        }
+        response = requests.post(self.url, headers=self.headers, data=data)
+        # print(response.json())
+        return response.json()
+
+    def parse_data(self, response):
+        """解析响应数据"""
+        data = response['data']['list']
+        for item in data:
+            name = item.get('name', '无')
+            serviceCondition = item.get('serviceCondition', '无')
+            workContent = item.get('workContent', '无')
+            workPlace = item.get('workPlace', '无')
+            # print(name, serviceCondition, workContent, workPlace)
+            # 数据库插入数据
+            self.save_data(name, serviceCondition, workContent, workPlace)
+
+    def save_data(self, name, serviceCondition, workContent, workPlace):
+        """数据库插入数据"""
+        sql = 'INSERT INTO baidu(id,name,serviceCondition,workContent,workPlace) VALUES(%s,%s,%s,%s,%s)'
+        try:
+            self.cursor.execute(sql, (0, name, serviceCondition, workContent, workPlace))
+            self.db.commit()  # 提交
+            print('INSERT SUCCESS')
+except Exception as e:
+        self.db.rollback()  # 回滚
+        print('INSERT FAILED,CASE:', e)
+
+        def run(self):
+        keyword = input('请输入招聘岗位：')
+        page = int(input('请输入页数：'))
+        self.create_table()
+        for page in range(1, page + 1):
+        response = self.get_data(keyword, page)
+        self.parse_data(response)
+        self.cursor.close()
+        self.db.close()
+
+
+        if __name__ == '__main__':
+        baidu = Baidu()
+        baidu.run()
+```
+
+获取腾讯视频电视剧一栏里的电视剧信息
+
+目标网址：[腾讯视频 - 中国领先的在线视频媒体平台,海量高清视频在线观看](https://v.qq.com/channel/tv?channel=tv&feature=7&iarea=814&listpage=1)
+
++ 提取名称、集数、描述，获取20个页面
+
+```python
+import pymysql
+
+class Spider:
+    def __init__(self):
+        # 连接数据库
+        self.db = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='root',
+            password='123123',
+            db='spider'
+        )
+        # 获取游标对象
+        self.cursor = self.db.cursor()
+        # 定义网页信息
+        self.url = 'https://pbaccess.video.qq.com/com.tencent.qqlive.protocol.pb.VLPageService/getVLPage?video_appid=3000010'
+        self.headers = {
+            'cookie': 'RK=yvN8hrwEHy; ptcz=4749f7ca08e70dc65bed32bd2c7448af9eb38c99f032a6974725b335bb55c25b; pgv_pvid=5165889288; _clck=3866836399|1|f7e|0; pac_uid=0_b686f84f0328f; eas_sid=B126z7P1Q701w4I6Y6H8M6s4h6; video_platform=2; tvfe_boss_uuid=9d8908044291084c; video_platform=2; video_guid=6699dba602dade94; pgv_info=ssid=s2191640720',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+
+    def create_table(self):
+        # 创建数据表
+        sql = """CREATE TABLE tencent_video(
+            id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            second_title VARCHAR(255) NOT NULL,
+            timelong VARCHAR(255) NOT NULL
+        )"""
+        # 异常处理
+        try:
+            self.cursor.execute(sql)
+            print('CREATE SUCCESS')
+        except Exception as e:
+            print('CREATE FAILED,CASE:', e)
+
+    def get_data(self, page):
+        # 获取网页数据
+        data = {"page_context": {"page_index": page},
+                "page_params": {"page_id": "channel_list_second_page", "page_type": "operation", "channel_id": "100113",
+                                "filter_params": "feature=-1&iarea=-1&year=-1&pay=-1&sort=75", "page": page}}
+        response = requests.get(url=self.url, headers=self.headers, json=data)
+        return response.json()
+
+    def parse_data(self, response, page):
+        # 解析响应数据
+        try:
+            data = response["CardList"][1]["children_list"]["list"]["cards"]
+        except:
+            data = response["CardList"][0]["children_list"]["list"]["cards"]
+        for item in data:
+            title = item.get('params').get('title', '无')
+            second_title = item.get('params').get('second_title', '无')
+            timelong = item.get('params').get('timelong', '无')
+            print(title,second_title,timelong)
+            self.save_data(title, second_title, timelong)
+
+    def save_data(self, title, second_title, timelong):
+        # 数据库插入数据
+        sql = 'INSERT INTO tencent_video(id,title,second_title,timelong) values(%s,%s,%s,%s)'
+        try:
+            self.cursor.execute(sql, args=(0, title, second_title, timelong))
+            self.db.commit()  # 提交
+            print('INSERT SUCCESS')
+        except Exception as e:
+            self.db.rollback()  # 回滚
+            print('CREATE FAILED,CASE:', e)
+
+    def run(self):
+        self.create_table()
+        page = int(input('请输入页数：'))
+        for p in range(page):
+            response = self.get_data(p)
+            self.parse_data(response, p)
+        self.cursor.close()
+        self.db.close()
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    spider.run()
+```
+
+## **MongoDB存储数据**
+
+### **MongoDB简介**
+
+MongoDB 是由 C++ 语言编写的非关系型数据库，是一个基于分布式文件存储的开源数据库系统，其内容存储形式类似 JSON 对象，它的字段值可以句含其他文档、数组及文档数组，非常灵活。
+
+### **MongoDB封装类**
+
+```python
+
+import pymongo
+import requests
+
+
+class Spider:
+    def __init__(self):
+        # 连接数据库
+        self.client = pymongo.MongoClient(
+            host='localhost',
+            port=27017
+        )
+        # 创建数据库集合
+        self.collection = self.client['spider']['name']
+        self.url = 'https://www.baidu.com'
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+
+        }
+
+    def get_data(self):
+        # 获取网页数据
+        response = requests.get(url=self.url, headers=self.headers)
+        return response.text
+
+    def parse_data(self, response):
+        # 解析响应数据
+        # ...
+        item_info = {}
+        item_info['title'] = '获取的标题'
+        item_info['img'] = '获取的图片地址'
+        item_info['url'] = '获取的链接地址'
+        self.save_data(item_info)
+
+    def save_data(self, info):
+        # 插入数据到mongo数据库
+        self.collection.insert_one(info)
+
+    def run(self):
+        response = self.get_data()
+        self.parse_data(response)
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    spider.run()
+```
+
+### MongoDB案例
+
+获取到爱奇艺视频电视剧信息
+
+目标网址:[内地电视剧大全-好看的内地电视剧排行榜-爱奇艺](https://list.iqiyi.com/www/2/15-------------11-1-1-igiyi--.html?s_source=PCW_SC)
+
++ 获取标题、链接、描述信息并保存到mongo数据库
+
+```python
+import pymongo
+import requests
+from retrying import retry
+
+
+class IQiYi:
+    def __init__(self):
+        self.client = pymongo.MongoClient(
+            host='localhost',
+            port=27017
+        )
+        self.collection = self.client['spider']['iqiyi']
+        self.url = 'https://pcw-api.iqiyi.com/search/recommend/list'
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+
+    @retry(stop_max_attempt_number=3)
+    def get_data(self, params):
+        response = requests.get(url=self.url, params=params, headers=self.headers)
+        return response.json()
+
+    def parse_data(self, response):
+        data = response['data']['list']
+        for item in data:
+            item_info = {}
+            item_info['title'] = item['title']
+            item_info['playUrl'] = item['playUrl']
+            item_info['description'] = item['description'].replace('\n', '')
+            print(item_info)
+            self.save_data(item_info)
+
+    def save_data(self, info):
+        self.collection.insert_one(info)
+
+    def run(self):
+        page = int(input('请输入页数：'))
+        for page in range(1, page+1):
+            params = {
+                'channel_id': '2',
+                'data_type': '1',
+                'mode': '11',
+                'page_id': page,
+                'ret_num': '48',
+                'session': '63bd9816bc423d33355fcf0333b55637',
+                'three_category_id': '15;must',
+            }
+            response = self.get_data(params)
+            self.parse_data(response)
+
+
+if __name__ == '__main__':
+    iqy = IQiYi()
+    iqy.run()
 ```
 
 # 验证码
@@ -3198,13 +3768,1422 @@ if __name__ == "__main__":
     start_tasks()
 ```
 
+# **Selenium的使用**
+
+## Selenium的介绍
+
++ Selenium是一个Web的自动化测试工具，最初是为网站自动化测试而开发的，类型像我们玩游戏用的按键精灵，可以按指定的命令自动操作，不同是 Selenium 可以直接运行在浏览器上，它支持所有主流的浏览器（包括PhantomJS这些无界面的浏览器）
+
++ Selenium可以根据我们的指令，让浏览器自动加载页面，获取需要的数据，甚至页面截屏，或者判断网站上某些动作是否发生
+
++ Selenium自己不带浏览器，不支持浏览器的功能，它需要与第三方浏览器结合在一起才能使用。但是我们有时候需要让它内嵌在代码中运行，所以我们可以用一个叫 PhantomJS 的工具代替真实的浏览器
+
+##  Selenium的环境配置
+
+1 安装模块
+
+```
+pip install selenium
+```
+
+2 安装驱动
+
+●驱动地址：http://chromedriver.storage.googleapis.com/index.html
+
+●驱动要对应浏览器版本，否则会无法启动
+
+●禁止浏览器更新 打开 cmd 输入 services.msc 打开后台服务，把浏览器自动更新给禁止
+
+## 浏览器对象
+
++ Selenium 支持非常多的浏览器，如 Chrome、 Firefox、Edge 等，还有Android、BlackBerry 等手机端的浏览器。另外,也支持无界面浏览器 PhantomJS
+
+| 谷歌浏览器对象   | webdriver.Chrome()    |
+| ---------------- | --------------------- |
+| 火狐浏览器对象   | webdriver.Firefox()   |
+| Edge浏览器对象   | webdriver.Edge()      |
+| 无头浏览器对象   | webdriver.PhantomJs() |
+| Safari浏览器对象 | webdriver.Safari()    |
+
+## 创建浏览器对象
+
+```python
+import time
+from selenium import webdriver
+from selenium.webdriver import ChromeOptions
+
+path = 'tools/chromedriver.exe'
+browser = webdriver.Chrome(path)
+```
+
+## 配置浏览器对象
+
+配置参数：https://peter.sh/experiments/chromium-command-line-switches/
+
+**创建 ChromeOptions 对象**
+
+```
+options = ChromeOptions()
+```
+
+**无头浏览器**
+
+```
+options.add_argument('--headless')
+options.add_argument("user-agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'")
+```
+
+**禁用图片**
+
+```
+prefs = {"profile.managed_default_content_settings.images": 2}
+options.add_experimental_option('prefs', prefs)
+```
+
+**User-Agent设置**
+移动端User-Agent：http://www.fynas.com/ua
+
+```
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+options.add_argument('user-agent=%s' % user_agent)
+```
+
+**隐藏自动化测试提示**
+
+```
+options.add_experimental_option('excludeSwitches', ['enable-automation'])
+```
+
+**防止检测**
+
+```
+设置window.navigator.webdriver为False
+options.add_argument('--disable-blink-features=AutomationControlled')
+```
+
+**设置代理**
+
+```
+options.add_argument('--proxy-server=http://121.13.252.60:41564')
+```
+
+**隐藏滚动条**
+
+```
+options.add_argument('--hide-scrollbars')
+```
+
+**禁用JavaScript**
+
+```
+options.add_argument('--disable-javascript')
+```
+
+**文件下载**
+
++ download.default_directory：指定路径
+
++ profile.default_content_settings.popups：0为屏蔽弹窗，1 为开启弹窗
+
+```
+prefs = {'profile.default_content_settings.popups': 0, 'download.default_directory': 'D:\'}
+options.add_experimental_option('prefs', prefs)
+```
+
+ **配置浏览器**
+
+```
+path = 'tools/chromedriver.exe'
+browser = webdriver.Chrome(executable_path=path, options=options)
+```
+
+**访问网页**
+
++ 使用 browser.get()方法 访问指定网页
+
+```
+browser.get('https://www.baidu.com')
+```
+
+**获取网页源码**
+
++ 通过 browser.page_source 属性 获取 页面源码
+
+```
+source = browser.page_source
+print(source)
+```
 
 
 
+## 元素定位
+
+> 只演示常用的方法
+
+```python
+driver.find_element_by_id()                 # 通过id属性定位(唯一)；常用
+driver.find_element_by_xpath()              # 通过xpath表达式定位；常用
+driver.find_element_by_class_name()         # 通过类名定位；常用
+driver.find_element_by_name()               # 通过name属性定位
+driver.find_element_by_tag_name()           # 通过标签名定位
+driver.find_element_by_css_selector()       # 通过css选择器定位
+driver.find_element_by_link_text()          # 通过链接标签的text类容定位
+driver.find_element_by_partial_link_text()  # 通过匹配链接标签的text类容定位
+```
+
+以百度首页的搜索框节点为例，**搜索python**
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/image-20231110100418776.png" alt="image-20231110100418776" style="zoom:67%;" />
+
+搜索框的`html`结构：
+
+```cobol
+<input id="kw" name="wd" class="s_ipt" value="" maxlength="255" autocomplete="off">
+```
+
+### id定位
+
+```
+find_element_by_id()  `根据`id`属性获取，这里`id`属性是 `kw
+```
+
+```python
+from selenium import webdriver
+import time  
+ 
+browser = webdriver.Chrome()
+ 
+browser.get(r'https://www.baidu.com')  
+time.sleep(2)
+ 
+# 在搜索框输入 python
+browser.find_element_by_id('kw').send_keys('python')
+time.sleep(2)
+ 
+# 关闭浏览器
+browser.close()
+```
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/image-20231110100335452.png" alt="image-20231110100335452" style="zoom: 80%;" />
+
+### xpath定位
+
+```
+find_element_by_xpath()
+```
+
+```python
+from selenium import webdriver
+import time  
+ 
+browser = webdriver.Chrome()
+ 
+browser.get(r'https://www.baidu.com')  
+time.sleep(2)
+ 
+# 在搜索框输入 python
+browser.find_element_by_xpath("//*[@id='kw']").send_keys('python')
+time.sleep(2)
+ 
+# 关闭浏览器
+browser.close()
+```
+
+### **携带链接的文本选择器**
+
+```python
+more = browser.find_element(By.LINK_TEXT, '更多')
+print(more)
+```
+
+### **携带链接的部分文本选择器**
+
+```python
+hao123 = browser.find_element(By.PARTIAL_LINK_TEXT, 'hao')
+print(hao123)
+```
+
+### 定位多元素
+
+使用 find_elements(by,text) 方法 以列表形式返回所有元素
+
+```python
+Input = browser.find_elements(By.TAG_NAME, 'input')
+print(Input)
+```
+
+## 获取元素属性
+
+### 获取元素文本
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/image-20231110101315893.png" alt="image-20231110101315893" style="zoom: 50%;" />
+
+```
+<a class="title-content tag-width c-link c-font-medium c-line-clamp1" href="https://www.baidu.com/s?cl=3&amp;tn=baidutop10&amp;fr=top1000&amp;wd=%E5%90%84%E5%9C%B0%E8%B4%AF%E5%BD%BB%E5%8D%81%E4%B9%9D%E5%B1%8A%E5%85%AD%E4%B8%AD%E5%85%A8%E4%BC%9A%E7%B2%BE%E7%A5%9E%E7%BA%AA%E5%AE%9E&amp;rsv_idx=2&amp;rsv_dl=fyb_n_homepage&amp;sa=fyb_n_homepage&amp;hisfilter=1" target="_blank"><span class="title-content-index c-index-single c-index-single-hot1">1</span><span class="title-content-title">各地贯彻十九届六中全会精神纪实</span></a>
+```
+
+```python
+from selenium import webdriver
+import time  
+ 
+browser = webdriver.Chrome()
+ 
+browser.get(r'https://www.baidu.com')  
+ 
+logo = browser.find_element_by_css_selector('#hotsearch-content-wrapper > li:nth-child(1) > a')
+print(logo.text)  #通过 text 属性 获取 元素文本
+
+# 关闭浏览器
+browser.close()
+```
+
+输出
+
+```python
+各地贯彻十九届六中全会精神纪实
+```
+
+### 获取元素属性值
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/image-20231110100406152.png" alt="image-20231110100406152" style="zoom:67%;" />
+
+```
+<img hidefocus="true" id="s_lg_img" class="index-logo-src" src="//www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" width="270" height="129" onerror="this.src='//www.baidu.com/img/flexible/logo/pc/index.png';this.onerror=null;" usemap="#mp">
+```
+
+```python
+from selenium import webdriver
+import time  
+ 
+browser = webdriver.Chrome()
+ 
+browser.get(r'https://www.baidu.com')  
+ 
+logo = browser.find_element_by_class_name('index-logo-src')
+print(logo.get_attribute('src')) #获取 元素的属性值
+ 
+# 关闭浏览器
+browser.close()
+```
+
+输出：
+
+```cobol
+https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png
+```
+
+### 获取其他属性
+
+除了属性和文本值外，还有id、位置、标签名和大小等属性。
+
+```python
+from selenium import webdriver
+import time  
+ 
+browser = webdriver.Chrome()
+ 
+browser.get(r'https://www.baidu.com')  
+ 
+logo = browser.find_element_by_class_name('index-logo-src')
+print(logo.id)
+print(logo.location)
+print(logo.tag_name)
+print(logo.size)
+ 
+# 关闭浏览器
+browser.close()
+```
+
+输出：
+
+```cobol
+6af39c9b-70e8-4033-8a74-7201ae09d540
+{'x': 490, 'y': 46}
+img
+{'height': 129, 'width': 270}
+```
+
+## 元素操作
+
+模拟输入
+点击元素
+清空输入
+元素截图
+元素检查
+判断元素是否可见
+判断元素是否可点击
+判断元素是否被选中
+
+### 模拟输入
+使用 send_keys(value)方法 指定元素输入内容
+
+```
+kw = browser.find_element(By.ID, 'kw')
+kw.send_keys('python')
+```
+
+### 点击元素
+使用 click()方法 点击元素
+
+```
+su = browser.find_element(By.ID, 'su')
+su.click()
+time.sleep(2)
+```
+
+### 回车确认
+
+```python
+from selenium import webdriver
+import time  
+ 
+browser = webdriver.Chrome()
+browser.get(r'https://www.baidu.com')  
+time.sleep(2)
+ 
+# 定位搜索框
+input = browser.find_element_by_class_name('s_ipt')
+# 输入python
+input.send_keys('python')
+time.sleep(2)
+# 回车查询
+input.submit()
+time.sleep(5)
+ 
+# 关闭浏览器
+browser.close()
+```
+
+### 清空输入
+
+使用 clear()方法 清空元素内容
+
+```
+kw = browser.find_element(By.ID, 'kw')
+# 输入python
+kw.send_keys('python')
+time.sleep(2)
+# 清除python
+kw.clear()
+time.sleep(2)
+```
+
+### 元素截图
+
+使用screenshot(path)方法截图元素
+
++ 通过 screenshot_as_base64 属性 获取截图元素 base64
+
+```
+su = browser.find_element(By.ID, 'su')
+su.screenshot('search.png')
+
+b64_img = su.screenshot_as_base64
+print(b64_img)
+```
+
+### **元素检查**
+
+#### 判断元素是否可见
+
+使用 is_displayed()方法 判断元素是否可见
+
+```
+kw = browser.find_element(By.ID, 'kw')
+print(kw.is_displayed())
+```
+
+#### 判断元素是否可点击
+
+使用 is_enabled()方法 判断元素是否可点击
+
+```
+su = browser.find_element(By.ID, 'su')
+print(su.is_enabled())
+```
+
+#### 判断元素是否被选中
+
+使用is_selected()方法 判断元素是否被选中
+
+```
+kw = browser.find_element(By.ID, 'kw')
+print(kw.is_selected())
+```
+
+## 获取浏览器属性
+
+获取浏览器标题
+获取浏览器尺寸
+获取当前网页地址
+获取cookies
+删除cookies
+添加cookie
+
+### 获取浏览器标题
+
+通过 title 属性获取网页标题
+
+```
+title = browser.title
+print(title)
+```
+
+### 获取浏览器尺寸
+
+使用 get_window_size()方法 获取浏览器尺寸
+
+```
+size = browser.get_window_size()
+win_width = size.get('width')
+win_height = size.get('height')
+```
+
+### 获取当前网页地址
+
+通过 current_url 获取 网页地址
+
+```
+url = browser.current_url
+print(url)
+```
+
+### 获取cookies
+
+使用get_cookie(name)方法 获取指定 cookie
+使用 get_cookies（）方法 获取列表形式的 cookies
+
+```
+cookie = browser.get_cookie('BA_HECTOR')
+cookies = browser.get_cookies()
+print(cookie)
+print(cookies)
+```
+
+### 删除cookies
+
+使用 delete_cookie(name)方法 删除指定 cookie
+使用 delete_cookies()方法 删除所有 cookie
+
+```
+browser .delete_cookie('BA_HECTOR')
+browser.delete_all_cookies()
+```
+
+### 添加cookie
+
+使用add_cookie()方法添加指定cookie
+
+```
+for cookie in cookies:
+print(cookie)
+browser.add_cookie(cookie)
+browser.refresh()
+```
+
+## 浏览器操作
+
+设置浏览器尺寸
+最小化浏览器
+最大化浏览器
+返回
+前进
+刷新
+关闭浏览器
+屏幕截图
+
+### 设置浏览器尺寸
+
+使用 set_window_size(width,height) 方法 设置浏览器尺寸
+
+```
+browser.set_window_size(1920, 1080)
+```
+
+### 最小化浏览器
+
+使用 minimize_window()方法 最小化浏览器
+
+```
+browser.minimize_window()
+```
+
+### 最大化浏览器
+
+使用 maximize_window() 方法 最大化浏览器
+
+```
+browser.maximize_window()
+```
+
+### 返回
+
+使用back()方法 返回上一个页面
+
+```
+browser.back()
+time.sleep(2)
+```
+
+### 前进
+
+使用forward()方法 前进到下一个页面
+
+```
+browser. forward()
+time.sleep(2)
+```
+
+### 刷新
+
+使用 refresh()方法 刷新页面
+
+```
+browser.refresh()
+time.sleep(2)
+```
+
+### 关闭浏览器
+
+```
+browser.quit()
+```
+
+### 屏幕截图
+
+使用get_screenshot_as_file保存当前页面截图
+使用 get_screenshot_as base64获取当前页面截图的base64
+
+```
+browser.get_screenshot_as_file('driver.png')
+b64_img = browser.get_screenshot_as_base64()
+print(b64_img)
+```
+
+## 文件上传
+
+```
+browser.get('https://imgse.com/')
+time.sleep(2)
+filepath = r'C:\Users\Administrator\PycharmProjects\pythonProject\Python高级爬虫\19.Session的使用\images\pic.png'
+upload = browser.find_element(By.XPATH, '//input[@type="file"]')
+upload.send_keys(filepath)
+time.sleep(2)
+```
+
+## 执行JavaScript
+
+```
+2
+3
+单步执行
+使用 execute_script(js)方法 执行 js
+1
+2
+browser.get('https://www.baidu.com')
+time.sleep(2)
+3
+4
+browser.execute_script("document.getElementById("su").style["display"]="none"')
+time.sleep(2)
+异步执行
+使用 execute_async_script(js)方法 异步执行 js
+1
+browser .execute_async_script('setTimeout (function() {debugger) , 2000)' )
+2
+3
+time.sleep(2)
+设置元素文本内容
+1
+2
+browser.execute_script("document.querySelector("#kw").value ="selenium"")
+time.sleep(2)\
+
+传递参数执行
+su = browser.find_element(By.ID, 'su')
+browser.execute_script("arguments[0].style["display"]="block"", su)
+su.click()
+time.sleep(20)
+```
 
 
 
-# 使用selenium爬百度文库ppt
+## 页面滚动
+
+```
+3
+火面滚动
+获取当前滚动条高度
+1
+2
+scrollTop = browser.execute_script('return document.documentElement.scrollTop')
+print(scrollTop)
+滚动到指定位置
+绝对路径
+1
+2
+scrollTo 中参数1 为 横向滚动条 ，参数2 为 竖向滚动条
+browser .execute_script( 'window.scrollTo(0,document .body . scrollHeight)')
+time.sleep(2)
+相对路径
+1
+2
+browser .execute_script('window.scrollBy(0, -1000) ')
+time.sleep(2)
+
+3
+滚动到底部
+1
+2
+browser .execute_script('document.documentElement.scrollTop=10000' )
+time.sleep(2)
+4
+滚动到顶部
+1
+2
+browser .execute_script('document.documentElement.scrollTop=o')
+time.sleep(2)
+```
+
+## 视频操作
+
+```
+1
+获取视频地址
+1
+2
+browser.get('https://haokan.baidu.com/v?vid=4759456910754957111')
+video = browser.find_element(By.TAG_NAME, 'video')
+3
+4
+video_url = browser.execute_script('return arguments[0].currentsrc', video)
+print(video_url)
+2
+3
+播放视频
+1
+2
+browser.execute_script('arguments[0].play()', video)
+time.sleep(2)
+暂停播放
+1
+2
+browser.execute_script("arguments[0].pause()', video)
+time.sleep(2)
+```
+
+
+
+## 选项卡管理
+
+```
+四火下目庄
+1
+打开新标签页
+1
+browser.execute_script("window.open("https://www.baidu.com")")
+2
+获取当前标签句柄
+1
+2
+current_handle = browser.current_window_handle
+print(current_handle)
+3
+获取所有标签句柄
+1
+2
+handles = browser.window_handles
+print(handles)
+4
+切换标签页
+1
+2
+browser.switch_to.window(handles[-1])
+time.sleep(3)
+关闭当前标签页
+1
+browser.close()
+```
+
+
+
+## 模拟键盘操作
+
+````
+ 全选 
+
+●使用 Keys.CONTROL 方法 模拟键入CTRL
+
+
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+```
+from selenium.webdriver.common.keys import Keys
+
+kw = browser.find_element(By.ID, 'kw')
+
+kw.send_keys('python')
+
+time.sleep(2)
+
+kw.send_keys(Keys.CONTROL, 'a')
+
+time.sleep(2)
+```
+
+
+
+ 2 复制 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.CONTROL, 'c')
+
+time.sleep(2)
+
+ 3 剪切 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.CONTROL, 'x')
+
+time.sleep(2)
+
+ 4 粘贴 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.CONTROL, 'v')
+
+time.sleep(2)
+
+ 5 空格 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.SPACE)
+
+time.sleep(2)
+
+ 6 后退键 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.BACKSPACE)
+
+time.sleep(2)
+
+ 7 回车键 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.ENTER)
+
+time.sleep(2)
+
+ 8 TAB键 
+
+
+
+1
+
+2
+
+3
+
+kw = browser.find_element(By.ID, 'kw')
+
+kw.send_keys(Keys.TAB)
+
+time.sleep(2)
+
+ 9 F5键 
+
+
+
+1
+
+2
+
+kw.send_keys(Keys.F5)
+
+time.sleep(2)
+````
+
+
+
+## IFrame切换
+
+我们知道网页中有一种节点叫作 iframe，也就是子 Frame，相当于页面的子页面，它的结构和外部网页的结构完全一致。Selenium 打开页面后，它默认是在父级 Frame 里面操作，而此时如果页面中还有子 Frame，它是不能获取到子 Frame 里面的节点的。这时就需要使用 switch to.frame() 方法来切换 Frame
+
+
+
+```
+ 切换到子页面 
+
+●使用 switch_to.frame(iframe) 方法 切换到子页面
+
+
+
+1
+
+2
+
+3
+
+4
+
+5
+
+browser.get('https://www.douban.com/')
+
+time.sleep(2)
+
+IFrame = browser.find_element(By.TAG_NAME, 'iframe')
+
+browser.switch_to.frame(IFrame)
+
+browser.find_element(By.NAME, 'phone').send_keys('123')
+
+ 2 切换到初始主页面 
+
+●使用 switch.default_content() 方法 切换到主页面
+
+
+
+1
+
+2
+
+3
+
+browser.switch_to.default_content()
+
+browser.find_element(By.CSS_SELECTOR, '.inp input').send_keys('python')
+
+time.sleep(2)
+
+
+```
+
+
+
+## 选择框操作
+
+```
+browser.get(
+
+r'file:///C:\Users\Administrator\PycharmProjects\pythonProject\Python高级爬虫\19.Session的使用\tools\selenium.html')
+
+time.sleep(2)
+
+
+
+ 单选框 
+
+
+
+1
+
+2
+
+3
+
+radios = browser.find_elements(By.CSS_SELECTOR, 'input[name="r1"]')
+
+radios[1].click()
+
+time.sleep(2)
+
+2 多选框
+
+ 1 取消已选项目 
+
+
+
+1
+
+2
+
+3
+
+4
+
+checkbox = browser.find_elements(By.CSS_SELECTOR, '#checkbox input[checked]')
+
+for cb in checkbox:
+
+​    cb.click()
+
+​    time.sleep(2)
+
+2 选中多选框项目
+
+
+
+1
+
+2
+
+3
+
+checkbox = browser.find_elements(By.CSS_SELECTOR, '#checkbox input')
+
+checkbox[1].click()
+
+time.sleep(2)
+
+3 下拉框
+
+ 1 创建下拉框对象 
+
+●使用 Select(element) 方法 将元素 转换为下拉框对象
+
+
+
+1
+
+2
+
+3
+
+from selenium.webdriver.support.select import Select
+
+select = Select(browser.find_element(By.ID, 'pro'))
+
+2 通过索引选中下拉框项目
+
+
+
+1
+
+2
+
+select.select_by_index(1)
+
+time.sleep(2)
+
+ 3 通过可见文本选中下拉框项目 
+
+
+
+1
+
+2
+
+select.select_by_visible_text('广东')
+
+time.sleep(2)
+
+ 4 通过value属性值选中下拉框 
+
+
+
+1
+
+2
+
+select.select_by_value('bj')
+
+time.sleep(2)
+```
+
+## 对话框处理
+
+```
+ 对话框处理 
+
+●使用 browser.switch_to.alert 方法 切换 到对话框
+
+ 1 警示框 
+
+●使用 accept() 方法 确认 警示框
+
+
+
+1
+
+2
+
+3
+
+4
+
+browser.find_element(By.ID, 'bu1').click()
+
+time.sleep(2)
+
+alert = browser.switch_to.alert
+
+alert.accept()
+
+ 2 确认框 
+
+●使用 dismiss() 方法 取消 确认框
+
+
+
+1
+
+2
+
+3
+
+4
+
+5
+
+browser.find_element(By.ID, 'bu2').click()
+
+time.sleep(2)
+
+confirm = browser.switch_to.alert
+
+confirm.dismiss()
+
+confirm.accept()
+
+ 3 提示框 
+
+●使用 send_keys(value) 方法 输入内容
+
+
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+browser.find_element(By.ID, 'bu3').click()
+
+prompt = browser.switch_to.alert
+
+print(prompt.text)
+
+time.sleep(2)
+
+prompt.send_keys('python')
+
+prompt.accept()
+```
+
+
+
+## 延时等待
+
+现在的网页越来越多采用了 Ajax 技术，这样程序便不能确定何时某个元素完全加载出来了。如果实际页面等待时间过长导致某个dom元素还没出来，但是你的代码直接使用了这个WebElement，那么就会抛出NullPointer的异常
+●为了避免这种元素定位困难而且会提高产生 ElementNotVisibleException 的概率。所以 Selenium 提供了两种等待方式，一种是隐式等待，一种是显式等待
+
+
+
+```
+强制等待
+●使用 time.sleep(second) 方法 阻塞等待
+
+
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+start = time.time()
+
+browser.get('https://www.baidu.com')
+
+time.sleep(2)
+
+news = browser.find_elements(By.CLASS_NAME, 'title-content-title')
+
+for item in news:
+
+​    print(item.text)
+
+​    print(time.time() - start)
+
+ 2 隐式等待 
+
+●隐式等待是等待特定的时间，一个浏览器对象只需调用一次，获取的元素如果在指定时间内加载完毕则继续执行，否则报错
+
+●使用 implicitly_wait(second) 方法 隐式等待
+
+
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+start = time.time()
+
+browser.get('https://www.baidu.com')
+
+browser.implicitly_wait(20)
+
+news = browser.find_elements(By.CLASS_NAME, 'title-content-title')
+
+for item in news:
+
+​    print(item.text)
+
+​	print(time.time() - start)
+```
+
+
+
+3 显式等待
+
+●显式等待指定某个条件，然后设置最长等待时间，如果在指定时间还没有符合条件，则报错
+
+4 等待条件
+
+| title_is                                   | 标题是某内容                                       |
+| ------------------------------------------ | -------------------------------------------------- |
+| title contains                             | 标题包含某内容                                     |
+| presence of element located                | 节点加载出，传入定位元组，如(By.ID,p')             |
+| visibility of element located              | 节点可见，传入定位元组                             |
+| visibility_of                              | 可见，传入节点对象                                 |
+| presence_of all elements located           | 所有节点加载出                                     |
+| text to be_present in element              | 某个节点文本包含某文字                             |
+| text to_be_present in element_value        | 某个节点值包含某文字                               |
+| frame to be available and switch to iframe | 加载并切换                                         |
+| invisibility_of element located            | 节点不可见                                         |
+| element to be clickable                    | 节点可点击                                         |
+| staleness of                               | 判断一个节点是否仍在 DOM，可判断页面是否已经刷新   |
+| element to be selected                     | 节点可选择，传节点对象                             |
+| element located to be selected             | 节点可选择，传入定位元组                           |
+| element selection state to be              | 传入节点对象以及状态，相等返回 True，否则返回False |
+| element located selection state to be      | 传入定位元组以及状态，相等返回 True，否则返回False |
+| alert is present                           | 是否出现 Alert                                     |
+
+5 创建WebDriverWait对象
+
+WebDriverWait(driver,timeout,poll_frequency,ignored_exceptions)
+
+driver：浏览器对象
+
+timeout：最大超时时间(秒)
+
+poll_frequency：执行间隔(秒)
+
+ignored_exceptions：忽略的异常
+
+```
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+wait = WebDriverWait(browser, 10, 0.2)
+```
+
+等待指定条件符合
+●使用 wait.until(method) 方法 等待指定条件符合，直到返回值的计算结果 为 True
+●使用 EC.presence_of_element_located(locator) 方法 判断元素是否加载完毕
+●使用 EC.presence_of_all_elements_located(locator) 方法 判断所有元素加载完毕
+
+```
+
+start = time.time()
+browser.get('https://www.baidu.com')
+news = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'title-content-title')))
+for item in news:
+    print(item.text)
+    print(time.time() - start)
+
+kw = wait.until(EC.presence_of_element_located((By.ID, 'kw')))
+kw.send_keys('python')
+```
+
+等待指定条件不符合
+●使用 wait.until_not(method) 方法 等待指定元素不符合条件，直到返回值的计算结果 为 False
+●使用 EC.element_to_be_clickable(locator) 方法 判断元素是否可点击
+●使用 EC.visibility_of_element_located(locator) 方法 判断元素是否可见
+
+```
+wait.until(EC.element_to_be_clickable((By.ID, 'su'))).click()
+wait.until_not(EC.visibility_of_element_located((By.ID, 's_lg_img_new')))
+```
+
+
+
+## 动作链
+
+```
+ 创建动作链对象
+●
+使用 ActionChains(driver) 方法 创建动作链对象
+2
+ 点击元素
+●
+使用 actions.click(element) 方法 点击元素
+●
+使用 perform() 方法 执行动作链
+3
+ 模拟输入
+4
+ 指定元素模拟输入
+5
+ 双击元素
+1
+2
+action.double_click(user).perform()
+time.sleep(2)
+6
+ 右击元素
+1
+2
+action.context_click(user).perform()
+time.sleep(2)
+7
+ 长按元素
+1
+2
+3
+login_btn = browser.find_element(By.XPATH, '//*[@id="J-login"]')
+action.click_and_hold(login_btn).perform()
+time.sleep(0.5)
+8
+ 释放
+1
+2
+action.release().perform()
+time.sleep(2)
+9
+ 移动到元素
+1
+2
+3
+note_btn = browser.find_element(By.LINK_TEXT, '短信验证')
+action.move_to_element(note_btn).click().perform()
+time.sleep(2)
+10
+ 移动到元素偏移量
+1
+2
+3
+4
+5
+block = browser.find_element(By.LINK_TEXT, '滑块验证')
+width = block.size.get('width')
+height = block.size.get('height')
+action.move_to_element_with_offset(block, width / 2, height / 2).click().perform()
+time.sleep(2)
+11
+ 拖动元素
+1
+ 拖动到元素
+1
+2
+3
+4
+block = browser.find_element(By.XPATH, '//*[@class="nc_iconfont btn_slide"]')
+bar = browser.find_element(By.XPATH, '//*[@class="nc-lang-cnt"]')
+action.drag_and_drop(block, bar).perform()
+time.sleep(2)
+2
+ 拖动到偏移量
+1
+2
+action.drag_and_drop_by_offset(block, bar.size.get('width'), 0).perform()
+time.sleep(10)
+```
+
+
+
+## 异常处理
+
+```
+TimeoutException
+1
+2
+3
+4
+5
+6
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
+try:
+browser.get('https://www.baidu.com')
+except TimeoutException:
+print('执行超时！')
+2
+ NoSuchElementException
+1
+2
+3
+4
+try:
+    browser.find_element(By.ID, 'python')
+except NoSuchElementException:
+	print('该元素不存在！')
+
+
+```
+
+## 使用selenium爬百度文库ppt
 
 百度文库共享文档要下载券下载真的是烦死人，但是一个个图片点击保存又太麻烦。所以就只能有劳python爬虫大人出马了。不过鉴于我技术不过关，写出的爬虫等级比较低下.
 
@@ -3218,7 +5197,7 @@ if __name__ == "__main__":
 
 网址：https://wenku.baidu.com/view/78deda6ac381e53a580216fc700abb68a882ad56.html?from=search 
 
-## 1.分析网页
+### 1.分析网页
 
 首先我们用谷歌打开这个网址，它是这个样子：
 
@@ -3288,7 +5267,7 @@ https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/
 
 所以，分析网页的目的是写定位节点规则,和匹配信息的模板
 
-## 2.编码
+### 2.编码
 
 直接在代码中解释，没有注释的地方可以当作模板，直接跳过
 
@@ -3296,8 +5275,1053 @@ https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/
 
 ![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255203.png)
 
-## 3.把图片合成pdf
+### 3.把图片合成pdf
 
 全部选择：
 
 ![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255204.png)
+
+# **多线程的使用**
+
+## 封装线程类
+
+```python
+import requests
+import threading
+import pymongo
+from queue import Queue
+
+
+class Spider:
+    def __init__(self):
+        # 连接数据库
+        self.client = pymongo.MongoClient(host='localhost', port=27017)
+        # 创建数据库集合
+        self.collection = self.client['spider']['spider_coll']
+        # 定义网页信息
+        self.url = '要获取的网页地址'
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+        # 创建队列
+        self.params_queue = Queue()  # 请求参数 队列
+        self.data_queue = Queue()  # 网页数据 队列
+        self.result_queue = Queue()  # 解析数据 队列
+        
+    # 请求参数
+    def get_params(self):
+        # 获取页数设置
+        for page in range(1, 2):  #页面参数
+            # 处理请求参数
+            params = {'page': page}
+            # 将 请求参数 放入 params队列，该队列计数加一
+            self.params_queue.put(params)
+
+   # 响应数据
+    def get_data(self):
+        while True:
+            # 从 params队列 取出 params参数，该队列计数不变
+            params = self.params_queue.get()
+            # 获取网页数据
+            response = requests.get(url=self.url, params=params, headers=self.headers)
+            print(response.json())
+            # 将 响应数据 放入 data队列，该队列计数加一
+            self.data_queue.put(response.json())
+            # params队列计数减一，队列使用 get 与 task_done 方法后计数才会减少
+            self.params_queue.task_done()
+
+    # 解析数据        	
+    def parse_data(self):
+        while True:
+            # 从 data队列 中 取出 响应数据
+            data = self.data_queue.get()
+            # 解析 响应数据
+            for item in data:
+                item_info = {}
+                item_info['title'] = '获取的标题'
+                item_info['follow'] = '获取的关注量'
+                item_info['url'] = '获取的详情地址'
+                # 将 解析数据 放入 result队列，该队列计数加一
+                self.result_queue.put(item_info)
+                # data队列计数减一
+                self.data_queue.task_done()
+
+    def save_data(self):
+        while True:
+            # 从 result队列 中 取出 解析数据
+            result = self.result_queue.get()
+            # 将 解析数据 保存 到 mongo数据库
+            self.collection.insert_one(result)
+            # result队列计数减一
+            self.result_queue.task_done()
+
+    def main(self):
+        # 定义一个线程列表
+        thread_list = []
+
+        # 创建 get_params 子线程，一般创建一个子线程即可
+        for i in range(1):
+            td_get_params = threading.Thread(target=self.get_params)
+            thread_list.append(td_get_params)  # 将 子线程 放入 线程列表
+
+        # 创建 get_data 子线程，该线程用于获取数据，可创建多个线程
+        for i in range(3):
+            td_get_data = threading.Thread(target=self.get_data)
+            thread_list.append(td_get_data)
+
+        # 创建 parse_data 子线程
+        for i in range(1):
+            td_parse_data = threading.Thread(target=self.parse_data)
+            thread_list.append(td_parse_data)
+
+        # 创建 save_data 子线程
+        for i in range(1):
+            td_save_data = threading.Thread(target=self.save_data)
+            thread_list.append(td_save_data)
+
+        # 遍历 线程列表
+        for t in thread_list:
+            t.setDaemon(True)  # 设置 为 守护主线程，主线程结束，子线程也结束
+            t.start()  # 启动线程
+
+        # 主线程阻塞，等待所有队列计数为零
+        for q in [self.params_queue, self.data_queue, self.result_queue]:
+            q.join()
+
+
+if __name__ == '__main__':
+    spider = Spider()  # 实例化线程类
+    spider.main()  # 执行程序
+```
+
+## 多线程爬虫案例
+
+使用多线程获取到爱奇艺视频电视剧的信息
+
+目标网址:  [内地电视剧大全-好看的内地电视剧排行榜-爱奇艺](https://list.iqiyi.com/www/2/15-------------11-1-1-igiyi--.html?s_source=PCW_SC)
+
++ 获取标题、链接、描述信息并保存到mongo数据库
+
+```python
+import threading
+import time
+
+import pymongo
+import requests
+from retrying import retry
+from queue import Queue
+
+
+class IQiYi:
+    def __init__(self):
+        self.client = pymongo.MongoClient(
+            host='localhost',
+            port=27017
+        )
+        self.collection = self.client['spider']['iqy']
+        self.url = 'https://pcw-api.iqiyi.com/search/recommend/list'
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+        self.params_queue = Queue()  # 创建处理params参数的队列
+        self.data_queue = Queue()  # 创建存储网页数据的队列
+        self.result_queue = Queue()  # 创建存储解析数据的队列
+
+    def get_params(self):
+        for page in range(1, 20):
+            params = {
+                'channel_id': '2',
+                'data_type': '1',
+                'mode': '11',
+                'page_id': page,
+                'ret_num': '48',
+                'session': '63bd9816bc423d33355fcf0333b55637',
+                'three_category_id': '15;must',
+            }
+            # 将各页数的 params参数 放入 params队列
+            self.params_queue.put(params)
+            
+    def get_data(self):
+            while True:
+                # 从 params队列 中取出params参数
+                params = self.params_queue.get()
+                # 获取网页数据
+                response = requests.get(url=self.url, params=params)
+                print(response.json())
+                # 将 响应数据 放入 data队列
+                self.data_queue.put(response.json())
+                # params队列的计数-1
+                self.params_queue.task_done()
+
+    def parse_data(self):
+        while True:
+            # 从data队列中取出data参数
+            response = self.data_queue.get()
+            # 解析数据
+            data = response['data']['list']
+            for item in data:
+                item_info = {}
+                item_info['title'] = item['title']
+                item_info['playUrl'] = item['playUrl']
+                item_info['description'] = item['description'].replace('\n', '')
+                # print(item_info)
+                # 将 解析的数据 放入result队列
+                self.result_queue.put(item_info)
+            # data队列计数-1
+            self.data_queue.task_done()
+
+    def save_data(self):
+        while True:
+            # 从result队列中取出result参数
+            result = self.result_queue.get()
+            # 插入数据到mongo数据库
+            self.collection.insert_one(result)
+            # result队列计数-1
+            self.result_queue.task_done()
+
+    def main(self):
+        thread_list = []
+
+        # 创建 get_params子线程
+        for i in range(1):
+            td_get_params = threading.Thread(target=self.get_params)
+            thread_list.append(td_get_params)
+
+        # 创建 get_data 子线程
+        for i in range(3):
+            td_get_data = threading.Thread(target=self.get_data)
+            thread_list.append(td_get_data)
+
+        # 创建 parse_data 子线程
+        for i in range(1):
+            td_parse_data = threading.Thread(target=self.parse_data)
+            thread_list.append(td_parse_data)
+
+        # 创建 save_data 子线程
+        for i in range(1):
+            td_save_data = threading.Thread(target=self.save_data)
+            thread_list.append(td_save_data)
+
+        # 遍历 子线程 列表
+        for t in thread_list:
+            t.setDaemon(True)  # 设置 为 守护主线程 主线程结束，子线程也结束
+            t.start()  # 启动线程
+
+        # 主线程阻塞，等待队列的计数为零
+        for q in [self.params_queue, self.data_queue, self.result_queue]:
+            q.join()
+
+
+if __name__ == '__main__':
+    start = time.time()
+    iqy = IQiYi()
+    iqy.main()
+    end = time.time()
+    print(end - start)
+```
+
+## **线程池实现爬虫**
+
+### 线程池介绍
+
++ 线程池，是一种线程的使用模式，它为了降低线程使用中频繁的创建和销毁所带来的资源消耗与代价。通过创建一定数量的线程，让他们时刻准备就绪等待新任务的到达，而任务执行结束之后再重新回来继续待命
+
+### 线程池的使用
+
+#### 定义线程任务
+
+```
+def task():
+    print('running task...')
+	time.sleep(1)
+	return 'success'
+```
+
+#### 创建一个线程池
+
+●调用 ThreadPoolExecutor 类的构造器创建一个线程池
+
+●使用 max_workers 方法 设置创建的线程数量
+
+```
+from concurrent.futures import ThreadPoolExecutor
+
+pool = ThreadPoolExecutor(max_workers=5)
+```
+
+#### 提交线程任务
+
+●调用 ThreadPoolExecutor 对象的 submit 方法来提交线程任务
+
+●使用 result 方法返回线程任务的返回值
+
+```
+result_list = []
+for i in range(10):
+    response = pool.submit(task)
+	result_list.append(response)
+
+for res in result_list:
+    print(res.result())
+```
+
+#### 关闭线程池
+
+●调用 ThreadPoolExecutor 对象的 shutdown 方法来关闭线程池
+
+```
+pool.shutdown()
+```
+
+### **封装进程池类**
+
+```python
+import time
+import pymysql
+
+
+class Spider:
+    def __init__(self):
+        self.db = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='root',
+            password='123123',
+            db='spider'
+        )
+        self.cursor = self.db.cursor()
+        self.url = '要获取的地址'
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+
+    def create_table(self):
+        sql = """CREATE TABLE name(
+            id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            pageUrl TEXT NOT NULL,
+            desc TEXT NOT NULL
+        )"""
+        try:
+            self.cursor.execute(sql)
+            print('CREATE SUCCESS')
+        except Exception as e:
+            print('CREATE FAILED,CASE:', e)
+
+    def get_data(self, page):
+        params = {
+            'page': page
+        }
+        response = requests.get(url=self.url, params=params, headers=self.headers)
+        return response.json()
+
+    def parse_data(self, response):
+        for item in data:
+            title = item.get('title')
+            pageUrl = item.get('pageUrl')
+            desc = item.get('desc')
+
+            self.save_data(name, title, pageUrl, desc)
+
+    def save_data(self, name, title, pageUrl, desc):
+        sql = 'INSERT INTO name(id,title,pageUrl,desc) VALUES (%s,%s,%s,%s,%s)'
+        try:
+            self.cursor.execute(sql, args=(0, name, title, pageUrl, desc))
+            self.db.commit()
+            print('INSERT SUCCESS')
+        except Exception as e:
+            self.db.rollback()
+            print('INSERT FAILED,CASE:', e)
+
+    def run(self):
+        page = 10
+        # 创建线程池对象，设置5个线程
+        with ThreadPoolExecutor(5) as pool:
+            for p in range(1, page + 1):
+                # 线程池提交线程任务
+                response = pool.submit(self.get_data, p)
+                # 获取线程任务的返回值，并且解析数据
+                self.parse_data(response.result())
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    spider.run()
+```
+
+### 进程池案例
+
+ 使用线程池获取百度招聘Python岗位信息
+
+目标地址：[百度招聘](https://talent.baidu.com/external/baidu/index.html)
+
++ 获取名称、工作条件、工作内容、工作地点
+
+```python
+# 目标地址：https://talent.baidu.com/external/baidu/index.html
+# 
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+import pymysql
+import requests
+
+
+class Baidu:
+    def __init__(self):
+        self.db = pymysql.connect(
+            host='localhost',
+            port=3306,
+            user='root',
+            password='123123',
+            db='spider'
+        )
+        self.cursor = self.db.cursor()
+        self.url = 'https://talent.baidu.com/httservice/getPostListNew'
+        self.headers = {
+            'Referer': 'https://talent.baidu.com',
+            'Cookie': 'BIDUPSID=6DAE2BE6DE41A36518E0802F1B820BAA; PSTM=1672477071; BAIDUID=6DAE2BE6DE41A365056D0C9618163E37:FG=1; BDORZ=FFFB88E999055A3F8A630C64834BD6D0; BAIDUID_BFESS=6DAE2BE6DE41A365056D0C9618163E37:FG=1; Hm_lvt_50e85ccdd6c1e538eb1290bc92327926=1672559377,1672559564; RT="z=1&dm=baidu.com&si=7w2nasej03r&ss=lcd2o1kb&sl=5&tt=342&bcn=https%3A%2F%2Ffclog.baidu.com%2Flog%2Fweirwood%3Ftype%3Dperf"; Hm_lpvt_50e85ccdd6c1e538eb1290bc92327926=1672559581',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+
+    def create_table(self):
+        sql = """CREATE TABLE IF NOT EXISTS baidu2(
+                id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                serviceCondition TEXT NOT NULL,
+                workContent TEXT NOT NULL,
+                workPlace VARCHAR(255) NOT NULL                          
+        )"""
+        try:
+            self.cursor.execute(sql)
+            print('CREATE TABLE SUCCESS')
+        except Exception as e:
+            print('CREATE TABLE FAILED,CASE:', e)
+
+
+    def get_data(self, keyword, page):
+        data = {
+            'recruitType': 'SOCIAL',
+            'pageSize': '10',
+            'keyWord': keyword,
+            'curPage': page,
+            'projectType': '',
+        }
+        response = requests.post(self.url, headers=self.headers, data=data)
+        # print(response.json())
+        return response.json()
+
+    def parse_data(self, response):
+        data = response['data']['list']
+        for item in data:
+            name = item.get('name', '无')
+            serviceCondition = item.get('serviceCondition', '无')
+            workContent = item.get('workContent', '无')
+            workPlace = item.get('workPlace', '无')
+            # print(name, serviceCondition, workContent, workPlace)
+            # 数据库插入数据
+            self.save_data(name, serviceCondition, workContent, workPlace)
+
+    def save_data(self, name, serviceCondition, workContent, workPlace):
+        sql = 'INSERT INTO baidu2(id,name,serviceCondition, workContent, workPlace) values(%s,%s,%s,%s,%s)'
+        try:
+            self.cursor.execute(sql, args=(0, name, serviceCondition, workContent, workPlace))
+            self.db.commit()  # 提交
+            print('INSERT SUCCESS')
+        except Exception as e:
+            self.db.rollback()  # 回滚
+            print('INSERT FAILED,CASE:', e)
+
+    def run(self):
+        keyword = input('请输入招聘岗位：')
+        page = int(input('请输入页数：'))
+        self.create_table()
+        start = time.time()
+        # 创建线程池对象[同时创建五个线程]
+        with ThreadPoolExecutor(5) as pool:
+            for page in range(1, page + 1):
+                # 提交线程任务给线程池
+                response = pool.submit(self.get_data, keyword, page)
+                # 使用result方法获取线程
+                self.parse_data(response.result())
+        self.cursor.close()
+        self.db.close()
+        print(time.time() - start)
+
+
+if __name__ == '__main__':
+    baidu = Baidu()
+    baidu.run()
+```
+
+# 多进程爬虫
+
++  由于GIL全局锁的存在，多线程在python3下可能只是个摆设，对应的解释器执行其中的内容的时候仅仅是顺序执行，此时我们可以考虑多进程的方式实现，思路和多线程相似，只是对应的api不相同
+
+## **封装多进程类**
+
+```python
+import time
+from multiprocessing import Process, JoinableQueue as Queue
+
+import pymongo
+import requests
+
+# 连接数据库，需要将mongo定义为全局变量，因为进程之间不共享
+client = pymongo.MongoClient(
+    host='localhost',
+    port=27017,
+)
+# 创建数据库集合
+collection = client['spider']['tencent_video']
+
+
+class Spider:
+    def __init__(self):
+        self.start = None
+        # 定义网页信息
+        self.url = '要获取的网页地址'
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.54'
+        }
+        # 创建队列
+        self.params_queue = Queue()
+        self.data_queue = Queue()
+        self.result_queue = Queue()
+
+    def get_params(self, page):
+        for i in range(page):
+            # 批量处理data参数
+            data = {"page": page}
+            # 将 data参数 放入 params队列，该队列计数加一
+            self.params_queue.put(data)
+
+    def get_data(self):
+        while True:
+            # 从 params队列 取出 data参数，该队列计数不变
+            data = self.params_queue.get()
+            # 获取网页数据
+            response = requests.post(url=self.url, headers=self.headers, json=data)
+            print(response.json())
+            # 将 响应数据 放入 data队列
+            self.data_queue.put(response.json())
+            # params队列计数减一
+            self.params_queue.task_done()
+
+    def parse_data(self):
+        while True:
+            # 从 data队列 中 取出 响应数据
+            data = self.data_queue.get()
+            # 解析响应数据
+            for item in data:
+                item_info = {}
+                item_info['title'] = item.get('title')
+                item_info['pageUrl'] = item.get('pageUrl')
+                item_info['desc'] = item.get('desc')
+                print(item_info)
+                # 将 解析数据 放入 result队列
+                self.result_queue.put(item_info)
+            # data队列计数减一
+            self.data_queue.task_done()
+
+    def save_data(self):
+        while True:
+            # 从 result队列 中 取出 解析数据
+            result = self.result_queue.get()
+            # 数据库插入数据
+            collection.insert_one(result)
+            # result队列计数减一
+            self.result_queue.task_done()
+
+    def run(self):
+        page = 5
+        self.start = time.time()
+        # 定义进程列表
+        process_list = []
+        # 创建 get_params 子进程
+        for i in range(1):
+    print(time.time() - spider.start)
+```
+
+##  多进程爬虫案例 
+
+ 使用多进程获取腾讯视频电视剧一栏里的电视剧信息 
+
+目标网址：[腾讯视频 - 中国领先的在线视频媒体平台,海量高清视频在线观看](https://v.qq.com/channel/tv?channel=tv&feature=7&iarea=814&listpage=1)
+
++ 提取名称、集数、描述，获取20个页面
+
+```python
+import time
+            # 批量处理data参数
+            data = {"page_context": {"page_index": page},
+                    "page_params": 
+                    {"page_id": "channel_list_second_page", "page_type": "operation",
+                     "channel_id": "100113", "filter_params": "", "page": page}}
+            # 将 data参数 放入 params队列，该队列计数加一
+            self.params_queue.put(data)
+
+    def get_data(self):
+        while True:
+            # 从 params队列 取出 data参数，该队列计数不变
+            data = self.params_queue.get()
+            # 获取网页数据
+            response = requests.post(url=self.url, headers=self.headers, json=data)
+            print(response.json())
+            # 将 响应数据 放入 data队列
+            self.data_queue.put(response.json())
+            # params队列计数减一
+            self.params_queue.task_done()
+
+    def parse_data(self):
+        while True:
+            # 从 data队列 中 取出 响应数据
+            response = self.data_queue.get()
+            # 解析响应数据
+            try:
+                data = response["CardList"][1]["children_list"]["list"]["cards"]
+            except:
+                data = response["CardList"][0]["children_list"]["list"]["cards"]
+            for item in data:
+                item_info = {}
+                item_info['title'] = item.get('params').get('title', '无')
+                item_info['second_title'] = item.get('params').get('second_title', '无')
+                item_info['timelong'] = item.get('params').get('timelong', '无')
+                print(item_info)
+                # 将 解析数据 放入 result队列
+                self.result_queue.put(item_info)
+            # data队列计数减一
+            self.data_queue.task_done()
+
+    def save_data(self):
+        while True:
+            # 从 result队列 中 取出 解析数据
+            result = self.result_queue.get()
+            # 数据库插入数据
+            collection.insert_one(result)
+            # result队列计数减一
+            self.result_queue.task_done()
+
+    def run(self):
+        page = int(input('请输入页数：'))
+        self.start = time.time()
+        # 定义进程列表
+        process_list = []
+        # 创建 get_params 子进程
+        for i in range(1):
+            p_get_params = Process(target=self.get_params, args=(page,))
+            process_list.append(p_get_params)
+        # 创建 get_data 子进程，可创建多个进程
+        for i in range(5):
+            p_get_data = Process(target=self.get_data)
+            process_list.append(p_get_data)
+        # 创建 parse_data 子进程，可创建多个进程
+        for i in range(1):
+            p_parse_data = Process(target=self.parse_data)
+            process_list.append(p_parse_data)
+        # 创建 save_data 子进程
+        for i in range(1):
+            p_save_data = Process(target=self.save_data)
+            process_list.append(p_save_data)
+        # 遍历 进程列表
+        for p in process_list:
+            p.daemon = True  # 设置为守护进程，主进程结束，子进程也结束
+            p.start()  # 启动进程
+            time.sleep(0.5)
+
+        # 主进程堵塞，等待所有队列为零
+        for q in [self.params_queue, self.data_queue, self.result_queue]:
+            q.join()
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    spider.run()
+    print(time.time() - spider.start)
+```
+
+# **异步协程爬虫:crossed_swords:**
+
+##  异步协程介绍
+
+  **异步** 
+
+●为完成某个任务，不同程序单元之间过程中无需通信协调，也能完成任务的方式，不相关的程序单元之间可以是异步的，例如：爬虫下载网页
+
+●调度程序调用下载程序后，即可调度其他任务，而无需与该下载任务保持通信以协调行为，不同网页的下载、保存等操作都是无关的，也无需相互通知协调，这些异步操作的完成时刻并不确定
+
+ **同步** 
+
+●不同程序单元为了完成某个任务，在执行过程中需靠某种通信方式以协调一致，我们称这些程序单元是同步执行的
+
+ **阻塞** 
+
+●阻塞状态指程序未得到所需计算资源时被挂起的状态。程序在等待某个操作完成期间，自身无法继续处理其他的事情，则称该程序在该操作上是阻塞的
+
+ **非阻塞** 
+
+●程序在等待某操作过程中，自身不被阳塞，可以继续处理其他的事情，则称该程序在该操作上是非阻塞的
+
+●同步/异步关注的是消息通信机制
+
+●阻塞/非阻塞关注的是程序在等待调用结果(消息，返回值) 时的状态
+
+## Aiohttp介绍 
+
+●aiohttp是一个为Python提供异步HTTP客户端/服务端编程，基于asyncio用于支持异步编程的标准库)的异步库asyncio可以实现单线程并发I/O操作，其实现了TCP、UDP、SSL等协议，aiohttp就是基于asyncio实现的http框架。
+
+●async 用来声明一个函数为异步函数
+
+●await 用来声明程序挂起，比如异步程序执行到某一步时需要等待的时间很长，就将此挂起，去执行其他的异先程序
+
+## Aiohttp的使用
+
+### **单线程发送请求**
+
+```
+import time
+import requests
+
+
+def main():
+    for i in range(50):
+        res = requests.get('https://www.baidu.com')
+        print(i, res.status_code)
+
+if __name__ == '__main__':
+    t1 = time.time()
+    main()
+    print(time.time() - t1)
+```
+
+###  Aiohttp发送请求
+
+调用协程对象
+
+```python
+import asyncio
+import time
+
+
+async def request(client, i):
+    # 使用 client 对象的 get 方法 发送请求，通过await关键字阻塞
+    res = await client.get('https://www.baidu.com')
+    return i, res.status
+
+
+async def main():
+    # 使用 上下文管理器 创建 aiohttp.ClientSession 对象
+    async with aiohttp.ClientSession() as client:
+        for i in range(50):
+            # 使用await关键字阻塞，调用 协程对象，传递 client 对象
+            res = await request(client, i)
+            print(res)
+
+
+t1 = time.time()
+# 使用 asyncio.run 方法 调用 协程对象
+asyncio.run(main())
+print(time.time() - t1)
+```
+
+**调用task对象**
+
+```python
+import asyncio
+import aiohttp
+import time
+
+
+async def request(client, i):
+    # 使用 client 对象 的 get 方法 发送请求，通过await关键字阻塞
+    res = await client.get('https://www.baidu.com')
+    return i, res.status
+
+
+async def main():
+    # 使用 上下文管理器 创建 aiohttp.ClientSession 对象
+    async with aiohttp.ClientSession() as client:
+        task_list = []
+        for i in range(50):
+            # 创建 协程对象
+            req = request(client, i)
+            # 创建 task对象
+            task = asyncio.create_task(req)
+            task_list.append(task)
+
+        # 将 协程列表转换为可等待的对象，使用await关键字阻塞
+        # wait对象返回一个元组：task集合、各协程任务的状态
+        done, pending = await asyncio.wait(task_list)
+        for item in done:
+            # 使用 result 方法 获取协程任务的返回值
+            print(item.result())
+
+
+t1 = time.time()
+# 使用 asyncio.run 方法 调用 协程对象
+asyncio.run(main())
+print(time.time() - t1)
+```
+
+##  异步协程爬虫案例 
+
+ 采集王者荣耀官网里面所有的图片信息 
+
+目标网址:[英雄资料列表页-英雄介绍-王者荣耀官方网站-腾讯游戏](https://pvp.qq.com/web201605/herolist.shtml)
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/image-20231110153040459.png" alt="image-20231110153040459" style="zoom: 50%;" />
+
+```python
+import asyncio
+import aiohttp
+import os
+
+
+class WzRy:
+    def __init__(self):
+        self.url = 'https://pvp.qq.com/web201605/js/herolist.json'
+        self.skin_url = 'https://game.gtimg.cn/images/yxzj/img201606/skin/hero-info/{}/{}-bigskin-{}.jpg'
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+        }
+
+    async def download_img(self, session, ename, cname):
+        for i in range(1,11):
+            print(self.skin_url.format(ename, ename, i))
+            filename = f'王者荣耀/{cname}-{i+1}.jpg'
+            print(f'开始下载：{filename}')
+            # 使用 session.get 方法 获取 发送图片链接请求
+            response = await session.get(self.skin_url.format(ename, ename, i))
+            if response.status == 200:  # 获取 响应状态码
+                # 使用 response.read方法 获取 二进制数据，通过 await关键字 阻塞
+                content = await response.read()
+                with open(filename, mode='wb') as f:
+                    f.write(content)
+            else:
+                break
+
+    async def run(self):
+        # 创建 aiohttp.ClientSession 对象
+        async with aiohttp.ClientSession() as session:
+            # 使用 await关键字 阻塞，使用 session.get 方法 返回 响应数据
+            response = await session.get(url=self.url, headers=self.headers)
+            # 使用 response.json 方法 获取 响应数据，乱码数据报错，则content_type参数设置为None
+            data = await response.json(content_type=None)
+            task_list = []
+            for item in data:
+                ename = item['ename']
+                cname = item['cname']
+                # 创建 task对象，将 session对象、ename、cname传递给 download_img 方法
+                task = asyncio.create_task(self.download_img(session, ename, cname))
+                task_list.append(task)
+
+            # 将协程列表转换为wait对象，使用 await关键字 阻塞 并 执行
+            await asyncio.wait(task_list)
+
+
+if __name__ == '__main__':
+    if not os.path.exists('王者荣耀'):
+        os.mkdir('王者荣耀')
+    wzry = WzRy()
+    asyncio.run(wzry.run())
+```
+
+ 通过异步的方式获取到英雄联盟官网的英雄皮肤图片 
+
+目标网址: [攻略中心-英雄联盟官方网站-腾讯游戏](https://101.qq.com/#/hero)
+
+```py
+import asyncio
+import os
+
+import aiohttp
+
+
+class LOL:
+    def __init__(self):
+        self.url = 'https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js?ts=2787894'
+        self.skin_url = 'https://game.gtimg.cn/images/lol/act/img/js/hero/{}.js?ts=2788293'
+        self.headers = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+        }
+
+    async def parse_data(self, session, heroId):
+        # 使用 await 关键字阻塞，使用 session.get 方法 获取 响应数据
+        response = await session.get(url=self.skin_url.format(heroId))
+        # 使用 await 关键字阻塞，使用 response.json 方法 获取 json数据
+        data = await response.json(content_type=None)
+        task_list = []
+        for skin in data.get('skins'):
+            title = skin.get('name')
+            img_url = skin.get('mainImg')
+            if img_url:
+                # 创建 download_img 方法 的 task对象，传递session, img_url, title
+                task = asyncio.create_task(self.download_img(session, img_url, title))
+                task_list.append(task)
+        # 使用 await 关键字阻塞，使用asyncio.wait方法 将 task_list 列表 转换为 可等待的对象
+        await asyncio.wait(task_list)
+
+    async def download_img(self, session, url, title):
+        # 使用 await 关键字阻塞，使用 session.get 方法 请求图片链接
+        response = await session.get(url, headers=self.headers)
+        if response.status == 200:
+            filename = f'英雄联盟/{title}.jpg'
+            print(f'正在下载：{filename}')
+            # 使用 await 关键字阻塞，使用 response.read() 方法 获取 响应二进制数据
+            content = await response.read()
+            with open(filename, mode='wb') as f:
+                f.write(content)
+
+    async def run(self):
+        # 使用 上下文管理器 创建 aiohttp.ClientSession 对象
+        async with aiohttp.ClientSession() as session:
+            # 使用 await 关键字阻塞，使用 session.get 方法 获取 响应数据
+            response = await session.get(url=self.url, headers=self.headers)
+            # 使用 await 关键字阻塞，使用 response.json 方法 获取 json数据
+            data = await response.json(content_type=None)
+            task_list = []
+            for hero in data.get('hero'):
+                heroId = hero.get('heroId')
+                # 创建 parse_data 方法 的 task对象，传递session、heroId
+                task = asyncio.create_task(self.parse_data(session, heroId))
+                task_list.append(task)
+            # 使用 await 关键字阻塞，使用asyncio.wait方法 将 task_list 列表 转换为 可等待的对象
+            await asyncio.wait(task_list)
+
+
+if __name__ == '__main__':
+    if not os.path.exists('英雄联盟'):
+        os.mkdir('英雄联盟')
+    lol = LOL()
+    # 使用 asyncio.run 方法 调用 协程对象
+    asyncio.run(lol.run())
+```
+
+
+
+# 网站分析方法:crossed_swords:
+
+## Ajax数据或请求json数据
+
+### 分析网站数据是否是Ajax请求
+
+当我们需要运用爬虫程序爬取网站信息数据时，最先需要分析数据到底是在服务器端组成好发回给浏览器的？还是通过Ajax请求进行发送的？
+ 验证方法：
+
+1.  点击要爬取的网页数据的下一页，观察地址栏是否发生变化。如果没有发生变化，则说明是[Ajax](https://so.csdn.net/so/search?q=Ajax&spm=1001.2101.3001.7020)请求。
+2. 在开发者模式下（F12），单击左上角小箭头，去在网页中找他的element，如果在element真实存在；在网页中单击右键，查看网页源代码，（ctrl+F）查找element中div的属性名，发现不存在，或者被注释掉了，则证明是一个Ajax请求。
+
+![image-20231110154723886](Python%E7%88%AC%E8%99%AB.assets/image-20231110154723886.png)
+
+![image-20231110154732950](Python%E7%88%AC%E8%99%AB.assets/image-20231110154732950.png)
+
+### 案例
+
+**以拉钩网招聘为例以POST方法获取数据**
+
+获取图中数据集，此页面地址：[拉勾网招聘页面演示地址](https://www.lagou.com/jobs/list_?labelWords=&fromSearch=true&suginput=) 
+
+![img](Python%E7%88%AC%E8%99%AB.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjUwNTc2,size_16,color_FFFFFF,t_70.png)
+
+分析页面数据发现是ajax
+
+ **找到Ajax请求数据体**
+
+![在这里插入图片描述](Python%E7%88%AC%E8%99%AB.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjUwNTc2,size_16,color_FFFFFF,t_70-16996048347592.png)
+
+ **分析请求提构造**
+
+![在这里插入图片描述](Python%E7%88%AC%E8%99%AB.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjUwNTc2,size_16,color_FFFFFF,t_70-16996048347603.png)
+
+![在这里插入图片描述](Python%E7%88%AC%E8%99%AB.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNjUwNTc2,size_16,color_FFFFFF,t_70-16996048347604.png)
+
+ **模拟代码演示（requests）**
+
+```python
+def getData(city_quote):
+    """
+    通过post请求解析拉勾网对应城市的json数据集
+    :param city_quote:
+    :return:
+    """
+    url = "https://www.lagou.com/jobs/positionAjax.json"
+
+    headers = {
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "cookie": "user_trace_token=20200301114810-40556cbd-ac17-4854-ae50-e5aacdaa9aab; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%2217094356904f1-0fb4889adf6cd1-4313f6b-2073600-17094356905660%22%2C%22%24device_id%22%3A%2217094356904f1-0fb4889adf6cd1-4313f6b-2073600-17094356905660%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22%22%2C%22%24latest_referrer_host%22%3A%22%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC_%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%22%7D%7D; _ga=GA1.2.1282471430.1583034493; LGUID=20200301114811-928d49c2-4465-439a-a16c-cef8b834998e; index_location_city=%E5%85%A8%E5%9B%BD; JSESSIONID=ABAAABAABAGABFA87D814047DE2D9143FD964F13B5CF011; WEBTJ-ID=04252020%2C131057-171afbeee7a243-0ec1918b465381-7373667-2073600-171afbeee7c720; _gid=GA1.2.1088974098.1587791458; Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1586235118,1586925135,1587791458; X_MIDDLE_TOKEN=24ef3fd0e84859d0a3e459bed747ee45; X_HTTP_TOKEN=bdbd8729e637bc9f38740878512e3fbecc22034874; _gat=1; PRE_UTM=; PRE_HOST=; PRE_LAND=https%3A%2F%2Fwww.lagou.com%2F; LGSID=20200425165304-fee9bb75-b8ee-4185-a4ba-bf572108bdba; PRE_SITE=; TG-TRACK-CODE=index_search; Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1587804804; LGRID=20200425165323-082cddcd-7423-4062-ab39-0b278dc1013e; SEARCH_ID=87417fff66354d1b9447aaaf07b17309",
+        "origin": "https://www.lagou.com",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36",
+        "referer": "https://www.lagou.com/jobs/list_?labelWords=&fromSearch=true&suginput=",
+    }
+    data = {
+        "first": "true",
+        "pn": "1",
+    }
+
+    response = requests.post(url, data=data, headers=headers)
+    print(response.json())
+```
+
+**运行结果**
+
+```python
+{'success': True, 'msg': None, 'code': 0, 'content': {'showId': 'd1f137337c3c4a70b331cd8a0e73c016', 'hrInfoMap': {'6803717': {'userId': 8733067, 'portrait': 'i/image3/M01/76/66/CgpOIF5we4CANS4qAACEOd1RoFw526.jpg', 'realName': 'muqianwen', 'positionName': '招聘HR', 'phone': None, 'receiveEmail': None, 'userLevel': 'G1', 'canTalk': True}, '7057096': {'userId': 418919, 'portrait': 'i/image2/M01/CE/15/CgotOVw4V1uAUpmqAADltxspyMM863.png', 'realName': 'HR', 'positionName': '', 'phone': None, 'receiveEmail': None, 'userLevel': 'G1', 'canTalk': True}, '6213467': {'userId': 14461756, 'portrait': 'i/image2/M01/6A/D6/CgotOV09IlGAPd6xAAcpgmuy6II576.png', 'realName': '马超', 'positionName': '理财规划师', 'phone': None, 'receiveEmail': None, 'userLevel': 'G1', 'canTal2020-05-03 12:43:23', 'formatCreateTime': '12:43发布', 'city': '郑州', 'district': None, 'businessZones': None, 'salary': '5k-10k', 'workYear': '不限', 'jobNature': '兼职', 'education': '不限', 'positionAdvantage': '工作轻松，简单易学上手快，佣金超高', 'imState': 'disabled', 'lastLogin': '2020-05-03 12:33:30', 'publisherId': 17211066, 'approve': 0, 'subwayline': None, 'stationname': None, 'linestaion': None, 'latitude': None, 'longitude': None, 'hitags': None, 'resumeProcessRate': 0, 'resumeProcessDay': 0, 'score': 1, 'newScore': 0.0, 'matchScore': 1.0, 'matchScoreExplain': None, 'query': None, 'explain': None, 'isSchoolJob': 0, 'adWord': 0, 'plus': None, 'pcShow': 0, 'appShow': 0, 'deliver': 0, 'gradeDescription': None, 'promotionScoreExplain': None, 'companySize': '少于15人', 'industryField': '消费生活', 'financeStage': '未融资', 'companyLabelList': [], 'firstType': '服务业', 'secondType': '百货|零售', 'thirdType': '西点师|面包糕点加工', 'skillLables': [], 'positionLables': ['其他'], .....
+```
+
+**以腾讯招聘为例GET方法获取json数据集**
+
+获取图中数据集，此页面地址：[腾讯招聘技术类第一页](https://careers.tencent.com/search.html?pcid=40001)
+
+![](Python%E7%88%AC%E8%99%AB.assets/image-20231110160123635.png)
+
+**在开发者模式下, 网络选项中找到对应部分的数据请求（如下图，返回的数据与页面上看到的一样)**
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/image-20231110160027969.png" style="zoom:79%;" />
+
+ **解析请求体的组成**
+
+![](Python%E7%88%AC%E8%99%AB.assets/image-20231110160437183.png)
+
+ **请求头部分解析**
+
+![image-20231110160638874](Python%E7%88%AC%E8%99%AB.assets/image-20231110160638874.png)
+
+ **使用requests模拟代码演示**
+
+```python
+# coding: utf8
+
+import requests
+
+def job_list_page():
+    """
+    职位类目下的具体列表
+    :return: None
+    """
+    url = "https://careers.tencent.com/tencentcareer/api/post/Query"
+    headers = {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36",
+        "cookie": "pgv_pvi=9760113664; _ga=GA1.2.1166311162.1578063723; _gcl_au=1.1.294868577.1586227694; loading=agree",
+        "referer": "https://careers.tencent.com/",
+    }
+    params = {
+        "timestamp": "1588476060003",
+        "parentCategoryId": "40001",
+        "pageIndex": "1",
+        "pageSize": "10",
+        "language": "zh-cn",
+        "area": "cn"
+    }
+
+    resp = requests.get(url, params=params, headers=headers)
+    print(resp.json())
+
+
+if __name__ == '__main__':
+    job_list_page()
+
+```
+
+## 结合js逆向方法
+
+见[js逆向](..\逆向\js逆向.md)
