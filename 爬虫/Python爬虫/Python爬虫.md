@@ -2231,13 +2231,13 @@ for text in down_text:
 
 
 
-# Scrapy框架
+# Scrapy框架:crossed_swords:
 
 [Scrapy](https://scrapy.org/) 是用 Python 实现的一个为了爬取网站数据、提取结构性数据而编写的应用框架。
 
 Scrapy 常应用在包括数据挖掘，信息处理或存储历史数据等一系列的程序中。
 
-## scrapy架构组成:crossed_swords:
+## scrapy架构组成
 
 ●engine：引擎，处理整个系统的数据流处理、触发事务，是整个框架的核心。
 
@@ -2428,8 +2428,6 @@ True
 [<Selector xpath='descendant-or-self::title' data='<title>SCRAPY爬虫实验室 - SCRAPY中文网提供</title>'>]
 ```
 
-
-
 ##  **开发爬虫**
 
 ### 基本方法
@@ -2524,13 +2522,13 @@ response.headers
 
 + 提取selector对象或列表的data属性值
 
-  ```
+  ```python
   selector.extract()
   ```
 
 +  提取selector列表第一个数据的data属性值
 
-  ```
+  ```python
   selector.extract_first()
   ```
 
