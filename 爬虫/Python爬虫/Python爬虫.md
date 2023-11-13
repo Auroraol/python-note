@@ -2638,7 +2638,9 @@ class Spider(scrapy.Spider):
 		yield item
 ```
 
-### **携带cookies请求**
+###  start_requests()
+
+#### **携带cookies请求**
 
 重写start_requests方法, 构造请求携带cookie
 
@@ -2657,7 +2659,7 @@ class Spider(scrapy.Spider):
 		pass
 ```
 
-###  **post请求**
+####  **post请求**
 
 重写start_requests方法，构造请求携带formdata
 
@@ -3018,88 +3020,211 @@ class SpidertestPipeline:
 
 
 
-## **middleware中间件 — 拦截响应数据**
+## **middleware下载中间件 — 拦截响应数据**
 
-下载器中间件
+位置：引擎和下载器之间
+
+作用：批量拦截到整个工程中所有的请求和响应
+
+使用
 
 + 在settings文件中开启中间件，权重值低的越优先执行
 + 在middlewares文件中定义中间件类
 
+拦截请求：
+
++ UA伪装：process_request
+
+- 
+代理IP:  process_exception:  return request
+
+拦截响应：
+
+- 篡改响应数据，响应对象
+
 **类结构**
 
-```Python
-class DownloaderMiddleware:
-	def process_request(self, request, spider):
-		pass
-	
-	def process_response(self, request, response, spider):
-		pass
-	
-	def process_exception(self, request, exception, spider):
-		pass
+![image-20231113160927670](Python%E7%88%AC%E8%99%AB.assets/image-20231113160927670.png)
+
+```python
+# Define here the models for your spider middleware
+#
+# See documentation in:
+# https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from fake_useragent import UserAgent
+from scrapy import signals
+
+
+# useful for handling different item types with a single interface
+
+# 爬虫中间件
+class SpidertestSpiderMiddleware:
+    # Not all methods need to be defined. If a method is not defined,
+    # scrapy acts as if the spider middleware does not modify the
+    # passed objects.
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # This method is used by Scrapy to create your spiders.
+        s = cls()
+        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        return s
+
+    def process_spider_input(self, response, spider):
+        # Called for each response that goes through the spider
+        # middleware and into the spider.
+
+        # Should return None or raise an exception.
+        return None
+
+    def process_spider_output(self, response, result, spider):
+        # Called with the results returned from the Spider, after
+        # it has processed the response.
+
+        # Must return an iterable of Request, or item objects.
+        for i in result:
+            yield i
+
+    def process_spider_exception(self, response, exception, spider):
+        # Called when a spider or process_spider_input() method
+        # (from other spider middleware) raises an exception.
+
+        # Should return either None or an iterable of Request or item objects.
+        pass
+
+    def process_start_requests(self, start_requests, spider):
+        # Called with the start requests of the spider, and works
+        # similarly to the process_spider_output() method, except
+        # that it doesn’t have a response associated.
+
+        # Must return only requests (not items).
+        for r in start_requests:
+            yield r
+    #
+    # def spider_opened(self, spider):
+    #     spider.logger.info('Spider opened: %s' % spider.name)
+
+
+# 下载中间件
+class SpidertestDownloaderMiddleware:
+    # Not all methods need to be defined. If a method is not defined,
+    # scrapy acts as
+    # if the downloader middleware does not modify the
+    # passed objects.
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # This method is used by Scrapy to create your spiders.
+        s = cls()
+        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        return s
+
+    # 拦截请求
+    def process_request(self, request, spider):
+        # Called for each request that goes through the downloader
+        # middleware.
+
+        # Must either:
+        # - return None: continue processing this request
+        # - or return a Response object
+        # - or return a Request object
+        # - or raise IgnoreRequest: process_exception() methods of
+        #   installed downloader middleware will be called
+        return None
+
+    # 拦截所有的响应
+    def process_response(self, request, response, spider):
+        # Called with the response returned from the downloader.
+
+        # Must either;
+        # - return a Response object
+        # - return a Request object
+        # - or raise IgnoreRequest
+        return response
+
+    # 拦截发生异常的请求对象
+    def process_exception(self, request, exception, spider):
+        # Called when a download handler or a process_request()
+        # (from other downloader middleware) raises an exception.
+
+        # Must either:
+        # - return None: continue processing this exception
+        # - return a Response object: stops process_exception() chain
+        # - return a Request object: stops process_exception() chain
+        pass
+    #
+    # # 打印的是日志(可以注释）
+    # def spider_opened(self, spider):
+    #     spider.logger.info('Spider opened: %s' % spider.name)
+
+# 设置随机UA
+class RandomUserAgentMiddleware:
+    def __init__(self):
+        self.user_agent = UserAgent().random
+
+    def process_request(self, request, spider):
+        request.headers['User-Agent'] = self.user_agent
+        print(self.user_agent)
+
 ```
 
 ### process_request
 
-1 处理请求
+处理请求
 
-●request通过下载中间件时，该方法被调用
++ request通过下载中间件时，该方法被调用
 
-2 返回值
+返回值 None
 
-1 None
++ 如果所有下载器中间件都返回None给引擎，则请求最终传给下载器处理，否则继续通过引擎传递给其他权重低的process_reqeust方法
 
-●如果所有下载器中间件都返回None给引擎，则请求最终传给下载器处理，否则继续通过引擎传递给其他权重低的process_reqeust方法
+Request对象
 
-2 Request对象
++ 如果返回request对象给引擎，则将reqeust对象通过引擎发送给调度器
 
-●如果返回request对象给引擎，则将reqeust对象通过引擎发送给调度器
+Response对象
 
-3 Response对象
-
-●将响应对象交给spider进行解析
++ 将响应对象交给spider进行解析
 
 ### process_response
 
-1 处理响应数据
+处理响应数据
 
-●下载器完成请求返回响应数据时，该方法被调用
++ 下载器完成请求返回响应数据时，该方法被调用
 
-2 返回值
+返回值
 
-1 Request对象
+Request对象
 
-●如果返回request对象给引擎，则将reqeust对象通过引擎发送给调度器
++ 如果返回request对象给引擎，则将reqeust对象通过引擎发送给调度器
 
-2 Response对象
+Response对象 
 
-●将响应对象交给spider进行解析
++ 将响应对象交给spider进行解析
 
-
-
-
-
-
+[scrapy 中间件设置随机UA、随机cookie、以及代理_scrapy ](https://blog.csdn.net/qq_46183423/article/details/128110048)
 
 ### 设置随机UA
 
-1 定义中间件类
+####  创建中间件类
 
-●在middlewares文件定义中间件类
++ 在middlewares文件定义中间件类
 
 ```python
 from fake_useragent import UserAgent
 
+# 定义
 class RandomUserAgentMiddleware:
-	def init(self):
-		self.user_agent = UserAgent().random
-	
-	def process_request(self, request, spider):
-		requests.headers['User-Agent'] = self.user_agent
+    def __init__(self):
+        self.user_agent = UserAgent().random
+
+    def process_request(self, request, spider):
+        request.headers['User-Agent'] = self.user_agent
 ```
 
- 开启中间件
-●在settings文件中开启中间件
+####  开启中间件
+
++ 在settings文件中开启中间件(在项目全局启用该中间件)(方式1)
 
 ```python
 DOWNLOADER_MIDDLEWARES = {
@@ -3107,7 +3232,21 @@ DOWNLOADER_MIDDLEWARES = {
 }
 ```
 
++ 在spider中启用中间件(方式2)
 
+在spider中是可以覆写setting的，也即sipder中的setting优先级比setting.py优先级要高。
+而且，此时的setting是针对单一spider的，不会影响别的spider，可以针对不同的spider进行个性化。
+具体实现如下：
+
+```python
+# 覆写settings
+custom_settings = {
+    # 不使用使用cookies
+    'COOKIES_ENABLED': 'False',
+    # 使用随机UA
+    'DOWNLOADER_MIDDLEWARES': {'jkxy.middlewares.RandomUserAgent': 543}
+}
+```
 
 ###  使用代理IP
 
@@ -3120,42 +3259,36 @@ DOWNLOADER_MIDDLEWARES = {
 
 代理ip的匿名度：
 - 透明：服务器知道该次请求使用了代理，也知道请求对应的真实ip
+
 - 匿名：知道使用了代理，不知道真实ip
+
 - 高匿：不知道使用了代理，更不知道真实的ip
 
 
+免费ip代理:
 
++ 基本上无法使用，不推荐
 
+#### 代理池
 
-1 代理池
++ 在settings文件配置代理池
 
-●在settings文件配置代理池
-
-```
+```python
 PROXIES_POOL = [
 {'ip_port': 'http://223.96.90.216:8085'},
 {'ip_port': 'http://120.220.220.95:8085'}
 ]
 ```
 
-开启下载器中间件
+#### 定义中间件类
 
-●在settings文件开启下载器中间件
++ 在middlewares文件定义中间件类
++ 在request的meta中添加proxy属性
++ 含有账号密码的IP需要进行http基本认证
++ 基本认证流程：请求头添加Proxy - Authorization: 'Basic ' + base64编码(user_passwd)
++ 注意：不能漏掉Basic的空格
 
-```
-DOWNLOADER_MIDDLEWARES = {
-'scrapy_proxy.middlewares.ProxyMiddleware': 543,
-}
-```
-
-定义中间件类
-●在middlewares文件定义中间件类
-●在request的meta中添加proxy属性
-●含有账号密码的IP需要进行http基本认证
-●基本认证流程：请求头添加Proxy - Authorization: 'Basic ' + base64编码(user_passwd)
-●注意：不能漏掉Basic的空格
-
-```
+```python
 from itemname.settings import PROXIES_POOL
 import base64
 import random
@@ -3169,11 +3302,21 @@ class ProxyMiddleware:
 			request.meta['proxy'] = proxy['ip_port']
 ```
 
+#### 开启下载器中间件
+
++ 在settings文件开启下载器中间件
+
+```python
+DOWNLOADER_MIDDLEWARES = {
+'scrapy_proxy.middlewares.ProxyMiddleware': 543,
+}
+```
+
 ### 对接Selenium
 
-1 定义中间件类
+#### 定义中间件类
 
-●在middlewares文件定义中间件类
++ 在middlewares文件定义中间件类
 
 ```
 from selenium import webdriver
@@ -3195,8 +3338,9 @@ class SeleniumMiddleware:
             return res
 ```
 
-开启下载器中间件
-●在settings文件开启下载器中间件
+#### 开启下载器中间件
+
++ 在settings文件开启下载器中间件
 
 ```
 DOWNLOADER_MIDDLEWARES = {
@@ -3204,39 +3348,50 @@ DOWNLOADER_MIDDLEWARES = {
 }
 ```
 
+### 随机cookie中间件
 
+.在middlewares.py中设置随机cookie中间件
+
+将获取到的所有cookie存放在一个txt文件中，可一条，可多条
+
+```cobol
+# 设置随机cookie
+class CookiesMiddleware(object):
+    def __init__(self):
+        with open('cookie.txt', 'rt', encoding='utf-8') as f:
+            COOKIE = f.readlines()
+            self.COOKIE_LIST = [d.strip() for d in COOKIE]
+ 
+    def process_request(self, request, spider):
+        cookie = random.choice(self.COOKIE_LIST)
+        request.headers['Cookie'] = cookie
+```
 
 ## 日志信息及日志级别
 
-1 日志级别
+### 日志级别
 
-●CRITICAL：严重错误
++ CRITICAL：严重错误
++ ERROR：一般错误
++ WARNING：警告
++ INFO：一般信息
++ DEBUG：调试信息
 
-●ERROR：一般错误
+### 设置日志级别
 
-●WARNING：警告
-
-●INFO：一般信息
-
-●DEBUG：调试信息
-
-2 设置日志级别
-
-●在settings文件中设置
++ 在settings文件中设置
 
 ```
 LOG_LEVEL = 'DEBUG'
 ```
 
-保存日志文件
+### 保存日志文件
 
-●在settings文件中设置
++ 在settings文件中设置
 
 ```
 LOG_FILE = 'demo.log'
 ```
-
-
 
 ## 案例:crossed_swords:
 
@@ -3602,6 +3757,1016 @@ class DoubanMongodbPipeline(object):
 k，执行爬虫程序，可以看到豆瓣电影top250的信息都已经存储到数据库了
 
 ![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255192.png)
+
+####  批量下载图片
+
+继续豆瓣
+
+爬虫的基本结构跟之前的一样：
+
+```python
+# -*- coding: utf-8 -*-
+import scrapy
+from douban_images.items import DoubanImagesItem
+
+
+class ImagesSpider(scrapy.Spider):
+    name = 'images'
+    allowed_domains = ['movie.douban.com']
+    start_urls = ['https://movie.douban.com/top250/']
+
+    def parse(self, response):
+        doubanItem = DoubanImagesItem()
+        items = response.xpath('//div[@class="item"]')
+        for item in items:
+            name = item.xpath('.//span[@class="title"]/text()').extract_first()
+            pic_url = item.xpath('./div[@class="pic"]/a/img/@src').extract_first()
+            doubanItem['name'] = name
+            doubanItem['pic_url'] = pic_url
+            yield doubanItem
+
+        next = response.xpath('//div[@class="paginator"]//span[@class="next"]/a/@href').extract_first()
+        if next is not None:
+            next = response.urljoin(next)
+            yield scrapy.Request(next, callback=self.parse)
+```
+
+items.py 也一样：
+
+```python
+
+# -*- coding: utf-8 -*-
+import scrapy
+
+
+class DoubanImagesItem(scrapy.Item):
+    name = scrapy.Field()
+    pic_url = scrapy.Field()
+```
+
+pipelines.py
+
+```python
+# -*- coding: utf-8 -*-
+
+# Define your item pipelines here
+#
+# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+from scrapy.pipelines.images import ImagesPipeline
+from scrapy import Request
+
+
+class DoubanImagesPipeline(ImagesPipeline):
+	# 获取图片资源
+    def get_media_requests(self, item, info):
+        name = item['name']
+        pic_url = item['pic_url']
+        # 请求传过来的图片地址以获取图片资源
+        yield Request(pic_url, meta={'name': name})
+
+	# 重命名，若不重写这函数，图片名为哈希，就是一串乱七八糟的名字
+    def file_path(self, request, response=None, info=None):
+        ext = request.url.split('.')[-1]
+        name = request.meta['name'].strip()
+        filename = 
+```
+
+继承了scrapy的：ImagesPipeline这个类，我们需要在里面实现： get_media_requests(self, item, info) 这个方法，这个方法主要是把蜘蛛 yield 过来的图片链接执行下载。
+
+主体代码准备完毕，还需要修改配置文件settings.py：
+
+```python
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
+
+ROBOTSTXT_OBEY = False
+
+# 启动图片下载中间件
+ITEM_PIPELINES = {
+   'douban_images.pipelines.DoubanImagesPipeline': 300,
+}
+
+# 设置图片存储目录
+IMAGES_STORE = 'F:/images'
+```
+
+scrapy 提供了一个常量：IMAGES_STORE，用于定义存储图片的路径, 可以是绝对路径也可以是相对路径, 相对路径相对于项目根目录。
+
+开启爬虫：scrapy crawl images
+
+爬取完毕，可以看到目标文件夹里已经获取了250张图片：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597110918330-d2e3bc9d-1910-412e-a6f6-11bcb8dadcef.png)
+
+#### **登录逻辑处理**
+
+##### 登录逻辑分析
+
+跟网上看到的不太一样，网上基本上都是抓取页面，获取到登录页表单，检测时候有验证码，如果有则下载，没有则直接表单提交登录。而通过我自己对豆瓣登录页的分析，并没有看到页面包括表单元素，豆瓣的登录是通过Ajax提交的。
+
+登录页地址：https://accounts.douban.com/passport/login
+
+使用Ajax登录豆瓣
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597111877539-91d46092-36e7-4ff9-b621-e383d46a27a3-169984268310112.png)
+
+既然找出了登录接口，那么要使用程序登录也不在话下了，我们先使用postman测试一下
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597111899308-352db83d-1082-4ad3-8ec6-204cb2732c04-169984272260914.png)
+
+第一次发送请求，服务器返回参数错误，查看了下cookie，发现服务器种了一个cookie：
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/1597111911134-06087fc9-13d4-49bc-96b3-5ec9fe51b9f4-169984273275016.png" alt="img" style="zoom: 67%;" />
+
+再次发送请求，将会携带这个cookie，发现登录成功了：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597111929996-a5eec56f-89fd-4afd-8c95-4f9f6b444f7e-169984275304318.png)
+
+ok，到此，登录逻辑已经捋顺了，需要调用登录接口两次：第一次获取cookie，第二次携带cookie访问
+
+登录接口如下：
+
+```
+https://accounts.douban.com/j/mobile/login/basic
+```
+
+使用POST请求发送，携带以下头部信息：
+
+```
+Content-Type: application/x-www-form-urlencoded
+Cookie: ...
+Accept: application/json
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36 Edg/81.0.416.68
+```
+
+传递以下几个参数：
+
+```
+name 用户名
+password 密码
+remember 是否记住密码
+```
+
+##### 登录前后页面分析
+
+我们以豆瓣首页为例：https://www.douban.com/
+
+在登录前访问豆瓣首页，看到页面长这样：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597111966336-695c138b-5548-4e8c-8904-8c474a168782-169984285712120.png)
+
+有一个登录框，顶部有一行菜单：“读书”、“电影”等等
+
+在登录后访问豆瓣首页，看到页面长这样：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597111974257-7e9eed0a-ac3b-41a4-852f-ad1bc3c1b771-169984285712222.png)
+
+
+
+
+
+顶部菜单变为了“首页”、“我的豆瓣”等等，没有了输入框
+
+我们点击“我的豆瓣”，可以看到豆瓣个人主页：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597111984060-a0da15eb-166b-4a41-8e39-1805212af872-169984285712724.png)
+
+在豆瓣主页中可以看到我们的昵称等信息。
+
+我们退出登录，再次输入个人主页地址：https://www.douban.com/mine/，可以看到会被重定向到登录页面。
+
+好的，所有逻辑都明了了，如果登录，我们跳转到个人主页，看下能不能获取到个人昵称，如果获取得到，说明登录成功了。
+
+##### 具体程序实现
+
+spider程序如下：
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2023/11/13 10:46
+# @Author  : IngDao
+# @Email   : 1665834268@qq.com
+# @File    : login.py
+import json
+
+import scrapy
+
+
+class LoginSpider(scrapy.Spider):
+    # 类变量(静态)
+    name = 'login'
+    url = 'https://accounts.douban.com/j/mobile/login/basic'
+    data = {
+        'name': 'your name',
+        'password': 'your password',
+        'remember': "true"
+    }
+
+    # 携带cookies请求和post请求
+    def start_requests(self):
+        # 第一次登录，由于缺少cookie，会返回登录错误，并设置cookie
+        yield scrapy.FormRequest(
+            url=self.url,
+            formdata=self.data,
+            method='POST',
+            callback=self.getCookie  # 调用
+        )
+
+    def getCookie(self, response):
+        # scrapy会自动携带上一个请求设置的cookie
+        yield scrapy.FormRequest(
+            url=self.url,
+            formdata=self.data,
+            method='POST',
+            callback=self.parse,  # 调用
+            # 添加以防止出现：Filtered duplicate request
+            dont_filter=True
+        )
+
+    def parse(self, response):
+        res = json.loads(response.body.decode())
+        print("========")
+        print(res)
+        print("========")
+        url = "https://www.douban.com/"
+        yield scrapy.Request(url, callback=self.getHomePage)
+
+    def getHomePage(self, response):
+        navs = response.xpath("//div[@class='nav-items']//li")
+        for nav in navs:
+            title = nav.xpath(".//a/text()").extract_first().strip()
+            url = nav.xpath(".//a/@href").extract_first()
+            print(title.strip())
+            print(url)
+            if '我的豆瓣' in title:
+                yield scrapy.Request(url, callback=self.getMyPage)
+
+    def getMyPage(self, response):
+        name = response.xpath("//div[@class='info']//h1/text()").extract_first().strip()
+        print("====start: getMyPage====")
+        print(name)
+        print("====end: getMyPage====")
+
+```
+
+这里值得说明的是，第一次登录成功后，scrapy会保存获取到的cookie，在第二次访问登录接口的时候，会自动携带cookie访问。
+
+第二次调用登录接口的时候，需要在请求中配置参数dont_filter=True，否则，Scrapy会认为此接口已经访问过了，不需要重新访问，返回一个Debug信息：Filtered duplicate request
+
+登录成功后，获取顶部导航栏菜单，访问“我的豆瓣”，查看是否能够获取到昵称。
+
+运行爬虫，看到控制台打印出以下数据（主要是要看到自己的昵称），说明登录成功了：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112182078-767e745b-b490-4da9-a95d-c6e70cc2857e.png)
+
+注意需要在settings.py中进行以下配置：
+
+```python
+# Crawl responsibly by identifying yourself (and your website) on the user-agent
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
+
+# Obey robots.txt rules
+ROBOTSTXT_OBEY = False
+```
+
+## 使用splash抓取动态网页数据
+
++ 为了加速页面的加载速度，页面的很多部分都是用JS生成的
++ 而对于用scrapy爬虫来说就是一个很大的问题，因为scrapy没有JS engine，所以爬取的都是静态页面
++ 对于JS生成的动态页面直接使用scrapy的Request请求都无法获得，需要使用scrapy-splash
+
+scrapy-splash 加载js数据是基于Splash来实现的，Splash是一个Javascript渲染服务。它是一个实现了HTTP API的轻量级浏览器，Splash是用Python实现的，同时使用Twisted和QT，而我们使用scrapy-splash最终拿到的response相当于是在浏览器全部渲染完成以后，拿到的渲染之后的网页源代码。
+
+#### 通过Dockers安装splash
+
+```python
+ocker pull scrapinghub/splash
+docker run -p 8050:8050 --name splash scrapinghub/splash
+```
+
+浏览器访问 [http://localhsot:8050](http://localhsot:8050/)，看到界面：
+
+![image-20231113105639733](Python%E7%88%AC%E8%99%AB.assets/image-20231113105639733.png)
+
+#### 在Python中的准备工作
+
+安装 scrapy-splash
+
+```
+pip install scrapy-splash
+```
+
+创建项目：
+
+```
+scrapy startproject taobao_splash
+cd taobao_splash
+scrapy genspider taobao s.taobao.com
+```
+
+配置文件 settings.py：
+
+```python
+
+# -*- coding: utf-8 -*-
+
+BOT_NAME = 'taobao_splash'
+
+SPIDER_MODULES = ['taobao_splash.spiders']
+NEWSPIDER_MODULE = 'taobao_splash.spiders'
+
+# 渲染服务的url
+SPLASH_URL = 'http://localhost:8050'
+
+# 去重过滤器
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+# Obey robots.txt rules
+ROBOTSTXT_OBEY = False
+
+# Enable or disable spider middlewares
+# See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+SPIDER_MIDDLEWARES = {
+   'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
+# Enable or disable downloader middlewares
+# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
+DOWNLOADER_MIDDLEWARES = {
+   'scrapy_splash.SplashCookiesMiddleware': 723,
+   'scrapy_splash.SplashMiddleware': 725,
+   'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810
+}
+
+# 使用Splash的Http缓存
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+```
+
+#### 分析淘宝页面
+
+我们先在Postman中测试一下：
+
+直接访问搜索页面： http://s.taobao.com/search?q=iphone，发现会被重定向到首页，而不是搜索页面，说明需要登录才能进行接下来的操作。
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112527136-23944832-124b-467a-9668-5e2a9575ac82.png)
+
+我们到浏览器中找找登录接口：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112546174-b85c539c-1f06-4ed9-a1dc-8cf4e3e218e7.png)
+
+发现是这个接口：https://login.taobao.com/newlogin/login.do?appName=taobao&fromSite=0
+
+我们在Postman中进行登录：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112567160-338a987f-5223-4cf6-9cc5-5f002fd897b9.png)
+
+再次访问搜索页面，发现能够正常获取：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112585553-920c27fb-ce73-49d5-8cb6-5b6bfedcb211.png)
+
+#### 爬虫编写
+
+```python
+
+# -*- coding: utf-8 -*-
+import scrapy
+from scrapy_splash import SplashRequest
+
+
+class TaobaoSpider(scrapy.Spider):
+    name = 'taobao'
+    allowed_domains = ['taobao.com']
+
+    #二级爬虫
+    def start_requests(self):
+        loginUrl = "https://login.taobao.com/newlogin/login.do?appName=taobao&fromSite=0"
+        yield scrapy.FormRequest(loginUrl, formdata={
+            "loginId": "your phone",
+            "password2": "your password(已加密)"
+        }, callback=self.parse)
+
+    def parse(self, response):
+        print(response.body)
+        url = 'https://s.taobao.com/search?q=iphone'
+        # 如果直接请求，内容还未来得及渲染就返回了
+        # yield scrapy.Request(url, callback=self.getContent)
+        # 通过SplashRequest请求，等待解析0.1秒后返回（时间可适当增加以保证页面完全解析渲染完成）
+        yield SplashRequest(url, self.getContent, args={'wait': 0.1})
+
+    def getContent(self, response):
+        titles = response.xpath('//div[@class="row row-2 title"]/a/text()').extract()
+        for title in titles:
+            print(title.strip())
+```
+
+这个地方使用了SplashRequest，传递了一个参数wait，表示等待splash解析0.1秒后返回解析后的结果，等待时间可以自己适当调整。
+
+如果我们将请求换为普通的 scrapy.Request，则可以看到返回结果为空，说明数据是异步解析加载渲染的。
+
+执行爬虫：
+
+```
+scrapy crawl taobao
+```
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112633338-f51742e5-e3a0-4b9e-8c71-dd4146e65736.png)
+
+## **伪装headers构造假IP**
+
+我们先分析下 https://www.ip138.com/ 这个网站，它可以获取到我们的IP及所在区域：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112790630-ee68597e-4109-470b-ae54-2586ce331729.png)
+
+#### 分析
+
+可知，其嵌套一个iframe，将 [2020.ip138.com](https://www.yuque.com/xiaoyulive/python_crawl/2020.ip138.com) 的内容嵌入。
+
+我们的目的是伪造一个headers，骗过此网站，让其解析伪造的IP。
+
+首先我们编写一个正常的爬虫，返回我们当前的IP：
+
+```python
+import scrapy
+
+
+class IpSpider(scrapy.Spider):
+    name = "ip"
+    allowed_domains = ["ip138.com"]
+    start_urls = ['https://2023.ip138.com/']
+
+    def parse(self, response):
+        print("=" * 40)
+        print(response.xpath('/html/body/p[1]/a[1]/text()').extract_first())
+        print("=" * 40)
+
+```
+
+在未伪造headers的时候，启动爬虫程序，会正常返回我的ip及所在地区
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112810257-b0ae8294-15ee-4b97-b50f-8cb72ede4c70.png)
+
+#### 伪造IP
+
+首先我们创建一个工具类，提供要给方法，用于伪造headers信息：
+
+```python
+#! /usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+import random
+from ip138_fake_headers.settings import USER_AGENT_LIST
+
+
+class Utils(object):
+
+    @staticmethod
+    def get_header(host, ip=None):
+        if ip is None:
+            ip = str(
+                '%s.%s.%s.%s' % (
+                    random.choice(list(range(255))),
+                    random.choice(list(range(255))),
+                    random.choice(list(range(255))),
+                    random.choice(list(range(255)))
+                )
+            )
+        return {
+            'Host': host,
+            'User-Agent': random.choice(USER_AGENT_LIST),
+            'server-addr': '',
+            'remote_user': '',
+            'X-Client-IP': ip,
+            'X-Remote-IP': ip,
+            'X-Remote-Addr': ip,
+            'X-Originating-IP': ip,
+            'x-forwarded-for': ip,
+            'Origin': 'http://' + host,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.5,en;q=0.3",
+            "Accept-Encoding": "gzip, deflate",
+            "Referer": "http://" + host + "/",
+            'Content-Length': '0',
+            "Connection": "keep-alive"
+        }
+```
+
+这里引入了配置文件，我们需要在settings.py中配置USER_AGENT_LIST：(注意不要设置这个, 去使用下载中间件去设置动态Ua)
+
+```python
+USER_AGENT_LIST=[
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
+    "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
+    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0
+]
+```
+
+然后配置中间件：
+
+```python
+# -*- coding: utf-8 -*-
+
+from ip138_fake_headers.libs.utils import Utils
+from scrapy.http.headers import Headers
+
+
+class Ip138FakeHeadersDownloaderMiddleware(object):
+
+    def process_request(self, request, spider):
+        request.headers = Headers(Utils.get_header('2020.ip138.com'))
+```
+
+在配置文件中启用中间件：
+
+```python
+ROBOTSTXT_OBEY = False
+
+DOWNLOADER_MIDDLEWARES = {
+   'ip138_fake_headers.middlewares.Ip138FakeHeadersDownloaderMiddleware': 1,
+}
+```
+
+启动爬虫程序，可以看到，伪造IP成功：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597112828805-bed22806-ff9f-46f4-8a9b-97cca9914e70.png)
+
+## **在爬虫程序中设置代理**
+
+方法一：在meta中设置
+
+我们可以直接在自己具体的爬虫程序中设置proxy字段，直接在构造Request里面加上meta字段即可：
+
+```python
+# -*- coding: utf-8 -*-
+import scrapy
+
+
+class Ip138Spider(scrapy.Spider):
+    name = 'ip138'
+    allowed_domains = ['ip138.com']
+    start_urls = ['http://2020.ip138.com']
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url, meta={'proxy': 'http://163.125.69.29:8888'}, callback=self.parse)
+
+    def parse(self, response):
+        print("response text: %s" % response.text)
+        print("response headers: %s" % response.headers)
+        print("response meta: %s" % response.meta)
+        print("request headers: %s" % response.request.headers)
+        print("request cookies: %s" % response.request.cookies)
+        print("request meta: %s" % response.request.meta)
+```
+
+方法二：在中间件中设置
+
+中间件middlewares.py的写法如下：
+
+```python
+# -*- coding: utf-8 -*-
+class ProxyMiddleware(object):
+    def process_request(self, request, spider):
+        request.meta['proxy'] = "http://proxy.your_proxy:8888"
+```
+
+这里有两个问题:
+
+●一是proxy一定是要写号http://前缀的否则会出现to_bytes must receive a unicode, str or bytes object, got NoneType的错误。
+●二是官方文档中写到process_request方法一定要返回request对象，response对象或None的一种，但是其实写的时候不用return
+
+另外如果代理有用户名密码等就需要在后面再加上一些内容:
+
+```python
+# Use the following lines if your proxy requires authentication
+proxy_user_pass = "USERNAME:PASSWORD"
+
+# setup basic authentication for the proxy
+encoded_user_pass = base64.encodestring(proxy_user_pass)
+request.headers['Proxy-Authorization'] = 'Basic ' + encoded_user_
+```
+
+如果想要配置多个代理，可以在配置文件中添加一个代理列表：
+
+```
+PROXIES = [
+    '163.125.69.29:8888'
+]
+```
+
+然后在中间件中引入：
+
+```
+
+# -*- coding: utf-8 -*-
+import random
+from ip138_proxy.settings import PROXIES
+
+class ProxyMiddleware(object):
+    def process_request(self, request, spider):
+        request.meta['proxy'] = "http://%s" % random.choice(PROXIES)
+        return None
+```
+
+在settings.py的DOWNLOADER_MIDDLEWARES中开启中间件：
+
+```
+DOWNLOADER_MIDDLEWARES = {
+    'myCrawler.middlewares.ProxyMiddleware': 1,
+}
+```
+
+运行程序，可以看到设置的代理生效了：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597113047749-40c9cd65-43a3-4740-9652-0f02801d7435.png)
+
+如果想要找到一些免费的代理可以到[快代理](https://www.kuaidaili.com/free/)中寻找
+
+## **伪造headers的多种实现**
+
+本文以前面的ip138爬虫为例，爬虫程序不再赘述。
+
+### 方法一：修改配置文件
+
+可以通过修改settings.py配置文件，很容易地为爬虫程序设置头部数据
+
+修改User-Agent：
+
+```
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1'
+```
+
+修改headers：
+
+```python
+DEFAULT_REQUEST_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.5,en;q=0.3",
+    "Accept-Encoding": "gzip, deflate",
+    'Content-Length': '0',
+    "Connection": "keep-alive"
+}
+```
+
+### 方法二：在爬虫程序中设置(推荐)
+
+在请求的时候设置：
+
+```python
+# -*- coding: utf-8 -*-
+import scrapy
+
+
+class Ip138Spider(scrapy.Spider):
+    name = 'ip138'
+    allowed_domains = ['www.ip138.com','2018.ip138.com']
+    start_urls = ['http://2018.ip138.com/ic.asp']
+    
+    headers = {
+        'User-Agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.5,en;q=0.3",
+        "Accept-Encoding": "gzip, deflate",
+        'Content-Length': '0',
+        "Connection": "keep-alive"
+    }
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url, headers=self.headers ,callback=self.parse)
+
+    def parse(self, response):
+        print("*" * 40)
+        print("response text: %s" % response.text)
+        print("response headers: %s" % response.headers)
+        print("response meta: %s" % response.meta)
+        print("request headers: %s" % response.request.headers)
+        print("request cookies: %s" % response.request.cookies)
+        print("request meta: %s" % response.request.meta)
+```
+
+除了可以在 settings.py 中设置，我们也可以为爬虫单独设置headers，例如：
+
+```
+class Ip138Spider(scrapy.Spider):
+	custom_settings = {
+        'DEFAULT_REQUEST_HEADERS' : {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.5,en;q=0.3",
+            "Accept-Encoding": "gzip, deflate",
+            'Content-Length': '0',
+            "Connection": "keep-alive"
+        }
+    }
+```
+
+### 方法三：在中间件中设置
+
+我们可以在DownloaderMiddleware中间件中设置headers
+
+```
+class TutorialDownloaderMiddleware(object):
+    def process_request(self, request, spider):
+    	request.headers.setdefault('User-Agent', 'Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5')
+```
+
+当然我们也可以设置完整的headers
+
+```
+from scrapy.http.headers import Headers
+headers = {
+    'User-Agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.5,en;q=0.3",
+    "Accept-Encoding": "gzip, deflate",
+    'Content-Length': '0',
+    "Connection": "keep-alive"
+}
+class TutorialDownloaderMiddleware(object):
+    def process_request(self, request, spider):
+        request.headers = Headers(headers)
+```
+
+在settings.py中启动中间件
+
+```
+# Enable or disable downloader middlewares
+
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
+
+DOWNLOADER_MIDDLEWARES = {
+    'tutorial.middlewares.TutorialDownloaderMiddleware': 1,
+}
+```
+
+### 方法四：使用fake-useragent切换User-Agent(推荐)
+
+middlewares.py
+
+```python
+from fake_useragent import UserAgent
+class RandomUserAgentMiddleware(object):
+    def __init__(self,crawler):
+    super(RandomUserAgentMiddleware, self).__init__()
+    self.ua = UserAgent()
+    self.ua_type = crawler.settings.get('RANDOM_UA_TYPE','random')
+
+    @classmethod
+    def from_crawler(cls,crawler):
+        return cls(crawler)
+
+    def process_request(self,request,spider):
+        def get_ua():
+            return getattr(self.ua,self.ua_type)
+        request.headers.setdefault('User-Agent',get_ua())
+```
+
+在settings.py中启用中间件
+
+```python
+RANDOM_UA_TYPE= 'random'
+
+DOWNLOADER_MIDDLEWARES = {
+    'tutorial.middlewares.RandomUserAgentMiddleware': 543,
+}
+```
+
+[scrapy实战：伪造headers的多种实现](https://blog.csdn.net/weixin_43430036/article/details/84851714)
+
+## scrapy 中间件设置随机UA、随机cookie、以及代理
+
+1、在middlewares.py中定义随机[UA](https://so.csdn.net/so/search?q=UA&spm=1001.2101.3001.7020)中间件
+
+```python
+import random
+ 
+# 随机请求头
+class UserAgentMiddleware(object):
+    def __init__(self):
+        self.user_agents_list = [
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 OPR/26.0.1656.60',
+            'Opera/8.0 (Windows NT 5.1; U; en)',
+            'Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208 Firefox/2.0.0 Opera 9.50',
+            'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; en) Opera 9.50',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0',
+        ]
+    def process_request(self, request, spider):
+        user_agent = random.choice(self.user_agents_list)
+        request.headers['User-Agent'] = user_agent
+```
+
+2.在middlewares.py中设置随机cookie中间件
+
+将获取到的所有cookie存放在一个txt文件中，可一条，可多条
+
+```cobol
+# 设置随机cookie
+class CookiesMiddleware(object):
+    def __init__(self):
+        with open('cookie.txt', 'rt', encoding='utf-8') as f:
+            COOKIE = f.readlines()
+            self.COOKIE_LIST = [d.strip() for d in COOKIE]
+ 
+    def process_request(self, request, spider):
+        cookie = random.choice(self.COOKIE_LIST)
+        request.headers['Cookie'] = cookie
+```
+
+3.在middlewares.py中设置代理中间件
+
+```python
+class IPProxyMiddleware(object):
+ 
+    @staticmethod
+    def fetch_proxy():
+        """
+        获取一个代理IP
+        """
+        # You need to rewrite this function if you want to add proxy pool
+        # the function should return an ip in the format of "ip:port" like "12.34.1.4:9090"
+        return None
+ 
+    def process_request(self, request, spider):
+        """
+        将代理IP添加到request请求中
+        """
+        proxy_data = self.fetch_proxy()
+        if proxy_data:
+            current_proxy = f'http://{proxy_data}'
+            spider.logger.debug(f"current proxy:{current_proxy}")
+            request.meta['proxy'] = current_proxy
+```
+
+4.最后在setting中启动自定义中间件
+
+```cobol
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': None,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+    'middlewares.IPProxyMiddleware': 100,
+    'middlewares.UserAgentMiddleware': 543,
+    'middlewares.CookiesMiddleware': 743,
+}
+```
+
+5.测试效果
+
+```
+在def parse中
+print('--------------------------------------', response.request.headers)
+```
+
+![img](Python%E7%88%AC%E8%99%AB.assets/9cccce989d81449786305c0a369dfca2.png)
+
+## 使用Selenium模拟用户操作浏览器
+
+selenium 是一套完整的web应用程序测试系统，包含了测试的录制（selenium IDE）,编写及运行（Selenium Remote Control）和测试的并行处理（Selenium Grid）。Selenium的核心Selenium Core基于JsUnit，完全由JavaScript编写，因此可以用于任何支持JavaScript的浏览器上。
+
+selenium可以模拟真实浏览器，自动化测试工具，支持多种浏览器，爬虫中主要用来解决JavaScript渲染问题。
+
+**准备工作**
+
+安装Selenium：
+
+```
+pip install selenium
+```
+
+安装chromedriver：到http://chromedriver.storage.googleapis.com/index.html中下载跟自己Chrome版本匹配的驱动。
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/1597113318605-2793c212-33c2-4a83-9ab3-afe661506c49.png" alt="img" style="zoom:67%;" />
+
+<img src="Python%E7%88%AC%E8%99%AB.assets/1597113323323-20e14aca-e1f5-464e-99a4-c64184a6dddd.png" alt="img" style="zoom:67%;" />
+
+**新建爬虫**
+
+```
+scrapy startproject zhihu_selenium
+cd zhihu_selenium
+scrapy genspider zhihu www.zhihu.com
+```
+
+**使用selenium模拟用户操作**
+
+先放上完整的爬虫程序：
+
+```
+# -*- coding: utf-8 -*-
+import scrapy
+import json
+import time
+from selenium import webdriver
+from pathlib import Path
+
+
+class ZhihuSpider(scrapy.Spider):
+    name = 'zhihu'
+    allowed_domains = ['www.zhihu.com']
+    start_urls = ['http://www.zhihu.com/']
+
+    # 模拟请求的headers
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 Edg/81.0.416.72",
+        "HOST": "www.zhihu.com"
+    }
+
+    # scrapy请求的开始时start_request
+    def start_requests(self):
+        zhihu_findUrl = 'https://www.zhihu.com/people/edit'
+        if not Path('zhihuCookies.json').exists():
+            self.loginZhihu()  # 先执行login，保存cookies之后便可以免登录操作
+
+        # 毕竟每次执行都要登录还是挺麻烦的，我们要充分利用cookies的作用
+        # 从文件中获取保存的cookies
+        with open('zhihuCookies.json', 'r', encoding='utf-8') as f:
+            listcookies = json.loads(f.read())  # 获取cookies
+
+        # 把获取的cookies处理成dict类型
+        cookies_dict = dict()
+        for cookie in listcookies:
+            # 在保存成dict时，我们其实只要cookies中的name和value，而domain等其他都可以不要
+            cookies_dict[cookie['name']] = cookie['value']
+
+        # Scrapy发起其他页面请求时，带上cookies=cookies_dict即可，同时记得带上header值，
+        yield scrapy.Request(url=zhihu_findUrl, cookies=cookies_dict, callback=self.parse, headers=self.headers)
+
+    def parse(self, response):
+        # 打印出设置页面中登录者的昵称
+        print("*" * 40)
+        print(response.xpath('//span[@class="FullnameField-name"]/text()').extract_first())
+        print("*" * 40)
+        # print("response text: %s" % response.text)
+        # print("response headers: %s" % response.headers)
+        # print("response meta: %s" % response.meta)
+        # print("request headers: %s" % response.request.headers)
+        # print("request cookies: %s" % response.request.cookies)
+        # print("request meta: %s" % response.request.meta)
+
+    # 使用selenium登录知乎并获取登录后的cookies，后续需要登录的操作都可以利用cookies
+    @staticmethod
+    def loginZhihu():
+        # 登录网址
+        loginurl = 'https://www.zhihu.com/signin'
+        # 加载webdriver驱动，用于获取登录页面标签属性
+        driver = webdriver.Chrome('D:/Software/chromedriver.exe')
+        # 加载页面
+        driver.get(loginurl)
+
+        time.sleep(3)  # 执行休眠3s等待浏览器的加载
+
+        # 方式1 通过填充用户名和密码
+        # driver.find_element_by_name('username').clear()  # 获取用户名框
+        # driver.find_element_by_name('username').send_keys(u'username')  # 填充用户名
+        # driver.find_element_by_name('password').clear()  # 获取密码框
+        # driver.find_element_by_name('password').send_keys(u'password')  # 填充密码
+        # input("检查网页是否有验证码要输入，有就在网页输入验证码，输入完后，控制台回车；如果无验证码，则直接回车")
+        # # 点击登录按钮,有时候知乎会在输入密码后弹出验证码，这一步之后人工校验
+        # driver.find_element_by_css_selector("button[class='Button SignFlow-submitButton Button--primary Button--blue']").click()
+        #
+        # input_no = input("检查网页是否有验证码要输入，有就在网页输入验证码，输入完后，控制台输入1回车；如果无验证码，则直接回车")
+        # if int(input_no) == 1:
+        #     # 点击登录按钮
+        #     driver.find_element_by_css_selector(
+        #         "button[class='Button SignFlow-submitButton Button--primary Button--blue']").click()
+
+        # 方式2 直接通过扫描二维码，如果不是要求全自动化，建议用这个，非常直接，毕竟我们这一步只是想保存登录后的cookies，至于用何种方式登录，可以不必过于计较
+        driver.find_element_by_css_selector("div[class='SignFlow-qrcodeTab']").click()
+        input("请扫描页面二维码，并确认登录后，点击回车：")  # 点击二维码手机扫描登录
+
+        time.sleep(3)  # 同样休眠3s等待登录完成
+
+        input("检查网页是否有完成登录跳转，如果完成则直接回车")
+
+        # 通过上述的方式实现登录后，其实我们的cookies在浏览器中已经有了，我们要做的就是获取
+        cookies = driver.get_cookies()  # Selenium为我们提供了get_cookies来获取登录cookies
+        driver.close()  # 获取cookies便可以关闭浏览器
+        # 然后的关键就是保存cookies，之后请求从文件中读取cookies就可以省去每次都要登录一次的
+        # 当然可以把cookies返回回去，但是之后的每次请求都要先执行一次login没有发挥cookies的作用
+        jsonCookies = json.dumps(cookies)  # 通过json将cookies写入文件
+        with open('zhihuCookies.json', 'w') as f:
+            f.write(jsonCookies)
+        print(cookies)
+```
+
+执行爬虫程序，第一次执行的时候，selenium会自动打开浏览器，模拟用户点击，用户登录后，获取到cookies，存储到zhihuCookies.json文件中。
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597113362339-0e9071fa-6819-49ea-864e-2581d4f62ba7.png)
+
+以后执行，程序都将从zhihuCookies.json文件中读取cookies，执行后续操作，这里，我们获取知乎用户信息编辑页面中的用户名：
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597113378018-f51018a5-d52a-43c8-9be1-b9baac4ecb40.png)
+
+
+
+![img](Python%E7%88%AC%E8%99%AB.assets/1597113389639-33741618-5024-40a2-9ff6-80c5c9083e85.png)
+
+至此，一个模拟用户操作浏览器的爬虫程序就完成了。
 
 
 

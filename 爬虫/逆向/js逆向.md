@@ -1292,15 +1292,13 @@ function _$gy(){}
 
 # 请求加密
 
+[Python进阶：设计模式之迭代器模式 (yuque.com)](https://www.yuque.com/wandouhuaxiamao/pythoncat/ddggyr)
 
-
-
+[动态JS混淆初体验_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV19x4y1j799?p=13&vd_source=d9a5c37e5a6a5464c48dd001e33d7319)
 
 
 
 # 响应加密
-
-
 
 
 

@@ -2,13 +2,13 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+from fake_useragent import UserAgent
 from scrapy import signals
 
+
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
 
-
+# 爬虫中间件
 class SpidertestSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
@@ -51,14 +51,16 @@ class SpidertestSpiderMiddleware:
         # Must return only requests (not items).
         for r in start_requests:
             yield r
+    #
+    # def spider_opened(self, spider):
+    #     spider.logger.info('Spider opened: %s' % spider.name)
 
-    def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
 
-
+# 下载中间件
 class SpidertestDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the downloader middleware does not modify the
+    # scrapy acts as
+    # if the downloader middleware does not modify the
     # passed objects.
 
     @classmethod
@@ -68,6 +70,7 @@ class SpidertestDownloaderMiddleware:
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
+    # 拦截请求
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader
         # middleware.
@@ -80,6 +83,7 @@ class SpidertestDownloaderMiddleware:
         #   installed downloader middleware will be called
         return None
 
+    # 拦截所有的响应
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
 
@@ -89,6 +93,7 @@ class SpidertestDownloaderMiddleware:
         # - or raise IgnoreRequest
         return response
 
+    # 拦截发生异常的请求对象
     def process_exception(self, request, exception, spider):
         # Called when a download handler or a process_request()
         # (from other downloader middleware) raises an exception.
@@ -98,6 +103,16 @@ class SpidertestDownloaderMiddleware:
         # - return a Response object: stops process_exception() chain
         # - return a Request object: stops process_exception() chain
         pass
+    #
+    # # 打印的是日志(可以注释）
+    # def spider_opened(self, spider):
+    #     spider.logger.info('Spider opened: %s' % spider.name)
 
-    def spider_opened(self, spider):
-        spider.logger.info('Spider opened: %s' % spider.name)
+
+class RandomUserAgentMiddleware:
+    def __init__(self):
+        self.user_agent = UserAgent().random
+
+    def process_request(self, request, spider):
+        request.headers['User-Agent'] = self.user_agent
+        print(self.user_agent)

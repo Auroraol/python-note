@@ -13,7 +13,7 @@ SPIDER_MODULES = ['spiderTest.spiders']
 NEWSPIDER_MODULE = 'spiderTest.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36 Edg/118.0.2088.76'
+# USER_AGENT = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36 Edg/118.0.2088.76'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -42,16 +42,17 @@ CONCURRENT_REQUESTS = 8
 # }
 
 # Enable or disable spider middlewares
-# See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+# # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
 #    'spiderTest.middlewares.SpidertestSpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'spiderTest.middlewares.SpidertestDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    # 'spiderTest.middlewares.SpidertestDownloaderMiddleware': 543,
+    'spiderTest.middlewares.RandomUserAgentMiddleware': 543
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
