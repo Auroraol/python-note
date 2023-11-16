@@ -911,6 +911,157 @@ def get_canpanysinfo(pageNum=None):
 
 <font color=red>**requests是对urllib的进一步封装，因此在使用上显得更加的便捷，建议在实际应用当中尽量使用requests**</font>
 
+### 为什么要进行 URL 编码？
+
+在 URL 地址中，不允许出现非 ASCII 字符，如果 URL 地址中需要包含中文字符，就必须对中文字符进行**编码**（转义）。
+
+在 URL 参数字符串中用 key=value 这种键值对的形式进行传递参数，多个键值对中间用 & 连接。如果在 value 中也存在 & 这个符号的话，不对其进行编码，就会引起**歧义**
+
+### pyhon中url 编码和解码
+
+```python 
+from urllib import parse
+
+# %E7%BE%8E%E5%A5%B3  不是乱码---> url编码
+# url解码
+res=parse.unquote('%E7%BE%8E%E5%A5%B3')
+print(res)
+
+# url编码
+res=parse.quote('刷币')  # %E5%88%B7%E5%B8%81
+print(res)
+```
+
+###  js中URL 编码
+
+####  escape()（已废弃）
+
+escape() 是对**字符串**进行编码，不适用于 URI，其中 @*_±./ 被排除在外，不会被编码。
+
+```javascript
+console.log(escape("qaqa666"));  // qaqa666
+console.log(escape("你好"));  // %u4F60%u597D
+console.log(escape("&&%%"));  // %26%26%25%25
+console.log(escape("@*_+-./"));  // @*_+-./
+1234
+```
+
+> 注意：escape() 已经从 Web 标准中删除，这里只是作为了解，虽然现在它还在，但是说不定哪天它就没了。
+>
+> 我们进行 URI 编码还是要使用下面两种函数。
+
+#### encodeURI() 和 encodeURIComponent()
+
+**相同点**：都是对 URI 进行编码。
+
+**不同点**：encodeURI 通常用于转码整个 URI，而 encodeURIComponent 主要是用来转码 URI 的组成部分（？后面的参数部分）。
+
+#####  encodeURI()
+
+encodeURI 会替换除`;` `,` `/` `?` `:` `@` `&` `=` `+` `$` `-` `_` `.` `!` `~` `*` `'` `(` `)` `#`的所有的字符，如下示例：
+
+```javascript
+// encodeURI() 编码
+// 不编码
+console.log(encodeURI(";,/?:@&=+$-_.!~*'()#"));
+// 输出：;,/?:@&=+$-_.!~*'()#
+
+console.log(encodeURI("https://hanyu.baidu.com/?id=1&name=六十六"));
+// 输出：https://hanyu.baidu.com/?id=1&name=%E5%85%AD%E5%8D%81%E5%85%AD
+// 六十六 被编码为了 %E5%85%AD%E5%8D%81%E5%85%AD
+```
+
+> 注意：encodeURI 自身无法产生能适用于 HTTP GET 或 POST 请求的URI，例如对于 XMLHTTPRequests，因为 “&”, “+”, 和 “=” 不会被编码，然而在 GET 和 POST 请求中它们是特殊字符。encodeURIComponent 这个方法会对这些字符编码。
+
+##### encodeURIComponent()
+
+encodeURIComponent 会替换除`A-Z` `a-z` `0-9` `-` `_` `.` `!` `~` `*` `'` `(` `)`的所有的字符，如下示例：
+
+```javascript
+//encodeURIComponent 编码
+// 不编码
+console.log(encodeURIComponent("A-Za-z0-9-_.!~*'()"));
+// 输出：A-Za-z0-9-_.!~*'()
+
+// 错误用法，不能直接将整个 URI 进行编码
+console.log(encodeURIComponent("https://hanyu.baidu.com/?name=六十六"));
+// 输出：https%3A%2F%2Fhanyu.baidu.com%2F%3Fname%3D%E5%85%AD%E5%8D%81%E5%85%AD
+// 可以看到 ：/ 都被编码了
+
+// 正确用法，只对单个参数进行编码
+console.log("https://hanyu.baidu.com/?name=" + encodeURIComponent("六十六"));
+// 输出：https://hanyu.baidu.com/?name=%E5%85%AD%E5%8D%81%E5%85%AD
+12345678910111213
+```
+
+为了避免服务器收到不可预知的请求，对任何用户输入的作为 URI 部分的内容都需要用 encodeURIComponent 进行转义，示例如下：
+
+```javascript
+// "https://hanyu.baidu.com/?type=a&name=你好"
+// 对于上面这串字符串，key 为 type，而 value 为 a&name=你好，如果我们不用 encodeURIComponent 编码，那么将会出现如下结果
+console.log(encodeURI("https://hanyu.baidu.com/?type=a&name=你好"));
+// 输出：https://hanyu.baidu.com/?type=a&name=%E4%BD%A0%E5%A5%BD
+// 如果服务器端收到数据，这将会变为两个参数，就会引发歧义，所以需要用 encodeURIComponent 进行编码
+console.log("https://hanyu.baidu.com/?type=" + encodeURIComponent("a&name=你好"));
+// 输出：https://hanyu.baidu.com/?type=a%26name%3D%E4%BD%A0%E5%A5%BD
+// 通过对比可以看到 & 被编码为了 %26，这样就能有效解决歧义
+12345678
+```
+
+###  js中URL 解码
+
+#### unescape()（已废弃）
+
+unescape() 就是将被编码过的字符串重新计算生成，与上文所述的 escape() 对应，这也是已经废弃的函数。
+
+```javascript
+console.log(unescape("qaqa666"));  // qaqa666
+console.log(unescape("%u4F60%u597D"));  // 你好
+console.log(unescape("%26%26%25%25"));  // &&%
+console.log(unescape("@*_+-./"));  // @*_+-./
+1234
+```
+
+#### decodeURI()
+
+decodeURI 就是将被 encodeURI 编码过的 URI 解码为未编码版本的新字符串。
+
+> 注意：decodeURI 不能解码那些不会被 encodeURI 编码的内容（例如 "`&` `=` `+` `$` `#`"）。
+
+```javascript
+// decodeURI 解码
+// 不解码
+console.log(decodeURI("&=+$#"));
+// 输出：&=+$#
+
+console.log(decodeURI("https://hanyu.baidu.com/?id=1&name=%E5%85%AD%E5%8D%81%E5%85%AD"));
+// 输出：https://hanyu.baidu.com/?id=1&name=六十六
+// %E5%85%AD%E5%8D%81%E5%85%AD 被解码为了 六十六
+12345678
+```
+
+#### decodeURIComponent()
+
+decodeURIComponent() 就是将被 encodeURIComponent() 编码过的**部分** URI 解码为一个统一资源标识符（URI）字符串，处理前的 URI 经过了给定格式的编码。
+
+> 同样，decodeURIComponent 也不能解码那些不会被 encodeURIComponent 编码的内容。
+
+```javascript
+// decodeURIComponent 解码
+// 不解码
+console.log(decodeURIComponent("A-Za-z0-9-_.!~*'()"));
+// 输出：A-Za-z0-9-_.!~*'()
+
+console.log("https://hanyu.baidu.com/?type=" + decodeURIComponent("a%26name%3D%E4%BD%A0%E5%A5%BD"));
+// 输出：https://hanyu.baidu.com/?type=a&name=你好
+```
+
+
+
+
+
+
+
 # 数据解析
 
 ## **页面解析和数据提取**
@@ -7488,3 +7639,6 @@ if __name__ == '__main__':
 ## 结合js逆向方法
 
 见[js逆向](..\逆向\js逆向.md)
+
+
+
