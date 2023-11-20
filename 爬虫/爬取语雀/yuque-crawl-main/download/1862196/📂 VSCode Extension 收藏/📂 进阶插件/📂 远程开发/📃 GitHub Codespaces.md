@@ -1,0 +1,14 @@
+安装Codespaces插件，可以使用同一个GitHub账号，在远程和本地连接同一个代码仓库进行开发。
+
+需要安装的插件：<br />[GitHub Codespaces - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces)<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/2213540/1671155774400-0b34c67e-f591-4283-8fb3-8c8b466e5c35.png#averageHue=%23e6eaed&clientId=u9000046c-d276-4&from=paste&height=199&id=u31f7425e&originHeight=199&originWidth=1003&originalType=binary&ratio=1&rotation=0&showTitle=false&size=25054&status=done&style=none&taskId=u873dab2c-5e7d-4d38-b985-3f7a1d8e7c4&title=&width=1003)
+
+[Remote Repositories - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-repositories)<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/2213540/1671156294818-f5af4629-ed8c-4238-a397-2cdbd3058921.png#averageHue=%23dfe8f0&clientId=u9000046c-d276-4&from=paste&height=197&id=u1eacb9a0&originHeight=197&originWidth=1047&originalType=binary&ratio=1&rotation=0&showTitle=false&size=19794&status=done&style=none&taskId=u9652e6d0-d63f-4adc-a190-348f560ae0c&title=&width=1047)
+
+GitHub Codespaces主页：<br />[Start coding instantly with Codespaces](https://github.com/features/codespaces)<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/2213540/1671156078448-f298a925-922e-46ea-b979-a547ba7e0216.png#averageHue=%23101320&clientId=u9000046c-d276-4&from=paste&height=910&id=ua33f5433&originHeight=910&originWidth=1866&originalType=binary&ratio=1&rotation=0&showTitle=false&size=160587&status=done&style=none&taskId=ueb95e0c2-d308-4a18-9be5-c3a5ccdcf2e&title=&width=1866)
+
+在[GitHub Codespaces](https://github.com/codespaces)中打开项目<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/2213540/1671171540938-023ac9ba-4cd5-48f6-8958-05e49e1b04d6.png#averageHue=%2352b068&clientId=u4373522f-a944-4&from=paste&height=633&id=ue134ae20&originHeight=633&originWidth=1891&originalType=binary&ratio=1&rotation=0&showTitle=false&size=69943&status=done&style=none&taskId=u47478e39-6280-41df-b80e-234af865170&title=&width=1891)<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/2213540/1671155925331-05073736-3388-40d2-872e-2a48bdf7860f.png#averageHue=%23beab65&clientId=u9000046c-d276-4&from=paste&height=1032&id=u50233a2e&originHeight=1032&originWidth=1920&originalType=binary&ratio=1&rotation=0&showTitle=false&size=248216&status=done&style=none&taskId=u6a99769f-fab5-416f-b7fd-361bfd40af2&title=&width=1920)
+
+在本地VSCode通过远程资源管理器连接到GitHub Codespaces：<br />![image.png](https://cdn.nlark.com/yuque/0/2022/png/2213540/1671157622163-b37a98e5-b7e8-40d7-818b-d143dc2d63f1.png#averageHue=%233d5563&clientId=u9000046c-d276-4&from=paste&height=443&id=u0ebe086f&originHeight=443&originWidth=372&originalType=binary&ratio=1&rotation=0&showTitle=false&size=46610&status=done&style=none&taskId=ubc82c0ab-a16d-49d9-9195-15ab00c0411&title=&width=372)
+
+
+

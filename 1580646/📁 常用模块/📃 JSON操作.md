@@ -1,3 +1,5 @@
+## 数据类型对应
+
 JSON表示的对象就是标准的JavaScript语言的对象，JSON和Python内置的数据类型对应如下：
 
 | 示例 | Python类型 | JSON类型 |

@@ -1,0 +1,25 @@
+ * [8小时转职Golang工程师](8%E5%B0%8F%E6%97%B6%E8%BD%AC%E8%81%8CGolang%E5%B7%A5%E7%A8%8B%E5%B8%88.md)
+ * [一、引言](%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80.md)
+ * [二、Golang开发环境](%E4%BA%8C%E3%80%81Golang%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83.md)
+ * [三、Golang语言特性](%E4%B8%89%E3%80%81Golang%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7.md)
+
+## 四、Golang语法新奇
+
+ * [四、Golang语法新奇](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87.md)
+ * [1、从一个main函数初见golang语法](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//1%E3%80%81%E4%BB%8E%E4%B8%80%E4%B8%AAmain%E5%87%BD%E6%95%B0%E5%88%9D%E8%A7%81golang%E8%AF%AD%E6%B3%95.md)
+ * [2、变量的声明](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//2%E3%80%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%A3%B0%E6%98%8E.md)
+ * [3、常量](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//3%E3%80%81%E5%B8%B8%E9%87%8F.md)
+ * [4、函数](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//4%E3%80%81%E5%87%BD%E6%95%B0.md)
+ * [5、defer](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//5%E3%80%81defer.md)
+ * [6、slice和map](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//6%E3%80%81slice%E5%92%8Cmap.md)
+ * [7、面向对象特征](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//7%E3%80%81%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%89%B9%E5%BE%81.md)
+ * [8、interface与类型断言](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//8%E3%80%81interface%E4%B8%8E%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80.md)
+ * [9、反射reflect](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//9%E3%80%81%E5%8F%8D%E5%B0%84reflect.md)
+ * [10、结构体标签](%E5%9B%9B%E3%80%81Golang%E8%AF%AD%E6%B3%95%E6%96%B0%E5%A5%87//10%E3%80%81%E7%BB%93%E6%9E%84%E4%BD%93%E6%A0%87%E7%AD%BE.md)
+## 五、Golang高阶
+ * [五、Golang高阶](%E4%BA%94%E3%80%81Golang%E9%AB%98%E9%98%B6.md)
+ * [4、Go Modules](%E4%BA%94%E3%80%81Golang%E9%AB%98%E9%98%B6//4%E3%80%81Go%20Modules.md)
+ * [1、goroutine](%E4%BA%94%E3%80%81Golang%E9%AB%98%E9%98%B6//1%E3%80%81goroutine.md)
+ * [2、channel](%E4%BA%94%E3%80%81Golang%E9%AB%98%E9%98%B6//2%E3%80%81channel.md)
+ * [3、Select](%E4%BA%94%E3%80%81Golang%E9%AB%98%E9%98%B6//3%E3%80%81Select.md)
+ * [六、案例-即时通信系统](%E5%85%AD%E3%80%81%E6%A1%88%E4%BE%8B-%E5%8D%B3%E6%97%B6%E9%80%9A%E4%BF%A1%E7%B3%BB%E7%BB%9F.md)

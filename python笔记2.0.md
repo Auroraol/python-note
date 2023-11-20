@@ -1200,6 +1200,40 @@ List = sorted(Dict)
 print(List) # [1, 2, 3]
 ```
 
+**使用推导式  方法**
+
+```python
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+# 创建Person实例
+person1 = Person('Person1')
+person2 = Person('Person2')
+person3 = Person('Person3')
+
+# 将Person实例列表转换为字典，以name属性作为键
+person_list = [person1, person2, person3]
+person_dict = {person.name: person for person in person_list}
+
+print(person_dict)
+```
+
+```python
+list_of_people = [
+    {'name': 'Person1', 'age': 25, 'city': 'City1'},
+    {'name': 'Person2', 'age': 30, 'city': 'City2'},
+    {'name': 'Person3', 'age': 22, 'city': 'City3'}
+]
+
+# 使用字典推导式创建以'name'属性为键的字典
+name_dict = {person['name']: person for person in list_of_people}
+
+print(name_dict)
+```
+
+
+
 ### 其它类型转换成集合
 
 + set(object) 通过set()方法将其它类型转换成集合类型
