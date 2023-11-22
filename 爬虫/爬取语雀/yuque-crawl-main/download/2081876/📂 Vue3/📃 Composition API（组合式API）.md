@@ -523,6 +523,7 @@ export default {
 ```
 
 <a name="zvAv7"></a>
+
 ### 其他相关API
 
 - `isProxy` 检查对象是否是由 [reactive](https://v3.cn.vuejs.org/api/basic-reactivity.html#reactive) 或 [readonly](https://v3.cn.vuejs.org/api/basic-reactivity.html#readonly) 创建的 proxy。
@@ -566,9 +567,13 @@ export default {
 以后就再也不用 `this.$store.commit` 、 `this.$store.dispatch` 地用了，很爽是不是。
 
 <a name="RTI1g"></a>
+
 ## 五、setup的参数
+
 <a name="m2pzK"></a>
+
 ### props
+
 setup支持接收参数，第一个参数是props，接收来自父组件的传值。
 
 比如有如下一个组件 `HelloWorld` ：
@@ -865,5 +870,4 @@ export default {
 ## 项目示例
 
 - [Demo App for the Composition API](https://github.com/LinusBorg/composition-api-demos)
-
 

@@ -1,6 +1,8 @@
 本文搜集了一些非常不错的RFC，有可能实现了，也有可能没有实现，大部分在本文编写时还未实现，以官方RFC为主：[Vue RFCs](https://github.com/vuejs/rfcs)。
 <a name="JknjD"></a>
+
 ## style-variables
+
 可以在css中使用js变量，方便通过js动态修改样式。
 
 [第一阶段的提案](https://github.com/vuejs/rfcs/blob/style-vars/active-rfcs/0000-sfc-style-variables.md)：
