@@ -1,8 +1,18 @@
 官方文档：[单文件组件 <script setup>](https://v3.cn.vuejs.org/api/sfc-script-setup.html)
 
 <a name="MMVQA"></a>
+
 ## script setup语法糖
-这是一项试验性特性（截止本文编写时），允许在script标签中添加setup属性，以暴露所有脚本中定义的**顶级变量和方法**：
+
+> 要使用这个语法，需要将 setup attribute 添加到 `<script> `代码块上：
+
+```html
+<script setup>
+console.log('hello script setup')
+</script>
+```
+
+以暴露所有脚本中定义的**顶级变量和方法**：
 ```vue
 <template>
 <div>{{count}}</div>
@@ -36,7 +46,6 @@ import MyComponent from './MyComponent.vue'
 - [New script setup and ref sugar](https://github.com/vuejs/rfcs/pull/222)
 - [New `script setup` (without ref sugar)](https://github.com/vuejs/rfcs/pull/227)
 
-<a name="PiUJY"></a>
 ## $ref语法糖
 为了避免在使用ref的时候，需要通过`.value`调用，vue3提供了`$ref`语法糖。
 
@@ -215,5 +224,4 @@ const vClickDirective = {
   <button @click="inc" v-click-directive>increase</button>
 </template>
 ```
-
 

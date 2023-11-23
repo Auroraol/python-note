@@ -150,11 +150,6 @@ if __name__ == '__main__':
     #     get_book(sys.argv[1])
     # else:
     #     get_book()
-    dict = ["https://www.yuque.com/xiaoyulive/frontend/echarts", "https://www.yuque.com/xiaoyulive/vscode",
-            "https://www.yuque.com/xiaoyulive/uniapp/bfn5o2", "https://www.yuque.com/xiaoyulive/cicd/gr55wu",
-            "https://www.yuque.com/xiaoyulive/kubernetes/xui5av", "https://www.yuque.com/xiaoyulive/docker/qlh70b",
-            "https://www.yuque.com/xiaoyulive/flutter/twcg6y", "https://www.yuque.com/xiaoyulive/typescript/euxhdb"
-        , "https://www.yuque.com/xiaoyulive/dart/lbk8fr", "https://www.yuque.com/xiaoyulive/flutter",
-            "https://www.yuque.com/xiaoyulive/linux/uuhcbp#sed"]
+    dict = ['https://www.yuque.com/wanghuaihoho/tg57g7/yazxf3']
     for url in dict:
         get_book(url)
