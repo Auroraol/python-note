@@ -150,6 +150,6 @@ if __name__ == '__main__':
     #     get_book(sys.argv[1])
     # else:
     #     get_book()
-    dict = ['https://www.yuque.com/wanghuaihoho/tg57g7/yazxf3']
+    dict = ['https://www.yuque.com/wenbuqianjin-yt4bf/tawvns/oa7f6u#jSUgQ']
     for url in dict:
         get_book(url)

@@ -41,6 +41,7 @@ npx degit dcloudio/uni-preset-vue#vite-ts my-vue3-project # typescript
 ![](https://kan.xiaoyulive.top/uniapp/017.png#height=439&id=qYtVf&originHeight=439&originWidth=232&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title=&width=232)
 
 <a name="18b69eb8"></a>
+
 ## 项目结构规划
 我规划的项目结构如下：<br />![](https://kan.xiaoyulive.top/uniapp/018.png#height=863&id=iREmV&originHeight=863&originWidth=332&originalType=binary&ratio=1&rotation=0&showTitle=false&status=done&style=none&title=&width=332)
 
@@ -79,8 +80,6 @@ CLI 工程默认带了 uni-app 语法提示和 5+App 语法提示
 
 可以下载 [uniapp-snippets-vscode](https://github.com/zhetengbiji/uniapp-snippets-vscode) 放于 `.vscode` 目录下已获得 uniapp 的代码块提示
 
-
-<a name="d17a0f0b"></a>
 ## 参考资料
 
 - [开发uni-app，HBuilderX和其他工具(如vscode)有什么区别](https://ask.dcloud.net.cn/article/35451)
