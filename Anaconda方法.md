@@ -78,6 +78,12 @@ conda config --set show_channel_urls yes
 
 到此就可以在这里就行编码啦，如果想换一个python版本，可选择其他版本自行创建，不想用的虚拟环境可以删除
 
+## 安装包
+
+前提:  系统管理员权限运行anaconda
+
+![image-20240221214542427](Anaconda%E6%96%B9%E6%B3%95.assets/image-20240221214542427.png)
+
 # pip安装及使用详解
 
 ## 概要
@@ -190,3 +196,189 @@ pip show -f package
 pip install requests -i http://pypi.douban.com/simple
 ```
 
+
+
+# Anaconda使用requirement方法
+
+### 一、生成requirements.txt文件
+
+用[conda](https://so.csdn.net/so/search?q=conda&spm=1001.2101.3001.7020) activate 你的环境名字，此时进入了你的环境中，然后使用代码：
+
+```python
+pip freeze > requirements.txt
+```
+
+就会生成一个所需环境包的txt文件，我的一个环境包含的包如下：
+
+```python
+backcall==0.1.0
+beautifulsoup4==4.9.0
+bleach==3.1.4
+certifi==2020.4.5.2
+colorama==0.4.3
+cycler==0.10.0
+decorator==4.4.2
+defusedxml==0.6.0
+entrypoints==0.3
+ipykernel==5.1.4
+ipython==7.13.0
+ipython-genutils==0.2.0
+jedi==0.17.0
+Jinja2==2.11.2
+joblib==0.15.1
+jsonschema==2.6.0
+jupyter-client==5.3.3
+jupyter-contrib-core==0.3.3
+jupyter-contrib-nbextensions==0.5.1
+jupyter-core==4.5.0
+jupyter-highlight-selected-word==0.2.0
+jupyter-latex-envs==1.4.6
+jupyter-nbextensions-configurator==0.4.1
+jupyterthemes==0.20.0
+kiwisolver==1.2.0
+lesscpy==0.14.0
+line-profiler==2.1.2
+lxml==4.5.0
+MarkupSafe==1.1.1
+matplotlib==3.1.3
+memory-profiler==0.55.0
+mistune==0.8.4
+mkl-fft==1.0.14
+mkl-random==1.0.4
+mkl-service==2.3.0
+msgpack==0.6.2
+nb-conda==2.2.1
+nb-conda-kernels==2.2.3
+nbconvert==5.6.1
+nbformat==5.0.6
+notebook==6.0.1
+numpy==1.17.0
+pandas==1.0.3
+pandocfilters==1.4.2
+parso==0.7.0
+patsy==0.5.1
+pickleshare==0.7.5
+ply==3.11
+prometheus-client==0.7.1
+prompt-toolkit==3.0.4
+psutil==5.7.0
+Pygments==2.6.1
+pyparsing==2.4.7
+python-dateutil==2.8.1
+pytz==2020.1
+pywin32==227
+pywinpty==0.5.7
+PyYAML==5.3.1
+pyzmq==18.1.1
+scikit-learn==0.22.1
+scipy==1.4.1
+seaborn==0.10.1
+Send2Trash==1.5.0
+six==1.14.0
+soupsieve==2.0.1
+statsmodels==0.11.1
+terminado==0.8.3
+testpath==0.4.4
+tornado==6.0.4
+traitlets==4.3.3
+wcwidth==0.1.9
+webencodings==0.5.1
+wincertstore==0.2
+
+```
+
+### 二、安装requirement.txt文件的扩展包
+
+```python
+pip install -r requirements.txt
+```
+
+除了使用pip命令来生成及安装requirement.txt文件以外，也可以使用conda命令来安装。
+
+```python
+conda install --yes --file requirements.txt
+```
+
+但是这里存在一个问题，如果requirements.txt中的包不可用，则会抛出“无包错误”。
+使用下面这个命令可以解决这个问题
+
+```python
+$ while read requirement; do conda install --yes $requirement; done < requirements.txt
+```
+
+如果想要在conda命令无效时使用pip命令来代替，那么使用如下命令：
+
+```python
+$ while read requirement; do conda install --yes $requirement || pip install $requirement; done < requirements.txt
+```
+
+有时可以导出conda环境，导出格式为.yml文件
+
+```python
+conda env export > requirements.yml
+```
+
+此时你的电脑需要这个conda环境，可以直接用这个yml文件在你的电脑上创造出一个同名字，同扩展包的环境，你只需要进入cmd，然后直接运行下面代码就可以了：
+
+```python
+conda env create -f requirements.yml
+```
+
+# Anaconda导出环境配置文件方法
+
+## 导出环境配置
+
+### 1. yml文件
+
+1. 激活虚拟环境（fyp是我的虚拟环境名称，请根据你自己的名称进行修改）
+
+```
+conda activate fyp
+```
+
+1. 运行此代码
+
+```
+conda env export > environment.yml
+```
+
+### 2. req.txt文件
+
+1. 激活虚拟环境（fyp是我的虚拟环境名称，请根据你自己的名称进行修改）
+
+```
+conda activate fyp
+```
+
+1. 运行此代码
+
+```
+conda list -e > requirements.txt
+```
+
+![image-20240421092102656](Anaconda%E6%96%B9%E6%B3%95.assets/image-20240421092102656.png)
+![image-20240421092109861](Anaconda%E6%96%B9%E6%B3%95.assets/image-20240421092109861.png)
+
+## 导入环境配置
+
+```
+conda env create -f environment.yml
+```
+
+
+
+# Anaconda navigator安装指定版本包
+
+注:  要在打钩的地方右击，否则跳不出来右侧菜单
+
+![image-20240420212329775](Anaconda%E6%96%B9%E6%B3%95.assets/image-20240420212329775.png)
+
+
+
+# Windows: Pycharm terminal 无法直接进入conda虚拟环境
+
+### 手动进入
+
+comics是我的虚拟环境名称，请根据自己的名称进行修改
+
+![image-20240421091607547](Anaconda%E6%96%B9%E6%B3%95.assets/image-20240421091607547.png)

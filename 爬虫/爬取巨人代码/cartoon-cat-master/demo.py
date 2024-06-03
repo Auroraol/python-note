@@ -17,4 +17,3 @@ if __name__ == '__main__':
     )
     crawler.start()
     crawler.show()
-

@@ -1159,6 +1159,9 @@ html = etree.HTML(response) #解析模板总页面
 ```python
 content = html.xpath('//input[@class="bg s_btn"]')
 print(content)
+
+# 使用 XPath 定位所有 class="pic" 或 class="loading" 的元素
+pic_elements = driver.find_elements_by_xpath("//div[contains(@class, 'pic') or contains(@class, 'loading')]")
 ```
 
  **根据id定位**
@@ -5084,6 +5087,30 @@ if __name__ == "__main__":
 
 # **Selenium的使用**
 
+```python
+from selenium import webdriver
+
+# 设置浏览器路径和驱动路径
+browser_path = "C:/Program Files/Google/Chrome/Application/chrome.exe"  # Chrome 浏览器路径
+driver_path = "C:/path/to/chromedriver.exe"  # ChromeDriver 驱动路径
+
+# 设置 Chrome 浏览器选项
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = browser_path
+
+# 创建 Chrome WebDriver 对象
+driver = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
+```
+
+如果安装了 Chrome 浏览器，并且已经将 ChromeDriver 添加到系统的 PATH 中
+
+```python
+pythonCopy Codefrom selenium import webdriver
+
+# 创建 Chrome WebDriver 对象
+driver = webdriver.Chrome()
+```
+
 ## Selenium的介绍
 
 + Selenium是一个Web的自动化测试工具，最初是为网站自动化测试而开发的，类型像我们玩游戏用的按键精灵，可以按指定的命令自动操作，不同是 Selenium 可以直接运行在浏览器上，它支持所有主流的浏览器（包括PhantomJS这些无界面的浏览器）
@@ -6594,6 +6621,25 @@ https://wkbjbos.bdimg.com/v1/docconvert3421/wk/6da8c8181da456d0bdb9fcb21b9e84e3/
 全部选择：
 
 ![img](https://raw.githubusercontent.com/Auroraol/Drawing-bed/main/img/202311081255204.png)
+
+## 报错
+
+[python selenium报错ValueError: Timeout value connect was ＜...＞, but it must be an int, float or None.](https://blog.csdn.net/liu_liu_123/article/details/131146119)
+
+最初安装的Selenium版本是3.141.0，Urllib3的版本是2.0.3，这两个版本的库是不兼容的，如果安装的是这两个库，那么在使用selenium时，就会显示上述错误。
+
+ 方案二：根据文末BH4EOD的评论，将selenium降为3.3.1，也可以解决问题。没自己试验过，如果方法一解决不了，也可以试下这个方法。
+
+   方案三：因python版本不对应，导致出错。根据[weixin_38686363](https://blog.csdn.net/weixin_38686363)在文末评论，他直接调用conda虚拟环境用的python3.10会出错，后来换成python 3.8.10，问题就解决了。
+
+   方案二和三，我没亲身体验过，不过是别的网友成功过的。如果方案一解决不了，可以试一下二和三。希望遇到问题的网友把解决这一问题的办法能在留言里写一下。我会把留言中的问题解决办法归集在一起，让大家的经验帮助更多的人。
+
+   **其他问题及解决方案：**
+
+​    **1、urllib3版本无法降到1.26.2。**根据网友Th3Shine在文末的评论，把python版本降到3.10可顺利将urllib3版本降到1.262。
+
+   **2、显示错误‘No module named 'urllib3.packages.six.moves'。**根据网友[tomniu8998](https://blog.csdn.net/tomniu8998)和[weixin_46250057](https://blog.csdn.net/weixin_46250057)在文末的回复，把selenium版本调整到3.3.1配合urllib3版本1.26.2，这一问题基本都能解决。若仍无法解决，可更换selenium版本：pip install urllib3==2.1.0
+pip install selenium==4.8.0
 
 # **多线程的使用**
 
