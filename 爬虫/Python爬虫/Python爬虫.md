@@ -5255,9 +5255,57 @@ source = browser.page_source
 print(source)
 ```
 
+## 补充 使用webdriver-manager :crossed_swords:
 
+使用webdriver-manager自动下载浏览器驱动，解决driver版本的问题
 
-## 元素定位
+参考:
+
++ [使用webdriver-manager](https://blog.csdn.net/gxz888/article/details/135324353)
++ [Chromedriver的自动更新问题 ](https://www.zhangshengrong.com/p/O3aAYjoda4/)
+
+```python
+# @Author : 小红牛
+# 微信公众号：WdPython
+# selenium 4.+
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+
+# 1.使用ChromeDriverManager安装ChromeDriver，并返回驱动程序的路径
+driver_path = ChromeDriverManager().install()
+# 打印驱动程序路径
+print(driver_path)
+# C:\Users\Ms-xiao\.wdm\drivers\chromedriver\win64\120.0.6099.109\chromedriver-win32/chromedriver.exe
+new_path = 'D:/Wdpython/driver/'
+# 2.把下载的驱动文件，复制到指定位置
+shutil.copy(driver_path, new_path)
+# 3.验证一下安装好的驱动，是否可用
+driver = webdriver.Chrome(service=ChromeService(new_path + 'chromedriver.exe'))
+# 打开百度网页
+driver.get('https://www.baidu.com')
+```
+
+其他浏览器驱动的下载方法
+
+```Python
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import IEDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from webdriver_manager.opera import OperaDriverManager
+# 1.火狐FireFox
+GeckoDriverManager().install()
+# 2.微软IE
+IEDriverManager().install()
+# 3.微软Edge
+EdgeChromiumDriverManager().install()
+# 4.欧朋opera
+OperaDriverManager().install()
+```
+
+## 元素
+
+定位
 
 > 只演示常用的方法
 
@@ -7687,4 +7735,30 @@ if __name__ == '__main__':
 见[js逆向](..\逆向\js逆向.md)
 
 
+
+解决方案
+1. 使用 requests 库获取页面内容：
+使用 requests 库获取页面内容，并将结果传递给 selenium。
+2. 使用 selenium的 ChromeOptions 设置请求头：
+使用 ChromeOptions 添加自定义请求头。
+
+[深入selenium三种等待方式使用-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1503339)
+
+
+
+```Python
+等待元素可见：
+使用显式等待确保元素在点击前完全可见，而不是简单的可点击状态。
+
+python
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# 等待元素可见
+link = WebDriverWait(driver, 20).until(
+    EC.visibility_of_element_located((By.CLASS_NAME, "ecom-open-operation-link"))
+)
+link.click()
+```
 
