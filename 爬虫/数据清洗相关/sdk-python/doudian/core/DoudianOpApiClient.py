@@ -28,7 +28,9 @@ class DoudianOpApiClient:
         requestUrl = request.getConfig().openRequestUrl
         timestamp = int(time.time())
         method = request.getUrlPath()[1:].replace("/", ".")
-        sortedParamJson = json.dumps(obj=paramJsonObj.__dict__, sort_keys=True, separators=(',', ':'), ensure_ascii=False, default=lambda obj: obj.__dict__)
+        sortedParamJson = json.dumps(paramJsonObj, sort_keys=True, separators=(',', ':'), ensure_ascii=False,
+                                     default=lambda obj: obj.__dict__)
+        # sortedParamJson = json.dumps(obj=paramJsonObj.__dict__, sort_keys=True, separators=(',', ':'), ensure_ascii=False, default=lambda obj: obj.__dict__)
         sign = calsSign(appKey, appSecret, method, timestamp, sortedParamJson)
 
         httpRequest = HttpRequest()
@@ -41,10 +43,11 @@ class DoudianOpApiClient:
         httpRequest.params["sign"] = sign
         httpRequest.params["timestamp"] = timestamp
         httpRequest.params["v"] = 2
-        if accessToken is not None:
-            httpRequest.params["access_token"] = accessToken.getAccessToken()
-        else:
-            httpRequest.params["access_token"] = ""
+        # if accessToken is not None:
+        #     # httpRequest.params["access_token"] = accessToken.getAccessToken()
+        #     httpRequest.params["access_token"] = accessToken
+        # else:
+        #     httpRequest.params["access_token"] = ""
 
         httpRequest.headers["from"] = "sdk"
         httpRequest.headers["sdk-type"] = "python"

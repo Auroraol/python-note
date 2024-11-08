@@ -36,16 +36,16 @@ if __name__ == '__main__':
       --compressed
     '''
     # c3e19b73c8c95e44.pdd4.myjjing.com 替换为店铺地址
-    url = 'http://887ae8c719c75d34.jd4.xiaoduoai.com/api/admin/goods/v2/list_v2'
+    url = 'http://8c9654706e67f925.pdd4.myjjing.com/api/admin/goods/v2/list_v2'
     # rawdata为token
-    rawdata = 'sensorsdata2015jssdkcross=%7B%22%24device_id%22%3A%2219222b1fb9a6be-0d02c1b9cb4a44-4c657b58-1327104-19222b1fb9bd3d%22%7D; session_id_csm=MTczMDE2NzcxMHxOd3dBTkRaQlZWaExVMDFGVDFOU1QwazBWRUpZUTFwRlZFZzJWMFl5TWxWUVQxZExRME5TTkVNM1VreEtSa2hFTkRaTlZ6WlBTVUU9fOLSg6S8NcjGlT9vgTjfZ1EQ_JELmPXR1Bsc1MyNdzCt; sso_token=token:edf704fb28254094b8f7a2d08dacfbe4; source_data=%7B%22person%22:%22%E5%88%98%E4%B8%B0%E6%B4%81%22%7D; SID=2|1:0|10:1730944460|3:SID|44:NWNlNTE1ZTRkMjRlNGFkZWEyMTE4YzRiYzNjNTI2YzA=|f747d3766fd913142b946489ddc913b4674a9f72a92ac34a4513cf5ed62d43e0; xd-metadata=shop_id=5f1ab6aded24ca0013a8636e; sajssdk_2015_new_user_887ae8c719c75d34_jd4_xiaoduoai_com=1; sa_jssdk_2015_887ae8c719c75d34_jd4_xiaoduoai_com=%7B%22distinct_id%22%3A%22%E6%96%87%E8%BD%A9%E7%BD%91%E6%97%97%E8%88%B0%E5%BA%97%3A%E6%96%B0%E5%8D%8E%E6%96%87%E8%BD%A9%E6%97%97%E8%88%B0%E5%BA%97%22%2C%22first_id%22%3A%22193045477981163-0ed1c95bcb772f8-4c657b58-1328640-193045477991aaa%22%2C%22props%22%3A%7B%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTkzMDQ1NDc3OTgxMTYzLTBlZDFjOTViY2I3NzJmOC00YzY1N2I1OC0xMzI4NjQwLTE5MzA0NTQ3Nzk5MWFhYSIsIiRpZGVudGl0eV9sb2dpbl9pZCI6IuaWh%2Bi9qee9keaXl%2BiIsOW6lzrmlrDljY7mlofovanml5foiLDlupcifQ%3D%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%24identity_login_id%22%2C%22value%22%3A%22%E6%96%87%E8%BD%A9%E7%BD%91%E6%97%97%E8%88%B0%E5%BA%97%3A%E6%96%B0%E5%8D%8E%E6%96%87%E8%BD%A9%E6%97%97%E8%88%B0%E5%BA%97%22%7D%7D; isGoodsDetailBackGoodsList=false'
+    rawdata = 'source_data=%7B%22person%22:%22%E5%88%98%E4%B8%B0%E6%B4%81%22%7D; xd-metadata=shop_id=66e28a9dff95c28cf35a8d52; sajssdk_2015_new_user_8c9654706e67f925_pdd4_myjjing_com=1; sa_jssdk_2015_8c9654706e67f925_pdd4_myjjing_com=%7B%22distinct_id%22%3A%22GENIO%20LAMODE%E6%9C%8D%E9%A5%B0%E7%AE%B1%E5%8C%85%E6%97%97%E8%88%B0%E5%BA%97%3Apdd75718305043%22%2C%22first_id%22%3A%221923b76620140d-0cd0a9aef36da28-4c657b58-1328640-1923b766202dec%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E5%BC%95%E8%8D%90%E6%B5%81%E9%87%8F%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC%22%2C%22%24latest_referrer%22%3A%22https%3A%2F%2Fcustomer.xiaoduoai.com%2F%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTkyM2I3NjYyMDE0MGQtMGNkMGE5YWVmMzZkYTI4LTRjNjU3YjU4LTEzMjg2NDAtMTkyM2I3NjYyMDJkZWMiLCIkaWRlbnRpdHlfbG9naW5faWQiOiJHRU5JTyBMQU1PREXmnI3ppbDnrrHljIXml5foiLDlupc6cGRkNzU3MTgzMDUwNDMifQ%3D%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%24identity_login_id%22%2C%22value%22%3A%22GENIO%20LAMODE%E6%9C%8D%E9%A5%B0%E7%AE%B1%E5%8C%85%E6%97%97%E8%88%B0%E5%BA%97%3Apdd75718305043%22%7D%7D; isGoodsDetailBackGoodsList=false; SID=2|1:0|10:1727584537|3:SID|44:OTEwYTk1YjU1YmI5NDI2ZGJkNjVjMDYwMzI3MzRkYzM=|7edabdcd1280171dfd368f9fa82feb6acffb9be8554b7a6acc8128c7644624ad'
     cookie_jar = SimpleCookie()
     cookie_jar.load(rawdata)
     cokies = {}
     for key, morsel in cookie_jar.items():
         cokies[key] = morsel.value
 
-    f = open("product_ids.json", 'r')
+    f = open("29/json/product_ids_text5.json", 'r')
     goods_ids = json.load(f)
     # print(goods_ids)
     param = json.loads('''{
@@ -65,10 +65,11 @@ if __name__ == '__main__':
     for goods_id in tqdm(goods_ids, desc='Processing'):
         param["keyword"] = str(goods_id)
         rsp = requests.post(url, json=param, cookies=cokies)
-        j = rsp.json()
-        if not flag:
-            print(j)
-            flag = True
-        if rsp.status_code != 200:
-            print(j)
+        if rsp.status_code == 200:
+            j = rsp.json()
+            if not flag:
+                print(j)
+                flag = True
+        else:
+            print(f"Error: {rsp.status_code}, Response: {rsp.text}")
             continue
