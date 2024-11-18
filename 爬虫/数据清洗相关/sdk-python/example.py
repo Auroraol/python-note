@@ -1,5 +1,6 @@
 import pandas as pd
-
+import chardet
+import json
 from doudian.api.afterSale_Detail.param.AfterSaleDetailParam import AfterSaleDetailParam
 from doudian.api.open_getAuthInfo.OpenGetAuthInfoRequest import OpenGetAuthInfoRequest
 from doudian.api.order_orderDetail.OrderOrderDetailRequest import OrderOrderDetailRequest
@@ -73,9 +74,29 @@ def Test3():
 	plat_user_ids = df[0].dropna()
 	return plat_user_ids
 
+def Test4():
+	# 读取 filtered_output.csv 文件
+	df_filtered = pd.read_csv('unique_to_output11.csv')
+	# 检测文件编码
+	with open('unique_to_output11.csv', 'rb') as file:
+		raw_data = file.read()
+		result = chardet.detect(raw_data)
+		encoding = result['encoding']
+
+	# 使用检测到的编码读取文件
+	plat_user_ids = []
+	with open('unique_to_output11.csv', 'r', encoding=encoding) as file:
+		for line in file:
+			data = json.loads(line.strip())
+			plat_user_ids.append(data['plat_user_id'])
+	return plat_user_ids
+
+
 if __name__ == '__main__':
-	res = Test3()
-	for id in res:
-		Test2(id)
+	#
+	# res = Test4()
+	# # print(res[0])
+	# for id in res:
+	# 	# Test2(id)
 
 
