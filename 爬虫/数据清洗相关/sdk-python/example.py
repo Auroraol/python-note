@@ -220,7 +220,7 @@ def Test6():
 
 	request = ddpGetShopListRequest()
 	param = request.getParams()
-	param.page_no = 2
+	param.page_no = 3
 	param.page_size = 20
 	# param.shop_id = id
 	response = request.execute()
@@ -285,23 +285,23 @@ def Test7_a():
 
 
 if __name__ == '__main__':
-	# Test7_a()
+	Test7_a()
 
-	numbers = [176432027,
-			   187516818,
-			   192414248,
-			   196478136,
-			   196671416,
-			   196800017,
-			   197447724,
-			   407573,
-			   55954254,
-			   69173218,
-			   84969621,
-			   86329983,
-			   984602, ]
-	for id in numbers:
-		Test2(id)
+	# numbers = [176432027,
+	# 		   187516818,
+	# 		   192414248,
+	# 		   196478136,
+	# 		   196671416,
+	# 		   196800017,
+	# 		   197447724,
+	# 		   407573,
+	# 		   55954254,
+	# 		   69173218,
+	# 		   84969621,
+	# 		   86329983,
+	# 		   984602, ]
+	# for id in numbers:
+	# 	Test2(id)
 
 
 
