@@ -261,12 +261,12 @@ def Test7(user_ids):
 		"conf": {
 			"ns": "rs",
 			"app": "app",
-			"conf_name": "rds"
+			"conf_name": "rds_goods"
 		},
 		"uid": "dy",
 		"data": {
-			"default_delay_time": 5,
-			"is_complete": False,
+			# "default_delay_time": 5,
+			# "is_complete": False,
 			"plat_user_ids": plat_user_ids
 		},
 		"is_search": True
